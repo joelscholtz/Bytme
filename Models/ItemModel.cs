@@ -5,15 +5,6 @@ using System.Threading.Tasks;
 
 namespace bytme.Models
 {
-    public class ItemSize
-    {
-        public int id { get; set; }
-        public int size { get; set; }
-        public int item_id { get; set; }
-        public int stock { get; set; }
-        public DateTime dt_created { get; set; }
-        public DateTime dt_modified { get; set; }
-    }
     public class Item
     {
         public int id { get; set; }
@@ -21,6 +12,7 @@ namespace bytme.Models
         public string description { get; set; }
         public string long_description { get; set; }
         public float price { get; set; }
+        public string size { get; set; }
         public string photo_url { get; set; }
         public int category_id { get; set; }
         public int quantity { get; set; }
@@ -32,7 +24,6 @@ namespace bytme.Models
     {
         public int id { get; set; }
         public string description { get; set; }
-        public string long_description { get; set; }
         public DateTime dt_created { get; set; }
         public DateTime dt_modified { get; set; }
 
