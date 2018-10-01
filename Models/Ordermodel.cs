@@ -15,7 +15,7 @@ namespace bytme.Models
         public DateTime dt_created { get; set; }
         public DateTime dt_modified { get; set; }
     }
-    public class OderHistory
+    public class OrderHistory
     {
         public int id { get; set; }
         public string itm_description { get; set; }
