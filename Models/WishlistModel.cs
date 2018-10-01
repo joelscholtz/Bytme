@@ -8,7 +8,7 @@ namespace bytme.Models
     public class WishlistModel
     {
         public int id { get; set; }
-        public 
+        public int stock { get; set; }
         public DateTime dt_created { get; set; }
     }
 }

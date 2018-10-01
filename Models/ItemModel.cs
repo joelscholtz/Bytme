@@ -5,9 +5,19 @@ using System.Threading.Tasks;
 
 namespace bytme.Models
 {
+    public class ItemSize
+    {
+        public int id { get; set; }
+        public int size { get; set; }
+        public int item_id { get; set; }
+        public int stock { get; set; }
+        public DateTime dt_created { get; set; }
+        public DateTime dt_modified { get; set; }
+    }
     public class Item
     {
         public int id { get; set; }
+        public string gender { get; set; }
         public string description { get; set; }
         public string long_description { get; set; }
         public float price { get; set; }
