@@ -1,18 +1,60 @@
-﻿@{
+﻿@model bytme.Models.ContactModel
+@{
     ViewData["Title"] = "Contact";
 }
-<h2>@ViewData["Title"]</h2>
-<h3>@ViewData["Message"]</h3>
 
-<address>
-    Sesamstraat 420,<br />
-    Rotterdam, 3030AA<br />
-    <abbr title="Phone">P:</abbr>
-    06-12345678
-</address>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-area">
+                <form method="post">
+                    <h2 style="margin-bottom: 15px;">Contact</h2>
+                    <div class="form-group">
+                        <input type="text" class="form-control" asp-for="name" placeholder="Name" required>
+                        <span asp-validation-for="name"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" asp-for="email" placeholder="Email" required>
+                        <span asp-validation-for="email"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" asp-for="subject" placeholder="Subject" required>
+                        <span asp-validation-for="subject"></span>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" type="textarea" asp-for="content" placeholder="Content" maxlength="140" rows="7"></textarea>
+                        <span asp-validation-for="content"></span>
+                    </div>
 
-<address>
-    <strong>Support:</strong> <a href="mailto:Support@example.com">Support@example.com</a><br />
-    <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>
-</address>
-    
+                    <button type="submit" id="submit" name="submit" class="btn btn-success pull-right">Verstuur</button>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h2 style="margin-bottom: 15px;">Gegevens</h2>
+            <address>
+                Hogeschool Rotterdam<br />
+                Rotterdam, 1234AB<br />
+                Wijnhaven 107
+
+            </address>
+            <hr />
+            <address>
+                <strong>Support:</strong> <a href="mailto:Support@example.com">info@bdhstudios.com</a><br />
+                <strong>Telephone:</strong> <a href="/">010 - 1234567</a><br />
+            </address>
+        </div>
+
+
+    </div>
+    @if (ViewBag.Message != null)
+    {
+        <div class="row">
+            <div class="col-md-12 mail-success">
+                <span>@ViewBag.Message</span>
+            </div>
+        </div>
+
+    }
+
+</div>
