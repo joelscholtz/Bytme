@@ -52,3 +52,7 @@ bytme/obj/project.assets.json
 bytme/obj/bytme.csproj.nuget.cache
 bytme/obj/bytme.csproj.nuget.g.props
 bytme/obj/bytme.csproj.nuget.g.targets
+/wwwroot/js/materialize.min.js
+/wwwroot/js/materialize.js
+/wwwroot/css/materialize.min.css
+/wwwroot/css/materialize.css

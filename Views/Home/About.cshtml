@@ -1,7 +1,6 @@
 ﻿@{
     ViewData["Title"] = "General Information";
 }
-<h2>@ViewData["Title"]</h2>
 <h3>@ViewData["Message"]</h3>
 
 @using Microsoft.AspNetCore.Identity
@@ -11,9 +10,12 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <p>Hello @UserManager.GetUserName(User)!</p>
+    <h2 style="text-align:center;">Hello @UserManager.GetUserName(User), how can we help you?</h2>
 }
 else
 {
-    <p>Hello!</p>
+    <h2 style="text-align:center;">Hello, how can we help you?</h2>
 }
+
+<hr />
+
