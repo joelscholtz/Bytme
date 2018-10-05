@@ -1,7 +1,19 @@
 ﻿@{
-    ViewData["Title"] = "About";
+    ViewData["Title"] = "General Information";
 }
 <h2>@ViewData["Title"]</h2>
 <h3>@ViewData["Message"]</h3>
 
-<p>Use this area to provide additional information.</p>
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <p>Hello @UserManager.GetUserName(User)!</p>
+}
+else
+{
+    <p>Hello!</p>
+}

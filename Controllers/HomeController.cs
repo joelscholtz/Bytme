@@ -19,7 +19,7 @@ namespace bytme.Controllers
 
         public IActionResult About()
         {
-            ViewData["Message"] = "Your application description page.";
+            //ViewData["Message"] = "Hello @UserManager.GetUserName(User)";
 
             return View();
         }
@@ -32,6 +32,16 @@ namespace bytme.Controllers
         }
 
         public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        public IActionResult Men()
+        {
+            return View();
+        }
+
+        public IActionResult Women()
         {
             return View();
         }
