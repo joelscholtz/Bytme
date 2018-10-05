@@ -44,7 +44,6 @@ C:\Users\Floor\source\Repos2\Bytme\obj\Debug\netcoreapp2.1\bytme.csprojAssemblyR
 C:\Users\Floor\source\Repos2\Bytme\obj\Debug\netcoreapp2.1\bytme.csproj.CoreCompileInputs.cache
 C:\Users\Floor\source\Repos2\Bytme\obj\Debug\netcoreapp2.1\bytme.RazorAssemblyInfo.cache
 C:\Users\Floor\source\Repos2\Bytme\obj\Debug\netcoreapp2.1\bytme.RazorAssemblyInfo.cs
-C:\Users\Floor\source\Repos2\Bytme\obj\Debug\netcoreapp2.1\UserSecretsAssemblyInfo.cs
 C:\Users\Floor\source\Repos2\Bytme\obj\Debug\netcoreapp2.1\bytme.AssemblyInfoInputs.cache
 C:\Users\Floor\source\Repos2\Bytme\obj\Debug\netcoreapp2.1\bytme.AssemblyInfo.cs
 C:\Users\Floor\source\Repos2\Bytme\obj\Debug\netcoreapp2.1\bytme.TagHelpers.input.cache
@@ -88,3 +87,6 @@ C:\Users\Floor\source\Repos2\Bytme\obj\Debug\netcoreapp2.1\Razor\Views\Manage\_L
 C:\Users\Floor\source\Repos2\Bytme\obj\Debug\netcoreapp2.1\Razor\Views\Manage\_NavBar.g.cshtml.cs
 C:\Users\Acer\Documents\School\Jaar 3\Project C\website\bytme\Bytme\obj\Debug\netcoreapp2.1\Razor\Views\Manage\Index.g.cshtml.cs
 C:\Users\Acer\Documents\School\Jaar 3\Project C\website\bytme\Bytme\obj\Debug\netcoreapp2.1\Razor\Views\Manage\OrderHistory.g.cshtml.cs
+C:\Users\Floor\source\Repos2\Bytme\obj\Debug\netcoreapp2.1\UserSecretsAssemblyInfo.cs
+C:\Users\Floor\source\Repos2\Bytme\obj\Debug\netcoreapp2.1\Razor\Views\AllSearch\Search.g.cshtml.cs
+C:\Users\Floor\source\Repos2\Bytme\obj\Debug\netcoreapp2.1\Razor\Views\Home\Men.g.cshtml.cs
