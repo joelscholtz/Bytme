@@ -87,7 +87,7 @@ C:\Users\Floor\source\Repos2\Bytme\obj\Debug\netcoreapp2.1\Razor\Views\Manage\_L
 C:\Users\Floor\source\Repos2\Bytme\obj\Debug\netcoreapp2.1\Razor\Views\Manage\_NavBar.g.cshtml.cs
 C:\Users\Acer\Documents\School\Jaar 3\Project C\website\bytme\Bytme\obj\Debug\netcoreapp2.1\Razor\Views\Manage\Index.g.cshtml.cs
 C:\Users\Acer\Documents\School\Jaar 3\Project C\website\bytme\Bytme\obj\Debug\netcoreapp2.1\Razor\Views\Manage\OrderHistory.g.cshtml.cs
-C:\Users\Floor\source\Repos2\Bytme\obj\Debug\netcoreapp2.1\UserSecretsAssemblyInfo.cs
 C:\Users\Floor\source\Repos2\Bytme\obj\Debug\netcoreapp2.1\Razor\Views\AllSearch\Search.g.cshtml.cs
 C:\Users\Floor\source\Repos2\Bytme\obj\Debug\netcoreapp2.1\Razor\Views\Home\Women.g.cshtml.cs
 C:\Users\Floor\source\Repos2\Bytme\obj\Debug\netcoreapp2.1\Razor\Views\Home\Men.g.cshtml.cs
+C:\Users\Floor\source\Repos2\Bytme\obj\Debug\netcoreapp2.1\UserSecretsAssemblyInfo.cs

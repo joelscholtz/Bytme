@@ -66,7 +66,7 @@ using bytme.Models;
             WriteLiteral("\r\n<!DOCTYPE html>\r\n\r\n<html>\r\n");
             EndContext();
             BeginContext(98, 101, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("head", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "aeffa390a4df47faa23ece702edd0379", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("head", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "4a04b22800ea423886123bf629e88318", async() => {
                 BeginContext(104, 88, true);
                 WriteLiteral("\r\n    <meta name=\"viewport\" content=\"width=device-width\" />\r\n    <title>Search</title>\r\n");
                 EndContext();
@@ -86,7 +86,7 @@ using bytme.Models;
             WriteLiteral("\r\n");
             EndContext();
             BeginContext(201, 15, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("body", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "13704f990a7644c39da4034ea883cabf", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("body", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "12e280a32d734845884b5f1a175c24ae", async() => {
                 BeginContext(207, 2, true);
                 WriteLiteral("\r\n");
                 EndContext();
