@@ -253,7 +253,7 @@ namespace bytme.Migrations
 
                     b.Property<string>("PasswordHash");
 
-                    b.Property<string>("PhoneNumber");
+                    //b.Property<string>("PhoneNumber");
 
                     b.Property<bool>("PhoneNumberConfirmed");
 

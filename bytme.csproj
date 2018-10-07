@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\Identity\Services\" />
     <Folder Include="Views\Wishlist\" />
     <Folder Include="Views\ShoppingCart\" />
   </ItemGroup>
