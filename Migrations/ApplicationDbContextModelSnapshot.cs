@@ -28,10 +28,6 @@ namespace bytme.Migrations
 
                     b.Property<string>("description");
 
-                    b.Property<DateTime>("dt_created");
-
-                    b.Property<DateTime>("dt_modified");
-
                     b.Property<string>("gender");
 
                     b.Property<int>("issales");
@@ -57,10 +53,6 @@ namespace bytme.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("description");
-
-                    b.Property<DateTime>("dt_created");
-
-                    b.Property<DateTime>("dt_modified");
 
                     b.HasKey("id");
 
@@ -253,7 +245,7 @@ namespace bytme.Migrations
 
                     b.Property<string>("PasswordHash");
 
-                    //b.Property<string>("PhoneNumber");
+                    b.Property<string>("PhoneNumber");
 
                     b.Property<bool>("PhoneNumberConfirmed");
 

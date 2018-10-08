@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace bytme.Migrations
 {
-    public partial class Init : Migration
+    public partial class bytme : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -60,9 +60,7 @@ namespace bytme.Migrations
                 {
                     id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    description = table.Column<string>(nullable: true),
-                    dt_created = table.Column<DateTime>(nullable: false),
-                    dt_modified = table.Column<DateTime>(nullable: false)
+                    description = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -83,9 +81,7 @@ namespace bytme.Migrations
                     photo_url = table.Column<string>(nullable: true),
                     category_id = table.Column<int>(nullable: false),
                     quantity = table.Column<int>(nullable: false),
-                    issales = table.Column<int>(nullable: false),
-                    dt_created = table.Column<DateTime>(nullable: false),
-                    dt_modified = table.Column<DateTime>(nullable: false)
+                    issales = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {

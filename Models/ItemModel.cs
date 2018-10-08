@@ -17,15 +17,11 @@ namespace bytme.Models
         public int category_id { get; set; }
         public int quantity { get; set; }
         public int issales { get; set; }
-        public DateTime dt_created { get; set; }
-        public DateTime dt_modified { get; set; }
     }
     public class ItemCategories
     {
         public int id { get; set; }
         public string description { get; set; }
-        public DateTime dt_created { get; set; }
-        public DateTime dt_modified { get; set; }
 
     }
 }

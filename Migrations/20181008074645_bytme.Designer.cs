@@ -10,8 +10,8 @@ using bytme.Data;
 namespace bytme.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20181006161542_Init")]
-    partial class Init
+    [Migration("20181008074645_bytme")]
+    partial class bytme
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -29,10 +29,6 @@ namespace bytme.Migrations
                     b.Property<int>("category_id");
 
                     b.Property<string>("description");
-
-                    b.Property<DateTime>("dt_created");
-
-                    b.Property<DateTime>("dt_modified");
 
                     b.Property<string>("gender");
 
@@ -59,10 +55,6 @@ namespace bytme.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("description");
-
-                    b.Property<DateTime>("dt_created");
-
-                    b.Property<DateTime>("dt_modified");
 
                     b.HasKey("id");
 
