@@ -3,19 +3,36 @@
     ViewData["Title"] = "Women";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<div class="btn-group row center-block" role="group">
-    <hr />
-    <button type="button" class="btn btn-light" style="background-color:#fff;">Blazers</button>
-    <button type="button" class="btn btn-light" style="background-color:#fff;">Blouses</button>
-    <button type="button" class="btn btn-light" style="background-color:#fff;">Boots</button>
-    <button type="button" class="btn btn-light" style="background-color:#fff;">Cardigans</button>
-    <button type="button" class="btn btn-light" style="background-color:#fff;">Coats</button>
-    <button type="button" class="btn btn-light" style="background-color:#fff;">Dresses</button>
-    <button type="button" class="btn btn-light" style="background-color:#fff;">Heels</button>
-    <button type="button" class="btn btn-light" style="background-color:#fff;">Jumpers</button>
-    <button type="button" class="btn btn-light" style="background-color:#fff;">Skirts</button>
-    <button type="button" class="btn btn-light" style="background-color:#fff;">Trousers</button>
 
+<div class="btn-group row center-block" role="group">
+    <div class="column">
+        <hr />
+        <button type="button" class="btn btn-light" style="background-color:#fff;">Blazers</button>
+        <button type="button" class="btn btn-light" style="background-color:#fff;">Blouses</button>
+        <button type="button" class="btn btn-light" style="background-color:#fff;">Boots</button>
+        <button type="button" class="btn btn-light" style="background-color:#fff;">Cardigans</button>
+        <button type="button" class="btn btn-light" style="background-color:#fff;">Coats</button>
+        <button type="button" class="btn btn-light" style="background-color:#fff;">Dresses</button>
+        <button type="button" class="btn btn-light" style="background-color:#fff;">Heels</button>
+        <button type="button" class="btn btn-light" style="background-color:#fff;">Jumpers</button>
+        <button type="button" class="btn btn-light" style="background-color:#fff;">Skirts</button>
+        <button type="button" class="btn btn-light" style="background-color:#fff;">Trousers</button>
+    </div>
+</div>
+
+<div id="searchInput" class="row">
+    <div class="col-md-4">
+        <div id="custom-search-input">
+            <div class="input-group col-md-14">
+                <input id="textarea" type="text" class="form-control input-lg" />
+                <span class="input-group-btn">
+                    <button class="btn btn-info btn-lg" type="button" onClick="info()" value='Wikipedia Viewer Search'>
+                        <i class="glyphicon glyphicon-search"></i>
+                    </button>
+                </span>
+            </div>
+        </div>
+    </div>
 </div>
 
 <hr />
