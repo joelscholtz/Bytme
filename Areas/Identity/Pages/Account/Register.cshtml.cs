@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Net;
+using System.Net.Mail;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -66,12 +68,14 @@ namespace bytme.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
+                
                 var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
 
+                    // confirmation code + custom URL creation
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.Page(
                         "/Account/ConfirmEmail",
@@ -79,8 +83,31 @@ namespace bytme.Areas.Identity.Pages.Account
                         values: new { userId = user.Id, code = code },
                         protocol: Request.Scheme);
 
+                    // mailmessage creation
+                    MailMessage verifyMessage = new MailMessage();
+                    verifyMessage.IsBodyHtml = true;
+                    verifyMessage.From = new MailAddress("sayoswebshop@gmail.com");
+                    verifyMessage.To.Add(Input.Email);
+                    verifyMessage.Subject = "Verify your email";
+                    verifyMessage.Body = $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.";
+                    _logger.LogInformation("YAS BISH");
+
+                    // SMTP details
+                    SmtpClient smtpClient = new SmtpClient();
+                    smtpClient.UseDefaultCredentials = false;
+                    smtpClient.Credentials = new NetworkCredential("sayoswebshop@gmail.com", "PonyParkSlagHaren1234");
+                    smtpClient.EnableSsl = true;
+                    smtpClient.Host = "smtp.gmail.com";
+                    smtpClient.Port = 587;
+
+                    //sends message to recipient
+                    smtpClient.Send(verifyMessage);
+                    ModelState.Clear();
+
+                    
                     await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    _logger.LogInformation("MESSAGE SENT!");
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return LocalRedirect(returnUrl);
@@ -94,5 +121,7 @@ namespace bytme.Areas.Identity.Pages.Account
             // If we got this far, something failed, redisplay form
             return Page();
         }
+
+        
     }
 }
