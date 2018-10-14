@@ -24,5 +24,41 @@ namespace bytme.Areas.Identity.Pages.Account.Manage
             [Display(Name = "Postal Code")]
             public string zipcode { get; set; }
         }
+        public InputModel Country { get; set; }
+
+        public class country
+        {
+            [Required]
+            [Display(Name = "Country")]
+            public string Country { get; set; }
+        }
+
+        public InputModel City { get; set; }
+
+        public class city
+        {
+            [Required]
+            [Display(Name = "City")]
+            public string City { get; set; }
+        }
+        public InputModel Streetname { get; set; }
+
+        public class street
+        {
+            [Required]
+            [Display(Name = "Street name")]
+            public string Streetname { get; set; }
+        }
+        public InputModel Streetnumber { get; set; }
+
+        public class streetnumber
+        {
+            [Required]
+            [Display(Name = "Street number")]
+            public string Streetnumber { get; set; }
+        }
+        
+
     }
+
 }
