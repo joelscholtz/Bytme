@@ -51,9 +51,6 @@ namespace bytme.Areas.Identity.Pages.Account
                     return RedirectToPage("./ForgotPasswordConfirmation");
                 }
 
-                // For more information on how to enable account confirmation and password reset please 
-                // visit https://go.microsoft.com/fwlink/?LinkID=532713
-
                 // create code + URL for password reset
                 var code = await _userManager.GeneratePasswordResetTokenAsync(user);
                 var callbackUrl = Url.Page(
@@ -61,6 +58,8 @@ namespace bytme.Areas.Identity.Pages.Account
                     pageHandler: null,
                     values: new { code },
                     protocol: Request.Scheme);
+
+
 
                 // mailmessage creation
                 MailMessage forgotPassMessage = new MailMessage();
@@ -70,6 +69,8 @@ namespace bytme.Areas.Identity.Pages.Account
                 forgotPassMessage.Subject = "Reset Password";
                 forgotPassMessage.Body = $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>."; 
                 _logger.LogInformation("MAIL CREATION COMPLETED!");
+
+
 
                 // SMTP details
                 SmtpClient smtpClient = new SmtpClient();
