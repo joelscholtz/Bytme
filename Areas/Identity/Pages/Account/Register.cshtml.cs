@@ -90,7 +90,7 @@ namespace bytme.Areas.Identity.Pages.Account
                     verifyMessage.To.Add(Input.Email);
                     verifyMessage.Subject = "Verify your email";
                     verifyMessage.Body = $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.";
-                    _logger.LogInformation("YAS BISH");
+                    
 
                     // SMTP details
                     SmtpClient smtpClient = new SmtpClient();
