@@ -24,6 +24,7 @@ namespace bytme.Areas.Identity.Pages.Account.Manage
             [Display(Name = "Postal Code")]
             public string zipcode { get; set; }
         }
+        [BindProperty]
         public InputModel Country { get; set; }
 
         public class country
@@ -32,7 +33,7 @@ namespace bytme.Areas.Identity.Pages.Account.Manage
             [Display(Name = "Country")]
             public string Country { get; set; }
         }
-
+        [BindProperty]
         public InputModel City { get; set; }
 
         public class city
@@ -41,6 +42,7 @@ namespace bytme.Areas.Identity.Pages.Account.Manage
             [Display(Name = "City")]
             public string City { get; set; }
         }
+        [BindProperty]
         public InputModel Streetname { get; set; }
 
         public class street
@@ -49,6 +51,7 @@ namespace bytme.Areas.Identity.Pages.Account.Manage
             [Display(Name = "Street name")]
             public string Streetname { get; set; }
         }
+        [BindProperty]
         public InputModel Streetnumber { get; set; }
 
         public class streetnumber
