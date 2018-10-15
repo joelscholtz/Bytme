@@ -16,6 +16,7 @@ namespace bytme.Models
         [Required]
         [EmailAddress]
         [RegularExpression("^[_a-z0-9-]+(.[a-z0-9-]+)@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,10})$", ErrorMessage = "Must be a valid email address")]
+        [StringLength(100, ErrorMessage = "Must be a valid email address")]
         public string email { get; set; }
         [Required]
         [StringLength(50, MinimumLength = 2, ErrorMessage = "The subject must be between 2 and 50 characters.")]
