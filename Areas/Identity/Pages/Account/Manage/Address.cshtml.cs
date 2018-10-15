@@ -30,6 +30,7 @@ namespace bytme.Areas.Identity.Pages.Account.Manage
         public class country
         {
             [Required]
+            [RegularExpression("^[a-zA-Z ]*$", ErrorMessage = "You can only use letters.")]
             [Display(Name = "Country")]
             public string Country { get; set; }
         }
@@ -39,6 +40,7 @@ namespace bytme.Areas.Identity.Pages.Account.Manage
         public class city
         {
             [Required]
+            [RegularExpression("^[a-zA-Z ]*$", ErrorMessage = "You can only use letters.")]
             [Display(Name = "City")]
             public string City { get; set; }
         }
@@ -48,6 +50,7 @@ namespace bytme.Areas.Identity.Pages.Account.Manage
         public class street
         {
             [Required]
+            [RegularExpression("^[a-zA-Z ]*$", ErrorMessage = "You can only use letters.")]
             [Display(Name = "Street name")]
             public string Streetname { get; set; }
         }
