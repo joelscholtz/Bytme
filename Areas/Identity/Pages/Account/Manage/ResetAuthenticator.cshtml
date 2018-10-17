@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Reset authenticator key";
     ViewData["ActivePage"] = ManageNavPages.TwoFactorAuthentication;
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @Html.Partial("_StatusMessage", Model.StatusMessage)

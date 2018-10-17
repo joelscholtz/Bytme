@@ -2,6 +2,7 @@
 @model TwoFactorAuthenticationModel
 @{
     ViewData["Title"] = "Two-factor authentication (2FA)";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @Html.Partial("_StatusMessage", Model.StatusMessage)
