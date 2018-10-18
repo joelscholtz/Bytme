@@ -90,7 +90,7 @@ namespace bytme.Areas.Identity.Pages.Account
                     verifyMessage.From = new MailAddress("sayoswebshop@gmail.com");
                     verifyMessage.To.Add(Input.Email);
                     verifyMessage.Subject = "Verify your email";
-                    verifyMessage.Body = $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.";
+                    verifyMessage.Body = $"Please confirm your email by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.";
                     
 
                     // SMTP details
@@ -105,9 +105,7 @@ namespace bytme.Areas.Identity.Pages.Account
                     smtpClient.Send(verifyMessage);
                     ModelState.Clear();
 
-                    
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
                     _logger.LogInformation("MESSAGE SENT!");
 
                     //await _signInManager.SignInAsync(user, isPersistent: false);
