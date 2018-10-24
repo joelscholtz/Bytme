@@ -4,6 +4,13 @@
     ViewData["Title"] = "Delete Personal Data";
     ViewData["ActivePage"] = ManageNavPages.DeletePersonalData;
 }
+<head>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+    <script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+
+    <script src="//ajax.aspnetcdn.com/ajax/mvc/4.0/jquery.validate.unobtrusive.min.js"></script>
+</head>
 
 <h4>@ViewData["Title"]</h4>
 
@@ -28,7 +35,3 @@
         <button class="btn btn-danger" type="submit">Delete data and close my account</button>
     </form>
 </div>
-
-@section Scripts {
-<partial name="_ValidationScriptsPartial" />
-}

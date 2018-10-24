@@ -7,14 +7,32 @@ using Microsoft.AspNetCore.Mvc;
 using bytme.Models;
 using System.Net.Mail;
 using System.Net;
+using bytme.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace bytme.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly ApplicationDbContext _context;
+        
+        public HomeController(ApplicationDbContext context)
         {
-            return View();
+            _context = context;
+        }
+
+        public ActionResult Index()
+        {
+            IEnumerable<Item> item = _context.Items.AsEnumerable();
+
+            return View(item);
+        }
+
+        public ActionResult Products()
+        {
+            IEnumerable<Item> item = _context.Items.AsEnumerable();
+
+            return View(item);
         }
 
         public IActionResult About()
@@ -38,12 +56,16 @@ namespace bytme.Controllers
 
         public IActionResult Men()
         {
-            return View();
+            IEnumerable<Item> item = _context.Items.AsEnumerable();
+
+            return View(item);
         }
 
         public IActionResult Women()
         {
-            return View();
+            IEnumerable<Item> item = _context.Items.AsEnumerable();
+
+            return View(item);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

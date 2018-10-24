@@ -4,6 +4,13 @@
     ViewData["Title"] = "Two-factor authentication (2FA)";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<head>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+    <script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+
+    <script src="//ajax.aspnetcdn.com/ajax/mvc/4.0/jquery.validate.unobtrusive.min.js"></script>
+</head>
 <div>
     <h3>Change your account settings</h3>
     <hr />
@@ -65,7 +72,3 @@
         </div>
     </div>
 </div>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
