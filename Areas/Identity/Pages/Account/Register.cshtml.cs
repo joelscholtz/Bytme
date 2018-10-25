@@ -105,11 +105,11 @@ namespace bytme.Areas.Identity.Pages.Account
                     smtpClient.Send(verifyMessage);
                     ModelState.Clear();
 
-
                     _logger.LogInformation("MESSAGE SENT!");
 
-                    //await _signInManager.SignInAsync(user, isPersistent: false);
-                    return LocalRedirect(returnUrl);
+
+
+                    return RedirectToPage("./Verification");
                 }
                 foreach (var error in result.Errors)
                 {
