@@ -31,6 +31,7 @@ namespace bytme.Areas.Identity.Pages.Account.Manage
 
         public string Username { get; set; }
 
+        [EmailAddress]
         public bool IsEmailConfirmed { get; set; }
 
         [TempData]

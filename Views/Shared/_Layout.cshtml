@@ -47,10 +47,11 @@
         </div>
     </nav>
 
-    <partial name="_CookieConsentPartial" />
-
     <div class="container body-content">
         @RenderBody()
+        
+</div>
+</body>
 </html>
 <hr />
 <footer class="container text-center text-md-left">
@@ -63,7 +64,7 @@
 
                 <h5 class="font-weight-bold text-uppercase mt-3 mb-4">About</h5>
                 <p>
-                    Sayos is a small start up by students from the Rotterdam University of Applied Sciences. 
+                    Sayos is a small start up by students from the Rotterdam University of Applied Sciences.
                 </p>
 
             </div>
@@ -72,8 +73,7 @@
 
                 <h5 class="font-weight-bold text-uppercase mt-3 mb-4"></h5>
 
-                <ul class="list-unstyled">
-                </ul>
+                <ul class="list-unstyled"></ul>
 
             </div>
 
@@ -122,7 +122,7 @@
         </div>
 
     </div>
- <hr />
+    <hr />
 
     <!-- Copyright -->
     <div class="footer-copyright text-center py-3">
@@ -131,7 +131,6 @@
     </div>
 
 </footer>
-</div>
 
 <environment include="Development">
     <script src="~/lib/jquery/dist/jquery.js"></script>
@@ -154,6 +153,6 @@
     <script src="~/js/site.min.js" asp-append-version="true"></script>
 </environment>
 
-@RenderSection("Scripts", required: false)
-</body>
-</html>
+@section Scripts {
+    @RenderSection("Scripts", required: false)
+}
