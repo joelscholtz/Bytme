@@ -9,7 +9,6 @@ C:\Users\Acer\Documents\School\Jaar 3\Project C\website\bytme\bytme\obj\Debug\ne
 C:\Users\Acer\Documents\School\Jaar 3\Project C\website\bytme\bytme\obj\Debug\netcoreapp2.1\bytme.csproj.CoreCompileInputs.cache
 C:\Users\Acer\Documents\School\Jaar 3\Project C\website\bytme\bytme\obj\Debug\netcoreapp2.1\bytme.RazorAssemblyInfo.cache
 C:\Users\Acer\Documents\School\Jaar 3\Project C\website\bytme\bytme\obj\Debug\netcoreapp2.1\bytme.RazorAssemblyInfo.cs
-C:\Users\Acer\Documents\School\Jaar 3\Project C\website\bytme\bytme\obj\Debug\netcoreapp2.1\UserSecretsAssemblyInfo.cs
 C:\Users\Acer\Documents\School\Jaar 3\Project C\website\bytme\bytme\obj\Debug\netcoreapp2.1\bytme.AssemblyInfoInputs.cache
 C:\Users\Acer\Documents\School\Jaar 3\Project C\website\bytme\bytme\obj\Debug\netcoreapp2.1\bytme.AssemblyInfo.cs
 C:\Users\Acer\Documents\School\Jaar 3\Project C\website\bytme\bytme\obj\Debug\netcoreapp2.1\bytme.TagHelpers.input.cache
