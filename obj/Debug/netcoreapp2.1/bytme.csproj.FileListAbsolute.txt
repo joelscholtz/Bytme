@@ -214,3 +214,4 @@ C:\Users\Floor\source\repos\joelscholtz\Bytme\obj\Debug\netcoreapp2.1\bytme.dll
 C:\Users\Floor\source\repos\joelscholtz\Bytme\obj\Debug\netcoreapp2.1\bytme.pdb
 C:\Users\Floor\source\repos\joelscholtz\Bytme\obj\Debug\netcoreapp2.1\bytme.csproj.CopyComplete
 C:\Users\Floor\source\repos\joelscholtz\Bytme\obj\Debug\netcoreapp2.1\UserSecretsAssemblyInfo.cs
+C:\Users\Acer\Documents\School\Jaar 3\Project C\website\bytme\Bytme\obj\Debug\netcoreapp2.1\Razor\Areas\Identity\Pages\Account\Verification.g.cshtml.cs
