@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using bytme.Models;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using bytme.Areas.Identity.Services;
+using Microsoft.AspNetCore.Http;
 
 namespace bytme
 {
@@ -75,6 +76,26 @@ namespace bytme
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            env.EnvironmentName = EnvironmentName.Production;
+
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseExceptionHandler("/error");
+            }
+            app.UseStatusCodePages(async context =>
+            {
+                context.HttpContext.Response.ContentType = "text/HTML";
+
+                await context.HttpContext.Response.WriteAsync(
+                    "<center><strong><font size=6> This page doesn't exist" +
+                    "<p><strong>Status code: " + 
+                    context.HttpContext.Response.StatusCode);
+            });
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
