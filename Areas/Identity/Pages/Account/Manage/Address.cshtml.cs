@@ -31,8 +31,7 @@ namespace bytme.Areas.Identity.Pages.Account.Manage
         [BindProperty]
         public InputModel Input { get; set; }
 
-        public string ReturnUrl { get; set; }
-
+       
         [TempData]
         public string StatusMessage { get; set; }
 
@@ -61,11 +60,7 @@ namespace bytme.Areas.Identity.Pages.Account.Manage
             [Display(Name = "House Number")]
             [StringLength(5, ErrorMessage = "The longest house number in the Netherlands is 5 characters.")]
             public string streetnumber { get; set; }
-
-            //[DataType(DataType.Text)]
-            //[Display(Name = "House Number Addition", Description = "For example A or II")]
-            //[StringLength(6, ErrorMessage = "
-            //public string streetnumberadd { get; set; }
+            
 
             [Required]
             [DataType(DataType.Text)]
@@ -80,39 +75,64 @@ namespace bytme.Areas.Identity.Pages.Account.Manage
             public string zipcode { get; set; }
         }
 
-        public void OnGet(string returnUrl = null)
-        {
-            ReturnUrl = returnUrl;
-        }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> AccountChange(InputModel model)
+        public async Task<IActionResult> OnPostAsync()
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                // Get the current application user
-                var user = await _userManager.GetUserAsync(User);
-
-                //Update the details
-                user.name = model.name;
-                user.surname = model.surname;
-                user.street = model.street;
-                user.streetnumber = model.streetnumber;
-                user.city = model.city;
-                user.zipcode = model.zipcode;
-
-                // Update user address
-                var result = await _userManager.UpdateAsync(user);
+                return Page();
             }
 
+            // gets current user
+            var user = await _userManager.GetUserAsync(User);
 
-            //await _signInManager.RefreshSignInAsync(User);
+            // if no user is found, display error message
+            if (user == null)
+            {
+                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+            // checks if current value is equal to new value
+            // changes old value to input if false
+            if (Input.name != user.name)
+            {
+                user.name = Input.name;
+            }
+            if (Input.surname != user.surname)
+            {
+                user.surname = Input.surname;
+            }
+            if (Input.street != user.street)
+            {
+                user.street = Input.street;
+            }
+            if (Input.streetnumber != user.streetnumber)
+            {
+                user.streetnumber = Input.streetnumber;
+            }
+            if (Input.city != user.city)
+            {
+                user.city = Input.city;
+            }
+            if (Input.zipcode != user.zipcode)
+            {
+                user.zipcode = Input.zipcode;
+            }
+
+            // update user
+            var result = await _userManager.UpdateAsync(user);
+
+            // dev logger message
             _logger.LogInformation("User added their address information successfully.");
-            StatusMessage = "Your address information has been added.";
+
+            // user message
+            StatusMessage = "Your address information has been updated.";
 
             return RedirectToPage();
-
         }
+   
     }
 }
