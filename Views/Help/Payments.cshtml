@@ -1,0 +1,113 @@
+﻿
+@{
+    ViewData["Title"] = "Payments";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row text-center">
+        <h2>Payments</h2>
+    </div>
+</div>
+<div class="container">
+    <div class="panel-group" id="accordion">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Which cards do you accept?</a>
+                </h4>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse in">
+                <div class="panel-body">
+                    <p><strong>Credit:</strong></p>
+                    <ul>
+                        <li>Mastercard</li>
+                        <li>Visa</li>
+                        <li>American Express</li>
+                    </ul>
+                    <p><strong>Debit:</strong></p>
+                    <ul>
+                        <li>Maestro</li>
+                        <li>Visa Electron</li>
+                        <li>Visa Debit</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTen">When will my card be charged?</a>
+                </h4>
+            </div>
+            <div id="collapseTen" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <p>
+                        Your card will not be charged until your order has left our warehouse. If you send goods back, the amount will be credited back to your card account.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseEleven">Are my card details safe?</a>
+                </h4>
+            </div>
+            <div id="collapseEleven" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <p>For your convenience, your payment details will be saved on our encrypted server. Your card information is encrypted in our system using 128-bit SSL technology. This high standard of security means shopping with a card on Sayos is safe and secure, and ensures that your data will under no circumstances be accessible by third parties.</p>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwelve">Paying with PayPal</a>
+                </h4>
+            </div>
+            <div id="collapseTwelve" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <p>PayPal payments are usually credited within a few minutes.</p>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThirteen">What sort of payment confirmation will I receive?</a>
+                </h4>
+            </div>
+            <div id="collapseThirteen" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <p>You will receive an order confirmation which contains the link to your PayPal payment.</p>
+                    <p>If for some reason, the payment process is interrupted, this link offers you the chance to reprocess your payment with PayPal. Please note, however, that after three hours payment via PayPal is no longer possible.</p>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFourteen">Can I pay by PayPal without creating a PayPal account?</a>
+                </h4>
+            </div>
+            <div id="collapseFourteen" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <p>Yes, in order to do so select PayPal as your preferred payment method during checkout. At the end of the ordering process, you will be directed to PayPal. If you prefer not to create an account, then simply select the option ‘Don’t have a PayPal account?’ and you can enter your card details and confirm the payment as a PayPal guest.</p>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFifteen">What happens if I make a return when I payed with PayPal?</a>
+                </h4>
+            </div>
+            <div id="collapseFifteen" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <p>The amount will be credited to your PayPal account, unless you have paid as a guest. In that case, the amount will be credited to your bank account.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

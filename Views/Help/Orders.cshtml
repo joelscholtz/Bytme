@@ -1,0 +1,128 @@
+﻿@{
+    ViewData["Title"] = "Orders";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <div class="row text-center">
+        <h2>Orders</h2>
+    </div>
+</div>
+<div class="container">
+    <div class="panel-group" id="accordion">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Where is my order?</a>
+                </h4>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse in">
+                <div class="panel-body">
+                    Your order will arrive within <strong>3-5 days </strong>(Monday-Saturday) after it's been placed.
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTen">Can I modify my order after it has been placed?</a>
+                </h4>
+            </div>
+            <div id="collapseTen" class="panel-collapse collapse">
+                <div class="panel-body">
+                    Unfortunately, we can’t make changes to your order after it's been finalised.<br />
+
+                    Once an order is placed, the delivery option, delivery address, payment method, and product sizes can't be changed.
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseEleven">Authenticity of products</a>
+                </h4>
+            </div>
+            <div id="collapseEleven" class="panel-collapse collapse">
+                <div class="panel-body">
+                    All products sold on our website are genuine. We only trade with reputable manufacturers who provide the highest quality of products.<br />
+
+                    We do not sell fake, counterfeit, or replica goods.
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwelve">Price changes</a>
+                </h4>
+            </div>
+            <div id="collapseTwelve" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <strong><p>Satisfaction with your Sayos shopping experience is our top priority.</p></strong>
+
+                    <p>
+                        Our retail prices are based on an independent internal calculation.
+                        Translation: Our product pricing is subject to change due to a variety of reasons including availability, special offers, sales, seasonal offers, and many other possible factors.
+                    </p>
+
+                    <p>Bottom line: We constantly strive to offer you the best possible prices. Make sure to check Sayos regularly so you don't miss out on any bargains!</p>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThirteen">How can I place an order?</a>
+                </h4>
+            </div>
+            <div id="collapseThirteen" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <p><strong><span style="font-size:16px;">To order on Sayos you'll need to have the following:</span></strong></p>
+                    <ul>
+                        <li>a NL billing and delivery address</li>
+                        <li>a debit/credit card or PayPal account linked to a NL bank account</li>
+                        <li>an IP address in NL</li>
+                        <li>a Sayos account</li>
+                    </ul>
+
+                    <p><strong><span style="font-size:16px;">To place an order, just follow these steps:</span></strong></p>
+                    <p><strong>1.</strong> Place an item in your bag: Pick the size you want and select 'Add to bag'. Go to your bag in the top right corner when you have finished shopping.</p>
+                    <p><strong>2.</strong> From inside the bag select 'Go to checkout'.</p>
+                    <p><strong>3.</strong> Select your preferred delivery option. If you have chosen home delivery then confirm your address, if not then select your preferred parcel shop for delivery.</p>
+                    <p><strong>4.</strong> You will be asked to select a payment method. Simply select the payment method you would like, fill in the details where required, and click next.</p>
+                    <p><strong>5.</strong> You are now given the chance to check your order. If you are paying by PayPal you will now be redirected to the PayPal website to complete the process.</p>
+                    <p><strong>6.</strong> Once your order has been completed you will see the confirmation on the screen. You will also receive a confirmation email with an order number.</p>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFourteen">How can I tell if my order is confirmed?</a>
+                </h4>
+            </div>
+            <div id="collapseFourteen" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <p>Once your order has been completed, you will see a page showing your order and payment details.</p>
+                    <p>Shortly after you complete your order, we’ll send you an order confirmation email.</p>
+                    <p>You can also sign in to your account and check your recent orders under 'My Account' and 'Order History'.</p>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFifteen">How can I make sure my delivery address is correct?</a>
+                </h4>
+            </div>
+            <div id="collapseFifteen" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <p>Before completing your order, please make sure that you have entered the correct delivery address. This can be checked at your <a asp-area="Identity" asp-page="/Account/Manage/Index">Addres</a> page. </p>
+                    <p>Shortly after you complete your order, we’ll send you an order confirmation email.</p>
+                    <p>If you notice you need to change this, just enter your correct address information in the fields, before completing your order.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

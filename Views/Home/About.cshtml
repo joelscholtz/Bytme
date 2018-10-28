@@ -20,6 +20,72 @@ else
 <hr />
 
 <div class="container">
+    <div class="row text-center">
+        <div class="col-sm-4 col-md-4 col-lg-2 col-xs-12">
+            <div class="thumbnail">
+                <div class="caption">
+                    <a asp-area="Identity" asp-page="/Account/Manage/Index" style="color:black">
+                        <span class="glyphicon glyphicon-user" style="font-size:50px"></span>
+                    </a><br />
+                    <a asp-area="Identity" asp-page="/Account/Manage/Index" style="color:black">My Account</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4 col-md-4 col-lg-2 col-xs-12">
+            <div class="thumbnail">
+                <div class="caption">
+                    <a asp-controller="Help" asp-action="Orders" style="color:black">
+                        <span class="glyphicon glyphicon-gift" style="font-size:50px"></span>
+                    </a><br />
+                    <a asp-controller="Help" asp-action="Orders" style="color:black">Orders</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4 col-md-4 col-lg-2 col-xs-12">
+            <div class="thumbnail">
+                <div class="caption">
+                    <a asp-controller="Help" asp-action="Delivery" style="color:black">
+                        <span class="glyphicon glyphicon-send" style="font-size:50px"></span>
+                    </a><br />
+                    <a asp-controller="Help" asp-action="Delivery" style="color:black">Delivery</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4 col-md-4 col-lg-2 col-xs-12">
+            <div class="thumbnail">
+                <div class="caption">
+                    <a asp-controller="Help" asp-action="Return" style="color:black">
+                        <span class="glyphicon glyphicon-retweet" style="font-size:50px"></span>
+                    </a><br />
+                    <a asp-controller="Help" asp-action="Return" style="color:black">Returns &amp; Refunds</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4 col-md-4 col-lg-2 col-xs-12">
+            <div class="thumbnail">
+                <div class="caption">
+                    <a asp-controller="Help" asp-action="Payments" style="color:black">
+                        <span class="glyphicon glyphicon-euro" style="font-size:50px"></span>
+                    </a><br />
+                    <a asp-controller="Help" asp-action="Payments" style="color:black">Payments</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4 col-md-4 col-lg-2 col-xs-12">
+            <div class="thumbnail">
+                <div class="caption">
+                    <a asp-controller="Help" asp-action="Sizing" style="color:black">
+                        <span class="glyphicon glyphicon-tags" style="font-size:50px"></span>
+                    </a><br />
+                    <a asp-controller="Help" asp-action="Sizing" style="color:black">Sizing</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container">
     <div class="panel-group" id="accordion">
         <h2>General questions</h2>
         <div class="panel panel-default">
