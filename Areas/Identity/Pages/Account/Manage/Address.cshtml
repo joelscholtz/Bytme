@@ -1,6 +1,7 @@
 ﻿@page
 @model AddressModel
 @inject SignInManager<UserModel> SignInManager
+@inject UserManager<UserModel> userManager
 @using Microsoft.AspNetCore.Identity
 @using bytme.Models;
 @{
@@ -10,6 +11,9 @@
 @Html.Partial("_StatusMessage", Model.StatusMessage)
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+}
+@{ 
+    var user = await userManager.GetUserAsync(User);
 }
 <div>
     <h3>Change your account settings</h3>
@@ -26,32 +30,74 @@
                         <div asp-validation-summary="All" class="text-danger"></div>
                         <div class="form-group">
                             <label asp-for="Input.name"></label>
-                            <input asp-for="Input.name" class="form-control" />
+                            @if (user.name != null)
+                            {
+                                <input asp-for="Input.name" class="form-control" placeholder="@user.name" />
+                            }
+                            else
+                            {
+                                <input asp-for="Input.name" class="form-control" placeholder="Name" />
+                            }
                             <span asp-validation-for="Input.name" class="text-danger"></span>
                         </div>
                         <div class="form-group">
                             <label asp-for="Input.surname"></label>
-                            <input asp-for="Input.surname" class="form-control" />
+                            @if (user.surname != null)
+                            {
+                                <input asp-for="Input.surname" class="form-control" placeholder="@user.surname" />
+                            }
+                            else
+                            {
+                                <input asp-for="Input.surname" class="form-control" placeholder="Surname" />
+                            }                          
                             <span asp-validation-for="Input.surname" class="text-danger"></span>
                         </div>
                         <div class="form-group">
                             <label asp-for="Input.street"></label>
-                            <input asp-for="Input.street" class="form-control" />
+                            @if (user.street != null)
+                            {
+                                <input asp-for="Input.street" class="form-control" placeholder="@user.street" />
+                            }
+                            else
+                            {
+                                <input asp-for="Input.street" class="form-control" placeholder="Street" />
+                            }
                             <span asp-validation-for="Input.street" class="text-danger"></span>
                         </div>
                         <div class="form-group">
                             <label asp-for="Input.streetnumber"></label>
-                            <input asp-for="Input.streetnumber" class="form-control" />
+                            @if (user.streetnumber != null)
+                            {
+                                <input asp-for="Input.streetnumber" class="form-control" placeholder="@user.streetnumber" />
+                            }
+                            else
+                            {
+                                <input asp-for="Input.streetnumber" class="form-control" placeholder="House Number" />
+                            }
                             <span asp-validation-for="Input.streetnumber" class="text-danger"></span>
                         </div>
                         <div class="form-group">
                             <label asp-for="Input.city"></label>
-                            <input asp-for="Input.city" class="form-control" />
+                            @if (user.name != null)
+                            {
+                                <input asp-for="Input.city" class="form-control" placeholder="@user.city" />
+                            }
+                            else
+                            {
+                                <input asp-for="Input.city" class="form-control" placeholder="City" />
+                            }
                             <span asp-validation-for="Input.city" class="text-danger"></span>
                         </div>
                         <div class="form-group">
                             <label asp-for="Input.zipcode"></label>
-                            <input asp-for="Input.zipcode" class="form-control" />
+                            @if (user.zipcode != null)
+                            {
+                                <input asp-for="Input.zipcode" class="form-control" placeholder="@user.zipcode" />
+                            }
+                            else
+                            {
+                                <input asp-for="Input.zipcode" class="form-control" placeholder="Postal Code" />
+                            }
                             <span asp-validation-for="Input.zipcode" class="text-danger"></span>
                         </div>
                         <button type="submit" class="btn btn-default">Submit</button>
