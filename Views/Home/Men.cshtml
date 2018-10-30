@@ -1,4 +1,6 @@
-﻿@model IEnumerable<bytme.Models.Item>
+﻿@model PaginatedList<bytme.Models.Item>
+
+
 
 @{
     ViewData["Title"] = "Men";
@@ -20,21 +22,33 @@
 </div>
 <hr />
 
+<center>
+    <button>
+        <a asp-action="Men" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Price</a>
+    </button>
+</center>
+<center>
+    <button>
+        <a asp-action="Men" asp-route-sortOrder="@ViewData["DateSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Name</a>
+    </button>
+</center>
+
 @foreach (var item in Model)
 {
     if (item.gender == "male")
     {
-    <div class="col-sm-4 col-md-4 col-lg-4 col-xs-6">
-        <div class="thumbnail">
-            <img src="@item.photo_url" style="width:200px;height:200px" />
-            <div class="caption">
-                <h3 class="row text-center">@item.description</h3>
-                <p class="row text-center">@item.long_description</p>
-                <p class="row text-center"><a href="#" class="btn btn-primary" role="button"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Add to Cart</a></p>
-                <p class="row text-center"><a href="#" class="btn btn-danger" role="button"><span class="glyphicon glyphicon-heart-empty" aria-hidden="true"></span></a></p>
+        <div class="col-sm-4 col-md-4 col-lg-4 col-xs-6">
+            <div class="thumbnail">
+                <img src="@item.photo_url" style="width:200px;height:300px" />
+                <div class="caption">
+                    <h3 class="row text-center">@item.description</h3>
+                    <p class="row text-center">@item.long_description</p>
+                    <p class="row text-center">>&euro;@item.price</p>
+                    <p class="row text-center"><a href="#" class="btn btn-primary" role="button"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Add to Cart</a></p>
+                    <p class="row text-center"><a href="#" class="btn btn-danger" role="button"><span class="glyphicon glyphicon-heart-empty" aria-hidden="true"></span></a></p>
+                </div>
             </div>
         </div>
-    </div>
     }
 }
 
@@ -50,3 +64,24 @@
     </ul>
 </nav>-->
 
+<br>
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Men"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-page="@(Model.PageIndex - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @prevDisabled">
+    Previous
+</a>
+<a asp-action="Men"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-page="@(Model.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @nextDisabled">
+    Next
+</a>
+<br />

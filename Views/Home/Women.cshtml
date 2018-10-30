@@ -1,42 +1,193 @@
 ﻿@model IEnumerable<bytme.Models.Item>
+
+@using bytme.Models;
+@using System;
 @{
     ViewData["Title"] = "Women";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="btn-group row center-block" role="group">
-    <div class="column">
+
+
+<script>
+    var SliderMax;
+    var SliderMin;
+    function evalSliderMin() {
+        var sliderValueMin = document.getElementById('priceMinSlider').value;
+        document.getElementById('sliderValueMin').innerHTML = sliderValueMin;
+
+    }
+    function evalSliderMax() {
+        var sliderValueMax = document.getElementById('priceMaxSlider').value;
+        document.getElementById('sliderValueMax').innerHTML = sliderValueMax;
+    }
+    function evalSliderEquals() {
+        SliderMax = document.getElementById('priceMaxSlider');
+        SliderMin = document.getElementById('priceMinSlider');
+
+        if (SliderMin.value >= SliderMax.value) {
+            SliderMin.value = SliderMax.value - 1;
+            document.getElementById('sliderValueMin').innerHTML = SliderMin.value;
+        }
+        if (SliderMax.value <= SliderMin.value) {
+            SliderMax.value = SliderMin.value + 1;
+            document.getElementById('sliderValueMax').innerHTML = SliderMax.value;
+        }
+
+    }
+
+
+</script>
+<div class="form-group-lg row center-block" role="group">
+
+    <form asp-action="Women" method="post">
+        <div class="btn-group row center-block" role="group">
+            <div class="column">
+                <hr />
+                <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="All" />
+                <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Blazers">
+                <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Blouses">
+                <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Boots">
+                <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Coats">
+                <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Cardigans">
+                <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Dresses">
+                <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Heels">
+                <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Jumpers">
+                <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Skirts">
+                <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Trousers">
+            </div>
+        </div>
         <hr />
-        <button type="button" class="btn btn-light" style="background-color:#fff;">Blazers</button>
-        <button type="button" class="btn btn-light" style="background-color:#fff;">Blouses</button>
-        <button type="button" class="btn btn-light" style="background-color:#fff;">Boots</button>
-        <button type="button" class="btn btn-light" style="background-color:#fff;">Cardigans</button>
-        <button type="button" class="btn btn-light" style="background-color:#fff;">Coats</button>
-        <button type="button" class="btn btn-light" style="background-color:#fff;">Dresses</button>
-        <button type="button" class="btn btn-light" style="background-color:#fff;">Heels</button>
-        <button type="button" class="btn btn-light" style="background-color:#fff;">Jumpers</button>
-        <button type="button" class="btn btn-light" style="background-color:#fff;">Skirts</button>
-        <button type="button" class="btn btn-light" style="background-color:#fff;">Trousers</button>
-    </div>
+        <h3>Categories</h3>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4">
+                    <h5><strong>  Price:</strong></h5>
+                    <div style="border: solid 1px grey"></div>
+                    <div class="form-group">
+                        <label for="price-min">Minumum:</label>
+                        <input class="form-control" name="minPrice" id="priceMinSlider" min="8" max="1500" value="@ViewBag.miniPrice" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="priceMaxSlider">Maximum:</label>
+                        <input class="form-control" name="maxPrice" id="priceMaxSlider" min="8" max="1500" value="@ViewBag.maxiPrice">
+                    </div>
+
+
+                    <input type="hidden" name="currentCat" value="@ViewBag.currentCategory" />
+                </div>
+                <div class="col-lg-4">
+                    <h5><strong>  Brand(@ViewBag.BrandCount):</strong></h5>
+                    <div style="border: solid 1px grey"></div>
+                    <div class="form-group" style="overflow:scroll; height:300px;">
+                        <label for=""></label>
+                        <script>
+                            function checkOnlyOne(b) {
+                                $('input[type="checkbox"]').on('change', function () {
+                                    $('input[type="checkbox"]').not(this).prop('checked', false);
+                                });
+                            }
+                        </script>
+                        <input type="hidden" name="currentBrand" value="@ViewBag.currentBrand" />
+                        @if (ViewBag.PreviousBrand != null)
+                        {
+                            @foreach (var item in ViewBag.PreviousBrand)
+                            {
+                                <input class="BrandCheck" Onclick="checkOnlyOne(this.value)" type="checkbox" name="BrandBox" value="@item" /><span>@item</span><br>
+
+                            }
+                        }
+                        else
+                        {
+                            @foreach (var item in Model.Select(o => o.description).Distinct())
+                            {
+                                <input class="BrandCheck" Onclick="checkOnlyOne(this.value)" type="checkbox" name="BrandBox" value="@item" /><span>@item</span><br>
+
+                            }
+                        }
+
+                    </div>
+                </div>
+                @{
+
+                }
+                <div class="col-lg-4">
+                    <div style="border: solid 1px grey"></div>
+                    <div class="form-group" style="overflow:scroll; height:300px;">
+                        @foreach (var color in ViewBag.ColorList)
+                        {
+                            <input class="BrandCheck" Onclick="checkOnlyOne(this.value)" type="checkbox" name="ColorBox" value="@color" /><span>@color</span><br>
+                        }
+                    </div>
+                </div>
+                @*<div class="col-lg-3">
+                        <h5><strong>  Size</strong></h5>
+                        <div style="border: solid 1px grey"></div>
+                        <br />
+                        <ul>
+                            <li style="list-style: none">  <input type="checkbox" name="#" value="#"> XS<br></li>
+                            <li style="list-style: none">  <input type="checkbox" name="#" value="#"> S<br></li>
+                            <li style="list-style: none">  <input type="checkbox" name="#" value="#"> M<br></li>
+                            <li style="list-style: none">  <input type="checkbox" name="#" value="#"> L<br></li>
+                            <li style="list-style: none">  <input type="checkbox" name="#" value="#"> XL<br></li>
+                            <li style="list-style: none">  <input type="checkbox" name="#" value="#"> XXL<br></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-3">
+                        <h5><strong>  Size</strong></h5>
+                        <div style="border: solid 1px grey"></div>
+                        <br />
+                        <ul>
+                            <li style="list-style: none">  <input type="checkbox" name="XS" value="#"> XS<br></li>
+                            <li style="list-style: none">  <input type="checkbox" name="S" value="#"> S<br></li>
+                            <li style="list-style: none">  <input type="checkbox" name="M" value="#"> M<br></li>
+                            <li style="list-style: none">  <input type="checkbox" name="L" value="#"> L<br></li>
+                            <li style="list-style: none">  <input type="checkbox" name="XL" value="#"> XL<br></li>
+                            <li style="list-style: none">  <input type="checkbox" name="XXL" value="#"> XXL<br></li>
+                        </ul>
+                    </div>
+
+                    <div class="col-lg-3">
+                        <h5><strong>  Brand</strong></h5>
+                        <div style="border: solid 1px grey"></div>
+                        <br />
+                        <ul>
+                            <li style="list-style: none">  <input type="checkbox" name="#" value="#"> Lorem Ipsum..<br></li>
+                            <li style="list-style: none">  <input type="checkbox" name="#" value="#"> Lorem Ipsum..<br></li>
+                            <li style="list-style: none">  <input type="checkbox" name="#" value="#"> Lorem Ipsum..<br></li>
+                            <li style="list-style: none">  <input type="checkbox" name="#" value="#"> Lorem Ipsum..<br></li>
+                            <li style="list-style: none">  <input type="checkbox" name="#" value="#"> Lorem Ipsum..<br></li>
+                            <li style="list-style: none">  <input type="checkbox" name="#" value="#"> Lorem Ipsum..<br></li>
+                        </ul>
+                    </div>*@
+                <button type="submit" id="submit" name="submit" class="btn btn-success pull-right">Apply Filters</button>
+            </div>
+        </div>
+    </form>
 </div>
 <hr />
+<br />
+
 
 @foreach (var item in Model)
 {
-    if (item.gender == "female")
+    @if (item.gender == "female")
     {
-    <div class="col-sm-4 col-md-4 col-lg-4 col-xs-6">
-        <div class="thumbnail">
-            <img src="@item.photo_url" style="width:200px;height:200px" />
-            <div class="caption">
-                <h3 class="row text-center">@item.description</h3>
-                <p class="row text-center">@item.long_description</p>
-                <p class="row text-center"><a href="#" class="btn btn-primary" role="button"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Add to Cart</a></p>
-                <p class="row text-center"><a href="#" class="btn btn-danger" role="button"><span class="glyphicon glyphicon-heart-empty" aria-hidden="true"></span></a></p>
+        <div class="col-sm-4 col-md-4 col-lg-4 col-xs-6">
+            <div class="thumbnail">
+                <img src="@item.photo_url" style="width:200px;height:200px" />
+                <div class="caption">
+                    <h3 class="row text-center">@item.description</h3>
+                    <p class="row text-center">@item.long_description</p>
+                    <p class="row text-center">@item.price</p>
+                    <p class="row text-center"><a href="#" class="btn btn-primary" role="button"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Add to Cart</a></p>
+                    <p class="row text-center"><a href="#" class="btn btn-danger" role="button"><span class="glyphicon glyphicon-heart-empty" aria-hidden="true"></span></a></p>
+                </div>
             </div>
         </div>
-    </div>
     }
+
 }
 
 <!--<nav class="text-center">
