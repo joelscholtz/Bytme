@@ -60,7 +60,7 @@
 
                 <div class="navbar-collapse collapse">
                     <div class="navbar-left" style="margin-top:10px; margin-left:15px;">
-                        @using (Html.BeginForm())
+                        @using (Html.BeginForm("Products","Home", FormMethod.Get))
                         {
                             <ul class="nav navbar-nav">
                                 <li><input placeholder="Search.." type=@Html.TextBox("SearchString")</li>

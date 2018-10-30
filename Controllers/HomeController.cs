@@ -28,9 +28,16 @@ namespace bytme.Controllers
             return View(item);
         }
 
-        public ActionResult Products()
+        public IActionResult Products(string searchString, string searchCount)
         {
             IEnumerable<Item> item = _context.Items.AsEnumerable();
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                item = item.Where(s => s.description.Contains(searchString) || s.long_description.Contains(searchString));
+                ViewBag.Message = searchString;
+                ViewBag.Count = item.Where(s => s.description.Contains(searchString) || s.long_description.Contains(searchString)).Count();
+            }
 
             return View(item);
         }
@@ -54,9 +61,7 @@ namespace bytme.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Men(
-    string sortOrder,
-    int? page)
+        public async Task<IActionResult> Men(string sortOrder, int? page)
         {
             ViewData["CurrentSort"] = sortOrder;
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
