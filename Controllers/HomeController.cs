@@ -34,9 +34,9 @@ namespace bytme.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                item = item.Where(s => s.description.Contains(searchString) || s.long_description.Contains(searchString));
+                item = item.Where(s => s.description.ToUpper().Contains(searchString.ToUpper()) || s.long_description.ToLower().Contains(searchString.ToLower()));
                 ViewBag.Message = searchString;
-                ViewBag.Count = item.Where(s => s.description.Contains(searchString) || s.long_description.Contains(searchString)).Count();
+                ViewBag.Count = item.Where(s => s.description.ToUpper().Contains(searchString.ToUpper()) || s.long_description.ToLower().Contains(searchString.ToLower())).Count();
             }
 
             return View(item);
