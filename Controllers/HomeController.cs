@@ -7,14 +7,19 @@ using Microsoft.AspNetCore.Mvc;
 using bytme.Models;
 using System.Net.Mail;
 using System.Net;
+using System.CodeDom.Compiler;
+using Microsoft.CSharp;
 using bytme.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
+using System.Linq.Expressions;
 
 namespace bytme.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ApplicationDbContext _context;
+
 
         public HomeController(ApplicationDbContext context)
         {
@@ -31,6 +36,8 @@ namespace bytme.Controllers
         public IActionResult Products(string searchString, string searchCount)
         {
             IEnumerable<Item> item = _context.Items.AsEnumerable();
+
+
 
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -89,7 +96,7 @@ namespace bytme.Controllers
             return View(await PaginatedList<Item>.CreateAsync(items.AsNoTracking(), page ?? 1, pageSize));
         }
 
-        public async Task<IActionResult> Women(string category, string maxPrice, string minPrice, string currentCat, string currentBrand, string BrandBox, string ColorBox)
+        public async Task<IActionResult> Women(string category, string maxPrice, string minPrice, string currentCategory, string currentBrands, IEnumerable<string> BrandBox, IEnumerable<string> ColorBox)
         {
             // Incoming information from the form.
             ViewData["BrandBox"] = BrandBox;
@@ -97,11 +104,19 @@ namespace bytme.Controllers
             ViewData["minPrice"] = minPrice;
             ViewData["ColorBox"] = ColorBox;
             ViewData["category"] = category;
-            ViewData["currentCat"] = currentCat;
-            ViewData["currentBrand"] = currentBrand;
+            ViewData["currentCategory"] = currentCategory;
+            ViewData["currentBrands"] = currentBrands;
 
+            if (currentCategory != null)
+            {
+                ViewBag.currentCategory = currentCategory;
+            }
             ViewBag.miniPrice = minPrice;
             ViewBag.maxiPrice = maxPrice;
+
+            IList<string> Selected_BrandList = new List<string>();
+            IList<string> Selected_ColorList = new List<string>();
+
 
             IList<string> clrList = new List<string>();
             clrList.Add("red");
@@ -131,6 +146,8 @@ namespace bytme.Controllers
             var products = from p in _context.Items select p;
             products = products.Where(o => o.gender == "female");
 
+            ViewBag.currentBrands = products.Select(o => o.description).Distinct().ToList();
+
             if (HttpContext.Request.Method == "POST")
             {
                 switch (category)
@@ -141,119 +158,211 @@ namespace bytme.Controllers
                     case "Blazers":
                         products = products.Where(o => o.long_description.Contains("Blazer") || o.long_description.Contains("blazer"));
                         ViewBag.currentCategory = "Blazer";
+                        ViewBag.currentBrands = products.Select(o => o.description).Distinct().ToList();
                         break;
                     case "Blouses":
                         products = products.Where(o => o.long_description.Contains("Blouse") || o.long_description.Contains("blouse"));
                         ViewBag.currentCategory = "Blouse";
+                        ViewBag.currentBrands = products.Select(o => o.description).Distinct().ToList();
                         break;
                     case "Boots":
                         products = products.Where(o => o.long_description.Contains("Boots") || o.long_description.Contains("boots"));
                         ViewBag.currentCategory = "Boots";
+                        ViewBag.currentBrands = products.Select(o => o.description).Distinct().ToList();
                         break;
                     case "Coats":
                         products = products.Where(o => o.long_description.Contains("Coat") || o.long_description.Contains("coat"));
                         ViewBag.currentCategory = "Coat";
+                        ViewBag.currentBrands = products.Select(o => o.description).Distinct().ToList();
                         break;
                     case "Cardigans":
                         products = products.Where(o => o.long_description.Contains("Cardigan") || o.long_description.Contains("cardigan"));
                         ViewBag.currentCategory = "Cardigan";
+                        ViewBag.currentBrands = products.Select(o => o.description).Distinct().ToList();
                         break;
                     case "Dresses":
                         products = products.Where(o => (o.long_description.Contains("Dress") || o.long_description.Contains("dress")) && !o.long_description.Contains("shirt"));
                         ViewBag.currentCategory = "Dress";
+                        ViewBag.currentBrands = products.Select(o => o.description).Distinct().ToList();
                         break;
                     case "Heels":
                         products = products.Where(o => o.long_description.Contains("Heels") || o.long_description.Contains("heels"));
                         ViewBag.currentCategory = "Heels";
+                        ViewBag.currentBrands = products.Select(o => o.description).Distinct().ToList();
                         break;
                     case "Jumpers":
                         products = products.Where(o => o.long_description.Contains("Jumper") || o.long_description.Contains("jumper"));
                         ViewBag.currentCategory = "Jumper";
+                        ViewBag.currentBrands = products.Select(o => o.description).Distinct().ToList();
                         break;
                     case "Skirts":
                         products = products.Where(o => o.long_description.Contains("Skirt") || o.long_description.Contains("skirt"));
                         ViewBag.currentCategory = "Skirt";
+                        ViewBag.currentBrands = products.Select(o => o.description).Distinct().ToList();
                         break;
                     case "Trousers":
                         products = products.Where(o => o.long_description.Contains("Trousers") || o.long_description.Contains("trousers"));
                         ViewBag.currentCategory = "Trousers";
+                        ViewBag.currentBrands = products.Select(o => o.description).Distinct().ToList();
                         break;
 
 
                 }
-                if (ViewData["maxPrice"] != null && float.Parse(ViewData["maxPrice"].ToString()) != 0f)
+                if (ViewData["currentCategory"] != null)
+                {
+                    products = products.Where(p => p.long_description.Contains(ViewData["currentCategory"].ToString()) || p.long_description.Contains(ViewData["currentCategory"].ToString().ToLower()));
+                    ViewBag.BrandSelected = products;
+                    ViewBag.currentBrands = products.Select(o => o.description).Distinct().ToList();
+                    ViewBag.currentCategory = ViewData["currentCategory"];
+                }
+                if (minPrice != null)
+                {
+                    products.Where(p => p.price >= Convert.ToInt32(minPrice));
+                }
+                if (maxPrice != null)
+                {
+                    products.Where(p => p.price <= Convert.ToInt32(maxPrice));
+                }
+                //Array definitions for where clause and filtersColor
+                Expression<Func<Item, bool>>[] WhereColor = new Expression<Func<Item, bool>>[300];
+
+                IQueryable<Item>[] filtersColor = new IQueryable<Item>[300];
+
+                //bools for if 1 checkbox has been checked
+                bool ColorBox_OnlyOne = false;
+
+                //for every colorbox selected create a where clause that filtersColor color and put the result in the where clause array
+
+                int i = 0;
+                foreach (var filter in ColorBox)
+                {
+                    WhereColor[i++] = a => a.long_description.Contains(filter);
+                }
+                if (i == 1)
+                {
+                    ColorBox_OnlyOne = true;
+                }
+
+                //for every wheereclause that is not null create an IQueryable with the WhereColor and put it in the array for filtersColor
+                //every previous filter will be merged with the current filter
+                i = 0;
+                IQueryable<Item> resultsColor = products;
+                foreach (var clause in WhereColor)
                 {
 
-                    if (ViewData["currentCat"] != null)
+                    if (clause != null)
                     {
-                        products = products.Where(p => p.price <= float.Parse(ViewData["maxPrice"].ToString()) && (p.long_description.Contains(currentCat) || p.long_description.Contains(currentCat.ToLower())));
-                        ViewBag.currentCategory = currentCat;
+                        if (ColorBox_OnlyOne)
+                        {
+                            resultsColor = filtersColor[0] = products.Where(clause);
+                        }
+                        else if (ColorBox_OnlyOne == false)
+                        {
+
+                            filtersColor[i++] = products.Where(clause);
+                            if (i > 1)
+                            {
+                                resultsColor = Queryable.Union(
+                                filtersColor[i - 2].AsQueryable(),
+                                filtersColor[i - 1].AsQueryable()
+                                );
+                            }
+                            else
+                            {
+                                if (filtersColor[i] != null)
+                                {
+                                    resultsColor = Queryable.Union(
+                                    filtersColor[i].AsQueryable(),
+                                    filtersColor[i - 1].AsQueryable()
+                                    );
+                                }
+                            }
+                        }
                     }
-                    else
+
+
+                }
+
+                //final products list
+
+
+                //Array definitions for where clause and filters
+                Expression<Func<Item, bool>>[] whereBrand = new Expression<Func<Item, bool>>[300];
+
+                IQueryable<Item>[] filtersBrand = new IQueryable<Item>[300];
+
+                //for every colorbox selected create a where clause that filterBrand color and put the result in the where clause array
+                bool BrandBox_OnlyOne = false;
+                int j = 0;
+                foreach (var filter in BrandBox)
+                {
+                    whereBrand[j++] = a => a.description == filter;
+                }
+                if (j == 1)
+                {
+                    BrandBox_OnlyOne = true;
+                }
+                //for every wheereclause that is not null create an IQueryable with the whereBrand and put it in the array for filterBrand
+                //every previous filter will be merged with the current filter
+                j = 0;
+                IQueryable<Item> resultsBrand = products;
+                foreach (var clause in whereBrand)
+                {
+                    if (clause != null)
                     {
-                        products = products.Where(p => p.price <= float.Parse(ViewData["maxPrice"].ToString()));
+                        if (BrandBox_OnlyOne)
+                        {
+                            resultsBrand = filtersBrand[0] = products.Where(clause);
+                        }
+                        else if (BrandBox_OnlyOne == false)
+                        {
+
+                            filtersBrand[j++] = products.Where(clause);
+                            if (j > 1)
+                            {
+                                resultsBrand = Queryable.Union(
+                                filtersBrand[j - 2].AsQueryable(),
+                                filtersBrand[j - 1].AsQueryable()
+                                );
+                            }
+                            else
+                            {
+                                if (filtersBrand[j] != null)
+                                {
+                                    resultsBrand = Queryable.Union(
+                                    filtersBrand[j].AsQueryable(),
+                                    filtersBrand[j - 1].AsQueryable()
+                                    );
+                                }
+                            }
+                        }
+                    }
+                }
+                //final products list
+                if (resultsColor != products && resultsBrand != products)
+                {
+                    foreach (var resulter in resultsBrand)
+                    {
+                        IQueryable<Item> endresult = resultsColor.Where(o => o.long_description == resulter.long_description);
+                        products = endresult;
                     }
 
                 }
-            }
-
-            if (ViewData["minPrice"] != null && float.Parse(ViewData["minPrice"].ToString()) != 0f)
-            {
-                if (ViewData["currentCat"] != null)
-                {
-                    products = products.Where(p => p.price >= float.Parse(ViewData["minPrice"].ToString()) && (p.long_description.Contains(currentCat) || p.long_description.Contains(currentCat.ToLower())));
-                    ViewBag.currentCategory = currentCat;
-                }
-                else
-                {
-                    products = products.Where(p => p.price >= float.Parse(ViewData["minPrice"].ToString()));
-                }
-
-            }
-            if (ViewData["BrandBox"] != null)
-            {
-
-
-                if (currentCat != null)
+                else if (resultsColor != products && resultsBrand == products)
                 {
 
-                    products = products.Where(p => p.description == ViewData["BrandBox"].ToString() && (p.long_description.Contains(currentCat) || p.long_description.Contains(currentCat.ToLower())));
-                    ViewBag.currentCategory = currentCat;
-                    ViewBag.PreviousBrand = products.Select(o => o.description).Distinct();
-                    ViewBag.currentBrand = ViewData["BrandBox"].ToString();
+                    products = resultsColor;
                 }
-                else
+                else if (resultsBrand != products && resultsColor == products)
                 {
-                    products = products.Where(p => p.description == ViewData["BrandBox"].ToString());
-                    ViewBag.PreviousBrand = products.Select(o => o.description).Distinct();
-                    ViewBag.currentBrand = ViewData["BrandBox"].ToString();
+                    products = resultsBrand;
                 }
 
-            }
-            if (ViewData["ColorBox"] != null)
-            {
-
-                if (currentBrand != null && currentCat != null)
+                if (ViewData["currentCategory"] != null)
                 {
-                    products = products.Where(p => p.long_description == ViewData["BrandBox"].ToString() && p.long_description.Contains(ViewData["ColorBox"].ToString()) && (p.long_description.Contains(currentCat) || p.long_description.Contains(currentCat.ToLower())));
-                    ViewBag.currentBrand = currentBrand;
+                    products = products.Where(p => p.long_description.Contains(ViewData["currentCategory"].ToString()) || p.long_description.Contains(ViewData["currentCategory"].ToString().ToLower()));
+                    ViewBag.currentCategory = ViewData["currentCategory"];
                 }
-                else if (currentBrand != null && currentCat == null)
-                {
-                    products = products.Where(p => p.long_description == ViewData["BrandBox"].ToString() && p.long_description.Contains(ViewData["ColorBox"].ToString()));
-                    ViewBag.currentBrand = currentBrand;
-                }
-                else if (currentCat != null)
-                {
-                    products = products.Where(p => p.long_description.Contains(ViewData["ColorBox"].ToString()) && (p.long_description.Contains(currentCat) || p.long_description.Contains(currentCat.ToLower())));
-                    ViewBag.currentCategory = currentCat;
-                }
-
-                else
-                {
-                    products = products.Where(p => p.long_description.Contains(ViewData["ColorBox"].ToString()));
-                }
-
             }
 
 
