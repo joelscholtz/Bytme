@@ -44,7 +44,14 @@
                     <h3 class="row text-center">@item.description</h3>
                     <p class="row text-center">@item.long_description</p>
                     <p class="row text-center">>&euro;@item.price</p>
-                    <p class="row text-center"><a href="#" class="btn btn-primary" role="button"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Add to Cart</a></p>
+                    @if (item.quantity != 0)
+                    {
+                        @Html.ActionLink("Add to cart", "SaveItemInShoppingCart", "ShoppingCart", routeValues: new
+                        {
+                            item_id = item.id
+                        },
+                        htmlAttributes: new {@class = "btn btn-success btn-large"})
+                    }
                     <p class="row text-center"><a href="#" class="btn btn-danger" role="button"><span class="glyphicon glyphicon-heart-empty" aria-hidden="true"></span></a></p>
                 </div>
             </div>

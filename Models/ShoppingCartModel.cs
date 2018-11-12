@@ -9,6 +9,8 @@ namespace bytme.Models
     {
         public int id { get; set; }
         public int item_id { get; set; }
+        public int orderline_id { get; set; }
+        public int order_id { get; set; }
         public float price { get; set; }
         public string description { get; set; }
         public string long_description { get; set; }

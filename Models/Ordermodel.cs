@@ -8,12 +8,14 @@ namespace bytme.Models
     public class OrderMain
     {
         public int id { get; set; }
-        public int user_id { get; set; }
-        public DateTime dt_ordered { get; set; }
-        public DateTime dt_delivery { get; set; }
-        public string description { get; set; }
-        public DateTime dt_created { get; set; }
-        public DateTime dt_modified { get; set; }
+        public string user_id { get; set; }
+    }
+    public class OrderLines
+    {
+        public int id { get; set; }
+        public int item_id { get; set; }
+        public int order_id { get; set; }
+        public int qty { get; set; }
     }
     public class OrderHistory
     {
