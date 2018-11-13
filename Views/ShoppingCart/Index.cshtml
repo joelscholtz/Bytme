@@ -2,7 +2,26 @@
 
 @{
 }
+<script>
+    function UpdateQtyOrder(ordline_id, new_qty) {
 
+        $.ajax({
+            type: "POST",
+            data: {
+                orderline_id: ordline_id,
+                qty: new_qty
+            },
+
+            url: "/ShoppingCart/UpdateQuantityInShoppingCart",
+            success: function (response) {
+                document.body.innerHTML = response;
+            },
+            error: function () {
+                return "error";
+            }
+        });
+    }
+</script>
 <h2>Your Shoppingcart</h2>
 
 <div class="container">
