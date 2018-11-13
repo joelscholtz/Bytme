@@ -130,8 +130,16 @@
             </div>
         </form>
     </section>
-    <div class="login-help">
-        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register</a> • <a asp-page="./ForgotPassword">Forgot Password</a>
+    <div class="form-group">
+        <p>
+            <a asp-page="./ForgotPassword">Forgot your password?</a>
+        </p>
+        <p>
+            <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl"> Register as a new user</a>
+        </p>
+        <p>
+            <a asp-page="./ResendVerification">Resend Verification</a>
+        </p>
     </div>
 </div>
 
