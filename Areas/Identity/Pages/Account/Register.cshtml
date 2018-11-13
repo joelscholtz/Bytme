@@ -3,30 +3,123 @@
 @{
     ViewData["Title"] = "Register";
 }
-<h2>@ViewData["Title"]</h2>
+<style>
+    input:-webkit-autofill {
+        -webkit-box-shadow: 0 0 0 30px white inset;
+    }
 
-<div class="row">
-    <div class="col-md-4">
-        <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h4>Create a new account.</h4>
-            <hr />
-            <div asp-validation-summary="All" class="text-danger"></div>
+    .form-control {
+        width: 250px;
+        margin-left: 450px;
+    }
+
+    .hr {
+        width: 250px;
+    }
+
+    .container {
+        text-align: center;
+    }
+
+    .center {
+        margin: auto;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        bottom: 0;
+        right: 0;
+        transform: translate(-50% -50%);
+    }
+
+    body {
+        background: url(https://dl.dropboxusercontent.com/u/23299152/Wallpapers/wallpaper-22705.jpg) no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        font-family: 'Roboto', sans-serif;
+    }
+
+    .login-card {
+        padding: 40px;
+        width: 274px;
+        background-color: #F7F7F7;
+        margin: 0 auto 10px;
+        border-radius: 2px;
+        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+    }
+
+        .login-card h1 {
+            font-weight: 100;
+            text-align: center;
+            font-size: 2.3em;
+        }
+
+    .login {
+        text-align: center;
+        font-size: 14px;
+        font-family: 'Arial', sans-serif;
+        font-weight: 700;
+        height: 36px;
+        padding: 0 8px;
+    }
+
+    .login-card a {
+        text-decoration: none;
+        color: #666;
+        font-weight: 400;
+        text-align: center;
+        display: inline-block;
+        opacity: 0.6;
+        transition: opacity ease 0.5s;
+    }
+
+        .login-card a:hover {
+            opacity: 1;
+        }
+
+    .login-help {
+        width: 100%;
+        text-align: center;
+        font-size: 12px;
+    }
+
+    .password, .email {
+        height: 44px;
+        font-size: 16px;
+        width: 100%;
+        margin-bottom: 10px;
+        -webkit-appearance: none;
+        background: #fff;
+        border: 1px solid #d9d9d9;
+        border-top: 1px solid #c0c0c0;
+        /* border-radius: 2px; */
+        padding: 0 8px;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+    }
+</style>
+<!--https://codepen.io/Mongeed/pen/IuBLt-->
+<div class="login-card">
+    <h1>Register</h1><br>
+    <section>
+        <form method="post">
             <div class="form-group">
-                <label asp-for="Input.Email"></label>
-                <input asp-for="Input.Email" class="form-control" />
+                <input asp-for="Input.Email" class="email" placeholder="Email" />
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Input.Password"></label>
-                <input asp-for="Input.Password" class="form-control" />
+                <input asp-for="Input.Password" class="password" placeholder="Password"/>
                 <span asp-validation-for="Input.Password" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Input.ConfirmPassword"></label>
-                <input asp-for="Input.ConfirmPassword" class="form-control" />
+                <input asp-for="Input.ConfirmPassword" class="password" placeholder="Confirm password"/>
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
-            <button type="submit" class="btn btn-default">Register</button>
+            <div class="form-group">
+                <button type="submit" class="btn btn-default">Register</button>
+            </div>
         </form>
-    </div>
+    </section>
 </div>
