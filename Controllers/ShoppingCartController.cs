@@ -79,14 +79,14 @@ namespace bytme.Controllers
             return RedirectToAction(nameof(Index));
         }
         [HttpGet]
-        public IActionResult DeleteItemFromShoppingCart(int shoppingcart_id)
+        public IActionResult DeleteItemFromShoppingCart(int orderline_id)
         {
-            var result = (from shoppingcart in _context.ShoppingCartModels
-                          where shoppingcart.id == shoppingcart_id
-                          select shoppingcart).FirstOrDefault();
+            var result = (from OrderLines in _context.OrderLines
+                          where OrderLines.id == orderline_id
+                          select OrderLines).FirstOrDefault();
             if(result != null)
             {
-                _context.ShoppingCartModels.Remove(result);
+                _context.OrderLines.Remove(result);
                 _context.SaveChanges();
             }
             else
@@ -95,7 +95,22 @@ namespace bytme.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
-        
+
+        [HttpPost]
+        public IActionResult UpdateQuantityInShoppingCart(int orderline_id, int qty)
+        {
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var orders = _context.OrderMains.Where(o => o.user_id == userId).FirstOrDefault();
+
+            var listOfItems = _context.OrderLines.Where(o => o.order_id == orders.id && o.id == orderline_id).FirstOrDefault();
+
+            listOfItems.qty = qty;
+
+            _context.SaveChanges();
+
+            return RedirectToAction(nameof(Index));
+        }
+
         public int CountItemsInShoppingCart(int order_id)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -108,6 +123,7 @@ namespace bytme.Controllers
 
             return result;
         }
+
         [HttpGet]
         public IActionResult Index()
         {
