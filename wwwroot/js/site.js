@@ -12,6 +12,7 @@ function UpdateQtyOrder(ordline_id, new_qty) {
         },
 
         url: "/ShoppingCart/UpdateQuantityInShoppingCart",
+        async: true,
         success: function (response) {
             document.body.innerHTML = response;
         },

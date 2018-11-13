@@ -15,7 +15,6 @@ namespace bytme.Models
         public string description { get; set; }
         public string long_description { get; set; }
         public string size {get;set;}
-        public int quantity { get; set; }
         public string photo_url { get; set; }
         public int qty { get; set; }
         public float total { get; set; }

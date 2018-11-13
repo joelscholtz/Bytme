@@ -158,7 +158,7 @@ namespace bytme.Controllers
                     {
                         foreach(ShoppingCartModel item in model)
                         {
-                            item.subtotal = item.quantity * item.price;
+                            item.subtotal = item.qty * item.price;
                             totalPrice += item.subtotal;
                         }
                         ViewBag.totalPrice = totalPrice;
