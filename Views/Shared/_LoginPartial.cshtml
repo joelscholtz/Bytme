@@ -2,26 +2,22 @@
 
 @inject SignInManager<UserModel> SignInManager
 @inject UserManager<UserModel> UserManager
-
 @if (SignInManager.IsSignedIn(User))
 {
-    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post" id="logoutForm" class="navbar-right">
-        <ul class="nav navbar-nav navbar-right">
+    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post" id="logoutForm" class="navbar-nav navbar-default" style="background-color:#F3F3F3;">
+        <ul class="nav navbar-nav"> 
             <li><a asp-area="" asp-controller="Home" asp-action="About" style="color:#000;">General Information</a></li>
             <li><a asp-area="" asp-controller="Home" asp-action="Contact" style="color:#000;">Contact</a></li>
             <li>
-                <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage" style="color:#000;">Hello @UserManager.GetUserName(User)!</a>
-            </li>
-            <li>
-                <button type="submit" class="btn btn-link navbar-btn navbar-link" style="color:#000;">Logout</button>
+                <button type="submit" class="btn btn-link navbar-btn navbar-link" style="color:#000; text-decoration:none;">Logout</button>
             </li>
         </ul>
     </form>
 }
 else
 {
-    <ul class="nav navbar-nav navbar-right" style="background-color: #fff;">
-        <li><a asp-area="" asp-controller="Home" asp-action="About" style="color:#000;">General Information</a></li>
+    <ul class="nav navbar-nav navbar-default" style="background-color:#F3F3F3; ">
+        <li><a asp-area="" asp-controller="Home" asp-action="About" style="color:#000;text-align:left;">General Information</a></li>
         <li><a asp-area="" asp-controller="Home" asp-action="Contact" style="color:#000;">Contact</a></li>
         <li><a asp-area="Identity" asp-page="/Account/Register" style="color:#000;">Register</a></li>
         <li><a asp-area="Identity" asp-page="/Account/Login" style="color:#000;">Login</a></li>
