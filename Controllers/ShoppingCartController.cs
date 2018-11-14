@@ -131,6 +131,7 @@ namespace bytme.Controllers
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var result = _context.UserModels.Where(o => o.Id == userId).FirstOrDefault();
             float totalPrice = 0;
+            float sendcost = 2.95f;
             int order_id = CheckIfOrderExists();
             if(order_id != 0)
             {
@@ -138,6 +139,7 @@ namespace bytme.Controllers
                         join items in _context.Items on orderlines.item_id equals items.id
                         join ordermains in _context.OrderMains on orderlines.order_id equals ordermains.id
                         where orderlines.order_id == order_id
+                        orderby orderlines.id
                         select new ShoppingCartModel
                         {
                             description = items.description,
@@ -161,7 +163,14 @@ namespace bytme.Controllers
                             item.subtotal = item.qty * item.price;
                             totalPrice += item.subtotal;
                         }
-                        ViewBag.totalPrice = totalPrice;
+                        if(totalPrice < 100)
+                        {
+                            ViewBag.totalPrice = totalPrice + sendcost;;
+                        }
+                        else
+                        {
+                            ViewBag.totalPrice = totalPrice;
+                        }
                     }
                 }
                 int count = CountItemsInShoppingCart(order_id);
