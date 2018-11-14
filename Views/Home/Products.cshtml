@@ -1,4 +1,10 @@
 ﻿@model PaginatedList<bytme.Models.Item>
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<UserModel> SignInManager
+@inject UserManager<UserModel> UserManager
+@using bytme.Models;
+
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/css/bootstrap-select.min.css">
@@ -37,25 +43,34 @@
 
     .pagination {
         margin-left: 275px;
-        position:page;
+        position: page;
     }
 
     .shoppingcart {
         margin-top: -30px;
         text-align: end;
     }
-    
-    .shoppingcart > a {
+
+
+        .shoppingcart > a{
             font-size: 15px;
             color: #8F6B93;
-            text-decoration: none;
+        }
+
+            .shoppingcart > a:hover, .wishlist > a:hover {
+                color: rgba(143, 107, 147, .6);
+                text-decoration: none;
+            }
+
+    .wishlist {
+        margin-top: -30px;
+        text-align: end;
     }
 
-        .shoppingcart > a:hover {
-            font-size: 15px;
-            color: #C7B5C9;
-            text-decoration: none;
-        }
+        .wishlist > a {
+            font-size: 25px;
+            color: #8F6B93;
+        }  
 
     .pagination > li > a:hover,
     .pagination > li > span:hover,
@@ -121,11 +136,11 @@
         margin-top: -40px;
     }
 
-    .sortBy > .form-control:focus {
+        .sortBy > .form-control:focus {
             border-color: #C7B5C9;
             -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.100), 0 0 8px rgba(143, 107, 147, .6);
             box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(143, 107, 147, .6);
-    }
+        }
 
     select option:hover {
         box-shadow: 0 0 10px 10px #e1358f inset;
@@ -136,7 +151,7 @@
     }
 
     .hr {
-        margin-top:auto;
+        margin-top: auto;
     }
 
     .thumbnail > a > img:hover {
@@ -144,14 +159,14 @@
     }
 
     .cat {
-        margin-top:-10px;
+        margin-top: -10px;
     }
 
     .shop:after {
-            font-family: "Glyphicons Halflings";
-            content: "\e116";
-            margin-top: -30px;
-            text-align: end;
+        font-family: "Glyphicons Halflings";
+        content: "\e116";
+        margin-top: -30px;
+        text-align: end;
     }
 
     .shop:hover {
@@ -160,25 +175,28 @@
         text-decoration: none;
     }
 
+    .heart:after {
+        font-family: "Glyphicons Halflings";
+        content: "\e143";
+        margin-top: -30px;
+        text-align: end;
+    }
 </style>
 <script>
     function validate(evt) {
         var theEvent = evt || window.event;
 
         // Handle paste
-        if (theEvent.type === 'paste')
-        {
+        if (theEvent.type === 'paste') {
             key = event.clipboardData.getData('text/plain');
         }
-        else
-        {
+        else {
             // Handle key press
             var key = theEvent.keyCode || theEvent.which;
             key = String.fromCharCode(key);
         }
         var regex = /[0-9]/;
-        if (!regex.test(key))
-        {
+        if (!regex.test(key)) {
             theEvent.returnValue = false;
             if (theEvent.preventDefault) theEvent.preventDefault();
         }
@@ -276,6 +294,16 @@
         <div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box">
             <div class="thumbnail">
                 <a href="#"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;" /></a>
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <div class="wishlist">
+                        @Html.ActionLink("", "AddToWishList", "WishList", routeValues: new
+                        {
+                            itm_id = item.id
+                        },
+                        htmlAttributes: new { @class = "heart" })
+                    </div>
+                }
                 <div class="desc_box">
                     <p>&euro;@item.price</p>
                     <p class="description">@item.description</p>
@@ -284,9 +312,9 @@
                         @if (item.quantity != 0)
                         {
                             @Html.ActionLink("ADD ", "SaveItemInShoppingCart", "ShoppingCart", routeValues: new
-                       {
-                           item_id = item.id
-                       },
+                            {
+                                item_id = item.id
+                            },
                             htmlAttributes: new {@class = "shop" })
                         }
                     </div>
@@ -295,55 +323,47 @@
         </div>
     }
 
-        <div class="row text-center">
-            <hr />
-            <br>
-            <ul class="pagination">
-                <li class="@prevDisabled">
-                    @if (!String.IsNullOrEmpty(prevDisabled))
-                    {
-                        <a href="#!">
-                            <i class="glyphicon glyphicon-chevron-left"></i>
-                        </a>
-                    }
-                    else
-                    {
-                        <a asp-action="Products" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-page="@(Model.PageIndex - 1)" class="@prevDisabled">
-                            <i class="glyphicon glyphicon-chevron-left"></i>
-                        </a>
-                    }
-                </li>
-                @for (int i = 1; i <= totalPages; i++)
+    <div class="row text-center">
+        <br>
+        <ul class="pagination">
+            <li class="@prevDisabled">
+                @if (!String.IsNullOrEmpty(prevDisabled))
                 {
-                    @if (i == pageIndex)
+                    <a href="#!">
+                        <i class="glyphicon glyphicon-chevron-left"></i>
+                    </a>
+                }
+                else
+                {
+                    <a asp-action="Products" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-page="@(Model.PageIndex - 1)" class="@prevDisabled">
+                        <i class="glyphicon glyphicon-chevron-left"></i>
+                    </a>
+                }
+            </li>
+            @for (int i = 1; i <= totalPages; i++)
+            {
+                @if (i == pageIndex)
+                {
+                    <li class="active">
+                        <a asp-action="Products" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-page="@i" class="disabled">@i</a>
+                    </li>
+                }
+                else if (i > 3 && i <= (totalPages - 3))
+                {
+                    if (i < pageIndex)
                     {
-                        <li class="active">
-                            <a asp-action="Products" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-page="@i" class="disabled">@i</a>
-                        </li>
+                        if (!isPreExist)
+                        {
+                            <li><a asp-action="Products" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-page="@i">@i</a></li>
+                            isPreExist = true;
+                        }
                     }
-                    else if (i > 3 && i <= (totalPages - 3))
+                    else if (i > pageIndex)
                     {
-                        if (i < pageIndex)
+                        if (!isLateExist)
                         {
-                            if (!isPreExist)
-                            {
-                                <li><a asp-action="Products" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-page="@i">@i</a></li>
-                                isPreExist = true;
-                            }
-                        }
-                        else if (i > pageIndex)
-                        {
-                            if (!isLateExist)
-                            {
-                                <li><a asp-action="Products" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-page="@i">@i</a></li>
-                                isLateExist = true;
-                            }
-                        }
-                        else
-                        {
-                            <li>
-                                <a asp-action="Products" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-page="@i">@i</a>
-                            </li>
+                            <li><a asp-action="Products" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-page="@i">@i</a></li>
+                            isLateExist = true;
                         }
                     }
                     else
@@ -353,24 +373,31 @@
                         </li>
                     }
                 }
+                else
+                {
+                    <li>
+                        <a asp-action="Products" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-page="@i">@i</a>
+                    </li>
+                }
+            }
 
-                <li class="@nextDisabled">
-                    @if (!String.IsNullOrEmpty(nextDisabled))
-                    {
-                        <a href="#!" class="@nextDisabled">
-                            <i class="glyphicon glyphicon-chevron-right"></i>
-                        </a>
-                    }
-                    else
-                    {
-                        <a asp-action="Products" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-page="@(Model.PageIndex + 1)" class="@nextDisabled">
-                            <i class="glyphicon glyphicon-chevron-right"></i>
-                        </a>
-                    }
-                </li>
-            </ul>
-            <br />
-        </div>
+            <li class="@nextDisabled">
+                @if (!String.IsNullOrEmpty(nextDisabled))
+                {
+                    <a href="#!" class="@nextDisabled">
+                        <i class="glyphicon glyphicon-chevron-right"></i>
+                    </a>
+                }
+                else
+                {
+                    <a asp-action="Products" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-page="@(Model.PageIndex + 1)" class="@nextDisabled">
+                        <i class="glyphicon glyphicon-chevron-right"></i>
+                    </a>
+                }
+            </li>
+        </ul>
+        <br />
+    </div>
 }
 else
 {

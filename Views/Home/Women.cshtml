@@ -1,13 +1,39 @@
 ﻿@model IEnumerable<bytme.Models.Item>
+@using Microsoft.AspNetCore.Identity
 
+@inject SignInManager<UserModel> SignInManager
+@inject UserManager<UserModel> UserManager
 @using bytme.Models;
-@using System;
+
 @{
     ViewData["Title"] = "Women";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<style>
+    .heart:after {
+        font-family: "Glyphicons Halflings";
+        content: "\e143";
+    }
 
+    .wishlist {
+        text-align: end;
+        margin-top: -30px;
+        margin-right: 80px;
+    }
+
+        .wishlist > a {
+            font-size: 20px;
+            color: #8F6B93;
+            text-align: end;
+        }
+
+            .wishlist > a:hover {
+                font-size: 20px;
+                color: #C7B5C9;
+                text-decoration: none;
+            }
+</style>
 
 <script>
     var SliderMax;
@@ -35,9 +61,8 @@
         }
 
     }
-
-
 </script>
+
 <div class="form-group-lg row center-block" role="group">
 
     <form asp-action="Women" method="post">
@@ -90,13 +115,9 @@
                             <input class="BrandCheck" type="checkbox" name="BrandBox" value="@item" /><span style="color:#392C36">@item</span><br>
 
                         }
-
-
                     </div>
                 </div>
-                @{
 
-                }
                 <div class="col-lg-4">
                     <h5 style="color:#8f6b93"><strong> Color:</strong></h5>
                     <div style="border: solid 1px #8f6b93"></div>
@@ -123,21 +144,30 @@
         <div class="col-sm-4 col-md-4 col-lg-4 col-xs-6">
             <div class="thumbnail">
                 <img src="@item.photo_url" style="width:200px;height:300px" />
-                <div class="caption">
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <div class="wishlist">
+                        @Html.ActionLink(" ", "AddToWishList", "Wishlist", routeValues: new
+                   {
+                       itm_id = item.id
+                   },
+                             htmlAttributes: new { @class = "heart" })
+                    </div>
+                }
                     <h3 class="row text-center" style="color:#8f6b93">@item.description</h3>
                     <p class="row text-center" style="color:#D0CACF">@item.long_description</p>
                     <p class="row text-center" style="color:#80767E">&euro;@item.price</p>
-                    @if (item.quantity != 0)
-                    {
-                        @Html.ActionLink("Add to cart", "SaveItemInShoppingCart", "ShoppingCart", routeValues: new
+                    <div class="row text-center">
+                        @if (item.quantity != 0)
                         {
-                            item_id = item.id
-                        },
-                        htmlAttributes: new {@class = "btn btn-success btn-large"})
-                    }
-                    <p class="row text-center"><a href="#" class="btn btn-danger" role="button"><span class="glyphicon glyphicon-heart-empty" aria-hidden="true"></span></a></p>
+                            @Html.ActionLink("Add to cart", "SaveItemInShoppingCart", "ShoppingCart", routeValues: new
+                            {
+                                item_id = item.id
+                            },
+                            htmlAttributes: new {@class = "btn btn-success btn-large"})
+                        }
+                    </div>
                 </div>
-            </div>
         </div>
     }
 

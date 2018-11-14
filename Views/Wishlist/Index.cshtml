@@ -1,0 +1,50 @@
+﻿@model List<bytme.Models.WishlistModel>
+
+@{
+    ViewData["Title"] = "Favorites List";
+}
+
+<style>
+    .box {
+        width: auto;
+        margin-bottom: 0px;
+    }
+
+    .shop:after {
+        font-family: "Glyphicons Halflings";
+        content: "\e116";
+        margin-top: -30px;
+        text-align: end;
+    }
+
+    .shop:hover {
+        font-size: 15px;
+        color: #C7B5C9;
+        text-decoration: none;
+    }
+</style>
+<h2 style="text-align:center;">Favorites List</h2>
+<hr />
+@if (ViewBag.model_for_view != null)
+{
+    @foreach (var item in Model)
+    {
+        <div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box">
+            <div class="thumbnail" style="text-align:center;">
+                <a href="#"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;" /></a>
+                <div class="desc_box">
+                    <p>&euro;@item.price</p>
+                    <p class="description">@item.description</p>
+                    <p class="desc">@item.long_description</p>
+                    <a class="btn btn-default" href='@Url.Action("SaveItemInShoppingCart", "ShoppingCart", new { item_id = item.item_id })'><span class="glyphicon glyphicon-shopping-cart"></span></a>
+                    <a class="btn btn-danger" href='@Url.Action("RemoveFromWishList", "WishList", new { ordline_id = item.ordline_id })'>X</a>
+                    @ViewBag.ErrorMessage
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <h4 style="color: rgba(158, 1, 1, 0.9);">Your favorites list is empty.</h4>
+}

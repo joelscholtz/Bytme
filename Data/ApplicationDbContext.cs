@@ -28,7 +28,9 @@ namespace bytme.Data
         public DbSet<bytme.Models.OrderMain> OrderMains { get; set; }
         public DbSet<bytme.Models.OrderLines> OrderLines { get; set; }
         public DbSet<bytme.Models.OrderStatus> OrderStatuses { get; set; }
-        public DbSet<bytme.Models.WishlistModel> WishlistModels { get; set; }
+        public DbSet<bytme.Models.WishMains> WishMains { get; set; }
+        public DbSet<bytme.Models.WishLines> WishLines { get; set; }
         public DbSet<bytme.Models.ShoppingCartModel> ShoppingCartModels { get; set; }
+        public DbSet<bytme.Models.WishlistModel> Wishlist { get; set; }
     }
 }
