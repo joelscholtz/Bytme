@@ -108,6 +108,7 @@
 <div class="login-card">
     <h1>Log-in</h1><br>
     <section>
+       <div asp-validation-summary="All" class="text-danger" style="margin-right:20%"></div>
         <form method="post">
             <div class="form-group">
                 <input asp-for="Input.Email" class="email" placeholder="Email"/>

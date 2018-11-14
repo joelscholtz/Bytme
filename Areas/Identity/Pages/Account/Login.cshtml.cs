@@ -18,11 +18,15 @@ namespace bytme.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<UserModel> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly UserManager<UserModel> _userManager;
 
-        public LoginModel(SignInManager<UserModel> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<UserModel> signInManager, 
+                          ILogger<LoginModel> logger,
+                          UserManager<UserModel> userManager)
         {
             _signInManager = signInManager;
             _logger = logger;
+            _userManager = userManager;
         }
 
         [BindProperty]
@@ -75,10 +79,17 @@ namespace bytme.Areas.Identity.Pages.Account
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: true);
-                if (result.Succeeded)
+                var user = await _userManager.FindByEmailAsync(Input.Email);
+                if (result.Succeeded && user.EmailConfirmed)
                 {
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
+                }
+                if (!user.EmailConfirmed)
+                {
+                    ModelState.AddModelError(string.Empty, "Account not verified.");
+                    await _signInManager.SignOutAsync();
+                    return Page();
                 }
                 if (result.RequiresTwoFactor)
                 {
