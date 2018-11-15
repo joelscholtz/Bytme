@@ -1,186 +1,375 @@
 ﻿@model IEnumerable<bytme.Models.Item>
-@using Microsoft.AspNetCore.Identity
 
-@inject SignInManager<UserModel> SignInManager
-@inject UserManager<UserModel> UserManager
 @using bytme.Models;
+@using System;
 
 @{
     ViewData["Title"] = "Women";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 1;
+    int ie = 0;
+    int pageCurrent = 2;
+    string iei = i + "_" + ie;
+
+    void currentInc()
+    {
+        pageCurrent++;
+    }
+
 }
 
 <style>
-    .heart:after {
-        font-family: "Glyphicons Halflings";
-        content: "\e143";
+    .box {
+        width: auto;
+        margin-bottom: 0px;
     }
 
-    .wishlist {
-        text-align: end;
+    .desc {
+        width: 100px; /* the element needs a fixed width (in px, em, %, etc) */
+        overflow: hidden; /* make sure it hides the content that overflows */
+        white-space: nowrap; /* don't break the line */
+        text-overflow: ellipsis; /* give the beautiful '...' effect */
+        font-size: 10px;
+    }
+
+    .pagination {
+        margin-left: 275px;
+        position: page;
+    }
+
+    .shoppingcart {
         margin-top: -30px;
-        margin-right: 80px;
+        text-align: end;
     }
 
-        .wishlist > a {
-            font-size: 20px;
+        .shoppingcart > a {
+            font-size: 15px;
             color: #8F6B93;
-            text-align: end;
+            text-decoration: none;
         }
 
-            .wishlist > a:hover {
-                font-size: 20px;
+            .shoppingcart > a:hover {
+                font-size: 15px;
                 color: #C7B5C9;
                 text-decoration: none;
             }
+
+    .pagination > li > a:hover,
+    .pagination > li > span:hover,
+    .pagination > li > a:focus,
+    .pagination > li > span:focus {
+        z-index: 2;
+        color: #8F6B93;
+        background-color: #C7B5C9;
+        border-color: #ddd;
+    }
+
+    .pagination > .active > a,
+    .pagination > .active > span,
+    .pagination > .active > a:hover,
+    .pagination > .active > span:hover,
+    .pagination > .active > a:focus,
+    .pagination > .active > span:focus {
+        z-index: 3;
+        color: #fff;
+        cursor: default;
+        background-color: #8F6B93;
+        border-color: #8F6B93;
+    }
+
+    .pagination > li > a,
+    .pagination > li > span {
+        position: relative;
+        float: left;
+        padding: 6px 12px;
+        margin-left: -1px;
+        line-height: 1.42857143;
+        color: #8F6B93;
+        text-decoration: none;
+        background-color: #fff;
+        border: 1px solid #ddd;
+    }
+
+    .description {
+        margin-top: -8px;
+    }
+
+    /*filter sidebar css*/
+    [data-toggle="collapse"] {
+        cursor: pointer;
+    }
+
+    .align-center {
+        text-align: center;
+    }
+
+    .align-right {
+        text-align: right;
+    }
+
+    .valign-middle {
+        vertical-align: middle !important;
+    }
+
+    .sortBy {
+        float: right;
+        width: 275px;
+        margin-bottom: 10px;
+        margin-top: -40px;
+    }
+
+        .sortBy > .form-control:focus {
+            border-color: #C7B5C9;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.100), 0 0 8px rgba(143, 107, 147, .6);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(143, 107, 147, .6);
+        }
+
+    select option:hover {
+        box-shadow: 0 0 10px 10px #e1358f inset;
+    }
+
+    .prodgrid {
+        float: right;
+    }
+
+    .hr {
+        margin-top: auto;
+    }
+
+    .thumbnail > a > img:hover {
+        opacity: .9;
+    }
+
+    .cat {
+        margin-top: -10px;
+    }
+
+    .shop:after {
+        font-family: "Glyphicons Halflings";
+        content: "\e116";
+        margin-top: -30px;
+        text-align: end;
+    }
+
+    .shop:hover {
+        font-size: 15px;
+        color: #C7B5C9;
+        text-decoration: none;
+    }
 </style>
 
-<script>
-    var SliderMax;
-    var SliderMin;
-    function evalSliderMin() {
-        var sliderValueMin = document.getElementById('priceMinSlider').value;
-        document.getElementById('sliderValueMin').innerHTML = sliderValueMin;
 
-    }
-    function evalSliderMax() {
-        var sliderValueMax = document.getElementById('priceMaxSlider').value;
-        document.getElementById('sliderValueMax').innerHTML = sliderValueMax;
-    }
-    function evalSliderEquals() {
-        SliderMax = document.getElementById('priceMaxSlider');
-        SliderMin = document.getElementById('priceMinSlider');
 
-        if (SliderMin.value >= SliderMax.value) {
-            SliderMin.value = SliderMax.value - 1;
-            document.getElementById('sliderValueMin').innerHTML = SliderMin.value;
-        }
-        if (SliderMax.value <= SliderMin.value) {
-            SliderMax.value = SliderMin.value + 1;
-            document.getElementById('sliderValueMax').innerHTML = SliderMax.value;
-        }
-
-    }
-</script>
-
-<div class="form-group-lg row center-block" role="group">
-
-    <form asp-action="Women" method="post">
-        <div class="btn-group row center-block" role="group">
-            <div class="column">
-                <hr />
-                <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="All" />
-                <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Blazers">
-                <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Blouses">
-                <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Boots">
-                <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Coats">
-                <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Cardigans">
-                <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Dresses">
-                <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Heels">
-                <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Jumpers">
-                <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Skirts">
-                <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Trousers">
+<div class="container">
+    <img src="~/images/products_women.png" style="width:1180px" />
+    <br /><br /><br />
+        <div class="btn-group pull-right">
+            <button type="button" class="btn btn-light">Sort By</button>
+            <button type="button" class="btn dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="sr-only">Toggle Dropdown</span>▼
+            </button>
+            <div class="dropdown-menu" style="text-decoration:none;">
+                <a class="dropdown-item btn" style="text-decoration:none" asp-action="Men" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Name</a><br />
+                <a class="dropdown-item btn" style="text-decoration:none" asp-action="Men" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" class="btn dropdown-item">Price</a>
             </div>
         </div>
-        <hr />
-        <h3>Categories</h3>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-4">
-                    <h5 style="color: #8f6b93"><strong>  Type:</strong></h5>
-                    <div style="border: solid 1px #8f6b93"></div>
-                    <div class="form-group">
-                        <label for="price-min">Minimum:</label>
-                        <input class="form-control" type="number" name="minPrice" id="priceMinSlider" placeholder="8" min="8" max="1500" value="@ViewBag.miniPrice" />
-                    </div>
+    <br /><br /><br />
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="form-group-lg row center-block" role="group">
 
-                    <div class="form-group">
-                        <label for="priceMaxSlider">Maximum:</label>
-                        <input class="form-control" type="number" name="maxPrice" id="priceMaxSlider" placeholder="1500" min="8" max="1500" value="@ViewBag.maxiPrice">
-                    </div>
+                <form asp-action="Women" method="post">
 
+                        <div>
+                            <h4 class="cat" data-toggle="collapse" data-target="#group-1">
+                                <i class="fa fa-fw fa-caret-down parent-expanded"></i>
+                                <i class="fa fa-fw fa-caret-right parent-collapsed"></i>
+                                Categories
+                            </h4>
+                            <div id="group-1" class="list-group collapse in">
+                                <input type="submit" name="category" class="btn btn-light" asp-action="Women" style="background-color:#fff;" value="All" /><br />
+                                <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Blazers"><br />
+                                <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Blouses"><br />
+                                <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Boots"><br />
+                                <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Coats"><br />
+                                <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Cardigans"><br />
+                                <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Dresses"><br />
+                                <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Heels"><br />
+                                <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Jumpers"><br />
+                                <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Skirts"><br />
+                                <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Trousers"><br />
+                            </div>
+                        </div>
+                        <hr />
+                        <div>
+                            <h4 data-toggle="collapse" data-target="#group-2">
+                                <i class="fa fa-fw fa-caret-down parent-expanded"></i>
+                                <i class="fa fa-fw fa-caret-right parent-collapsed"></i>
+                                Brands
+                            </h4>
+                            <div id="group-2" class="list-group collapse in">
+                                <div class="form-group" style="overflow:scroll; height:300px; color:#392C36; overflow-y: scroll;  overflow-x: hidden;">
+                                    <input type="hidden" name="currentBrands" value="@ViewBag.currentBrands" />
 
-                    <input type="hidden" name="currentCategory" value="@ViewBag.currentCategory" />
-                </div>
-                <div class="col-lg-4">
-                    <h5 style="color:#8f6b93"><strong> Brands:</strong></h5>
-                    <div style="border: solid 1px #8f6b93"></div>
-                    <div class="form-group" style="overflow:scroll; height:300px; color:#392C36 ">
-                        <label for=""></label>
+                                    @foreach (var item in ViewBag.currentBrands)
+                                    {
+                                        <input class="BrandCheck" type="checkbox" name="BrandBox" value="@item" /><span style="color:#392C36"> @item</span><br>
 
-                        <input type="hidden" name="currentBrands" value="@ViewBag.currentBrands" />
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <div>
+                            <h4 data-toggle="collapse" data-target="#group-3">
+                                <i class="fa fa-fw fa-caret-down parent-expanded"></i>
+                                <i class="fa fa-fw fa-caret-right parent-collapsed"></i>
+                                Color
+                            </h4>
+                            <div id="group-3" class="list-group collapse in">
+                                <div class="form-group" style="overflow:scroll; height:150px; color:#392C36; overflow-y: scroll;  overflow-x: hidden;">
+                                    @foreach (var color in ViewBag.ColorList)
+                                    {
+                                        <input class="BrandCheck" type="checkbox" name="ColorBox" value="@color" /><span style="color:#392C36"> @color</span><br>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <script>
+                            function PriceChecker() {
+                                if (document.getElementByName('maxPrice').value <= document.getElementsById('minPrice').value) {
+                                    var difference = document.getElementsById('minPrice').value - document.getElementsById('maxPrice').value + 1;
+                                    document.getElementsById('maxPrice').value = document.getElementsById('maxPrice').value - difference;
+                                }
 
-                        @foreach (var item in ViewBag.currentBrands)
-                        {
-                            <input class="BrandCheck" type="checkbox" name="BrandBox" value="@item" /><span style="color:#392C36">@item</span><br>
+                            }
+                            function validate(evt) {
+                                var theEvent = evt || window.event;
 
-                        }
-                    </div>
-                </div>
+                                // Handle paste
+                                if (theEvent.type === 'paste') {
+                                    key = event.clipboardData.getData('text/plain');
+                                }
+                                else {
+                                    // Handle key press
+                                    var key = theEvent.keyCode || theEvent.which;
+                                    key = String.fromCharCode(key);
+                                }
+                                var regex = /[0-9]/;
+                                if (!regex.test(key)) {
+                                    theEvent.returnValue = false;
+                                    if (theEvent.preventDefault) theEvent.preventDefault();
+                                }
+                            }
+                        </script>
+                        <div>
+                            <h4 data-toggle="collapse" data-target="#group-4">
+                                <i class="fa fa-fw fa-caret-down parent-expanded"></i>
+                                <i class="fa fa-fw fa-caret-right parent-collapsed"></i>
+                                Price
+                            </h4>
+                            <div id="group-4" class="list-group collapse in">
+                                <div class="form-group">
+                                    <label for="price-min">Minimum:</label>
+                                    <input class="form-control" type="number" onkeypress='validate(event)' oninput="PriceChecker()" name="minPrice" id="priceMinSlider" placeholder="8" min="8" max="1500" value="@ViewBag.miniPrice" required />
+                                </div>
 
-                <div class="col-lg-4">
-                    <h5 style="color:#8f6b93"><strong> Color:</strong></h5>
-                    <div style="border: solid 1px #8f6b93"></div>
-                    <div class="form-group" style="height:300px;">
-                        @foreach (var color in ViewBag.ColorList)
-                        {
-                            <input class="BrandCheck" type="checkbox" name="ColorBox" value="@color" /><span style="color:#392C36">@color</span><br>
-                        }
-                    </div>
-                </div>
-                <button type="submit" id="submit" name="submit" class="btn btn-success pull-right">Apply Filters</button>
+                                <div class="form-group">
+                                    <label for="priceMaxSlider">Maximum:</label>
+                                    <input class="form-control" type="number" onkeypress='validate(event)' oninput="PriceChecker()" name="maxPrice" id="priceMaxSlider" placeholder="1500" min="8" max="1500" value="@ViewBag.maxiPrice" required>
+                                </div>
+
+                            </div>
+                        </div>
+                        <input type="submit" class="btn btn-success" />
+                </form>
             </div>
+            <hr />
+            <br />
         </div>
-    </form>
-</div>
-<hr />
-<br />
-
-
-@foreach (var item in Model)
-{
-    @if (item.gender == "female")
-    {
-        <div class="col-sm-4 col-md-4 col-lg-4 col-xs-6">
-            <div class="thumbnail">
-                <img src="@item.photo_url" style="width:200px;height:300px" />
-                @if (SignInManager.IsSignedIn(User))
+        <div class="col-lg-9">
+            @foreach (var item in Model)
+            {
+                @if (ie++ < 21)
                 {
-                    <div class="wishlist">
-                        @Html.ActionLink(" ", "AddToWishList", "Wishlist", routeValues: new
-                   {
-                       itm_id = item.id
-                   },
-                             htmlAttributes: new { @class = "heart" })
-                    </div>
+                    @if (item.gender == "female")
+                    {
+
+                        <div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box" id="page_@i _@ie" style="width:33%">
+                            <div class="thumbnail">
+                                <a href="#"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;" /></a>
+                                <div class="desc_box">
+                                    <p>&euro;@item.price</p>
+                                    <p class="description">@item.description</p>
+                                    <p class="desc">@item.long_description</p>
+                                    <div class="shoppingcart">
+                                        @if (item.quantity != 0)
+                                        {
+                                            @Html.ActionLink("ADD ", "SaveItemInShoppingCart", "ShoppingCart", routeValues: new
+                                       {
+                                           item_id = item.id
+                                       },
+                                            htmlAttributes: new { @class = "shop" })
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
                 }
-                    <h3 class="row text-center" style="color:#8f6b93">@item.description</h3>
-                    <p class="row text-center" style="color:#D0CACF">@item.long_description</p>
-                    <p class="row text-center" style="color:#80767E">&euro;@item.price</p>
-                    <div class="row text-center">
-                        @if (item.quantity != 0)
-                        {
-                            @Html.ActionLink("Add to cart", "SaveItemInShoppingCart", "ShoppingCart", routeValues: new
-                            {
-                                item_id = item.id
-                            },
-                            htmlAttributes: new {@class = "btn btn-success btn-large"})
-                        }
-                    </div>
-                </div>
+                else if (ie == 22) { i++; }
+
+                if (ie <= 21 * i && ie >= 22)
+                {
+                    @if (item.gender == "female")
+                    {
+                        <div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box" id="page_@i _@ie" style="display:none;width:33%">
+                            <div class="thumbnail">
+                                <a href="#"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;" /></a>
+                                <div class="desc_box">
+                                    <p>&euro;@item.price</p>
+                                    <p class="description">@item.description</p>
+                                    <p class="desc">@item.long_description</p>
+                                    <div class="shoppingcart">
+                                        @if (item.quantity != 0)
+                                        {
+                                            @Html.ActionLink("ADD ", "SaveItemInShoppingCart", "ShoppingCart", routeValues: new
+                                       {
+                                           item_id = item.id
+                                       },
+                                            htmlAttributes: new { @class = "shop" })
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    if (ie == 21 * i) { i++; }
+                }
+            }
+
+            <script>
+                var pagecurr = 2;
+                function LoadMore() {
+                    document.getElementById('loadmore').innerHTML = "Loading...";
+                    for (l = (21 * (pagecurr - 1)) + 1; l < (21 * pagecurr) + 1; l++) {
+                        var iddef = "page_" + pagecurr + " _" + l;
+                        var page = document.getElementById(iddef);
+                        if (page != null) { page.style.display = "block"; }
+                    }
+                    document.getElementById('loadmore').innerHTML = "Load more products..";
+                    pagecurr = pagecurr + 1;
+                }
+            </script>
+            <button id="loadmore" class="btn" onclick="LoadMore()" style="margin-left:0%; width:100%" value="1">Load more products..</button>
         </div>
-    }
 
-}
 
-<!--<nav class="text-center">
-    <ul class="pagination">
-        <li> <a href="#" aria-label="Previous"> <span aria-hidden="true">&laquo;</span> </a> </li>
-        <li class="active"><a href="#">1</a></li>
-        <li><a href="#">2</a></li>
-        <li><a href="#">3</a></li>
-        <li><a href="#">4</a></li>
-        <li class="disabled"><a href="#">5</a></li>
-        <li> <a href="#" aria-label="Next"> <span aria-hidden="true">&raquo;</span> </a> </li>
-    </ul>
-</nav>-->
+    </div>
+</div>
+
+
+
+
+

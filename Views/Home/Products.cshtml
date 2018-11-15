@@ -1,10 +1,4 @@
-﻿@model PaginatedList<bytme.Models.Item>
-@using Microsoft.AspNetCore.Identity
-
-@inject SignInManager<UserModel> SignInManager
-@inject UserManager<UserModel> UserManager
-@using bytme.Models;
-
+﻿@model IEnumerable<bytme.Models.Item>
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/css/bootstrap-select.min.css">
@@ -17,14 +11,9 @@
 @{
     ViewData["Title"] = ViewBag.Message;
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
-    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
-    bool isPreExist = false;
-    bool isLateExist = false;
-    var totalPages = Model.TotalPages;
-    var pageIndex = Model.PageIndex;
-    var middleNextPage = (Model.TotalPages + Model.PageIndex) / 2;
-    var middlePrePage = Model.PageIndex / 2;
+    int i = 1;
+    int ie = 0;
+    int pageCurrent = 2;
 }
 <title></title>
 <style>
@@ -43,34 +32,25 @@
 
     .pagination {
         margin-left: 275px;
-        position: page;
+        position:page;
     }
 
     .shoppingcart {
         margin-top: -30px;
         text-align: end;
     }
-
-
-        .shoppingcart > a{
+    
+    .shoppingcart > a {
             font-size: 15px;
             color: #8F6B93;
-        }
-
-            .shoppingcart > a:hover, .wishlist > a:hover {
-                color: rgba(143, 107, 147, .6);
-                text-decoration: none;
-            }
-
-    .wishlist {
-        margin-top: -30px;
-        text-align: end;
+            text-decoration: none;
     }
 
-        .wishlist > a {
-            font-size: 25px;
-            color: #8F6B93;
-        }  
+        .shoppingcart > a:hover {
+            font-size: 15px;
+            color: #C7B5C9;
+            text-decoration: none;
+        }
 
     .pagination > li > a:hover,
     .pagination > li > span:hover,
@@ -136,11 +116,11 @@
         margin-top: -40px;
     }
 
-        .sortBy > .form-control:focus {
+    .sortBy > .form-control:focus {
             border-color: #C7B5C9;
             -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.100), 0 0 8px rgba(143, 107, 147, .6);
             box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(143, 107, 147, .6);
-        }
+    }
 
     select option:hover {
         box-shadow: 0 0 10px 10px #e1358f inset;
@@ -151,7 +131,7 @@
     }
 
     .hr {
-        margin-top: auto;
+        margin-top:auto;
     }
 
     .thumbnail > a > img:hover {
@@ -159,14 +139,14 @@
     }
 
     .cat {
-        margin-top: -10px;
+        margin-top:-10px;
     }
 
     .shop:after {
-        font-family: "Glyphicons Halflings";
-        content: "\e116";
-        margin-top: -30px;
-        text-align: end;
+            font-family: "Glyphicons Halflings";
+            content: "\e116";
+            margin-top: -30px;
+            text-align: end;
     }
 
     .shop:hover {
@@ -175,28 +155,25 @@
         text-decoration: none;
     }
 
-    .heart:after {
-        font-family: "Glyphicons Halflings";
-        content: "\e143";
-        margin-top: -30px;
-        text-align: end;
-    }
 </style>
 <script>
     function validate(evt) {
         var theEvent = evt || window.event;
 
         // Handle paste
-        if (theEvent.type === 'paste') {
+        if (theEvent.type === 'paste')
+        {
             key = event.clipboardData.getData('text/plain');
         }
-        else {
+        else
+        {
             // Handle key press
             var key = theEvent.keyCode || theEvent.which;
             key = String.fromCharCode(key);
         }
         var regex = /[0-9]/;
-        if (!regex.test(key)) {
+        if (!regex.test(key))
+        {
             theEvent.returnValue = false;
             if (theEvent.preventDefault) theEvent.preventDefault();
         }
@@ -208,7 +185,7 @@
         <h2>Products for '@ViewBag.Message'</h2>
         <p>@ViewBag.Count products</p>
         <div class="sortBy">
-            <select class="form-control">
+            <select class="form-control" form="Filters" name="SortBy">
                 <option>Recommended</option>
                 <option value="@ViewData["PriceDesc"]">Price low - high</option>
                 <option>Price high - low</option>
@@ -221,183 +198,186 @@
 
 
     <div id="filter-sidebar" class="col-xs-6 col-sm-3 visible-sm visible-md visible-lg collapse sliding-sidebar">
-
-        <div>
-            <h4 class="cat" data-toggle="collapse" data-target="#group-1">
-                <i class="fa fa-fw fa-caret-down parent-expanded"></i>
-                <i class="fa fa-fw fa-caret-right parent-collapsed"></i>
-                Categories
-            </h4>
-            <div id="group-1" class="list-group collapse in">
-                <a asp-action="Products" class="list-group-item">Women</a>
-                <a asp-action="Products" class="list-group-item">Men</a>
-            </div>
-        </div>
-        <hr />
-        <div>
-            <h4 data-toggle="collapse" data-target="#group-2">
-                <i class="fa fa-fw fa-caret-down parent-expanded"></i>
-                <i class="fa fa-fw fa-caret-right parent-collapsed"></i>
-                Brands
-            </h4>
-            <div id="group-2" class="list-group collapse in">
-                <div class="form-group" style="overflow:scroll; height:300px; color:#392C36; overflow-y: scroll;  overflow-x: hidden;">
-                    @foreach (var item in ViewBag.currentBrands)
-                    {
-                        <input class="BrandCheck" type="checkbox" name="BrandBox" value="@item" /><span style="color:#392C36"> @item</span><br>
-
-                    }
+        <form id="Filters" asp-action="Products" method="post">
+            <div>
+                <h4 class="cat" data-toggle="collapse" data-target="#group-1">
+                    <i class="fa fa-fw fa-caret-down parent-expanded"></i>
+                    <i class="fa fa-fw fa-caret-right parent-collapsed"></i>
+                    Categories
+                </h4>
+                <div id="group-1" class="list-group collapse in">
+                    <a asp-action="Products" class="list-group-item">Women</a>
+                    <a asp-action="Products" class="list-group-item">Men</a>
                 </div>
             </div>
-        </div>
-        <hr />
-        <div>
-            <h4 data-toggle="collapse" data-target="#group-3">
-                <i class="fa fa-fw fa-caret-down parent-expanded"></i>
-                <i class="fa fa-fw fa-caret-right parent-collapsed"></i>
-                Color
-            </h4>
-            <div id="group-3" class="list-group collapse in">
-                <div class="form-group" style="overflow:scroll; height:150px; color:#392C36; overflow-y: scroll;  overflow-x: hidden;">
-                    @foreach (var color in ViewBag.ColorList)
-                    {
-                        <input class="BrandCheck" type="checkbox" name="ColorBox" value="@color" /><span style="color:#392C36"> @color</span><br>
-                    }
-                </div>
-            </div>
-        </div>
-        <hr />
-        <div>
-            <h4 data-toggle="collapse" data-target="#group-4">
-                <i class="fa fa-fw fa-caret-down parent-expanded"></i>
-                <i class="fa fa-fw fa-caret-right parent-collapsed"></i>
-                Price
-            </h4>
-            <div id="group-4" class="list-group collapse in">
-                <div class="form-group">
-                    <label for="price-min">Minimum:</label>
-                    <input class="form-control" type="number" onkeypress='validate(event)' name="minPrice" id="priceMinSlider" placeholder="8" min="8" max="1500" value="@ViewBag.miniPrice" />
-                </div>
-
-                <div class="form-group">
-                    <label for="priceMaxSlider">Maximum:</label>
-                    <input class="form-control" type="number" onkeypress='validate(event)' name="maxPrice" id="priceMaxSlider" placeholder="1500" min="8" max="1500" value="@ViewBag.maxiPrice">
-                </div>
-
-            </div>
-        </div>
-        <hr />
-    </div>
-
-    @foreach (var item in Model)
-    {
-        <div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box">
-            <div class="thumbnail">
-                <a href="#"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;" /></a>
-                @if (SignInManager.IsSignedIn(User))
-                {
-                    <div class="wishlist">
-                        @Html.ActionLink("", "AddToWishList", "WishList", routeValues: new
+            <hr />
+            <div>
+                <h4 data-toggle="collapse" data-target="#group-2">
+                    <i class="fa fa-fw fa-caret-down parent-expanded"></i>
+                    <i class="fa fa-fw fa-caret-right parent-collapsed"></i>
+                    Brands
+                </h4>
+                <div id="group-2" class="list-group collapse in">
+                    <div class="form-group" style="overflow:scroll; height:300px; color:#392C36; overflow-y: scroll;  overflow-x: hidden;">
+                        @foreach (var item in ViewBag.currentBrands)
                         {
-                            itm_id = item.id
-                        },
-                        htmlAttributes: new { @class = "heart" })
+                            <input class="BrandCheck" type="checkbox" name="BrandBox" value="@item" /><span style="color:#392C36"> @item</span><br>
+
+                        }
                     </div>
-                }
-                <div class="desc_box">
-                    <p>&euro;@item.price</p>
-                    <p class="description">@item.description</p>
-                    <p class="desc">@item.long_description</p>
-                    <div class="shoppingcart">
-                        @if (item.quantity != 0)
+                </div>
+            </div>
+            <hr />
+            <div>
+                <h4 data-toggle="collapse" data-target="#group-3">
+                    <i class="fa fa-fw fa-caret-down parent-expanded"></i>
+                    <i class="fa fa-fw fa-caret-right parent-collapsed"></i>
+                    Color
+                </h4>
+                <div id="group-3" class="list-group collapse in">
+                    <div class="form-group" style="overflow:scroll; height:150px; color:#392C36; overflow-y: scroll;  overflow-x: hidden;">
+                        @foreach (var color in ViewBag.ColorList)
                         {
-                            @Html.ActionLink("ADD ", "SaveItemInShoppingCart", "ShoppingCart", routeValues: new
+                            <input class="BrandCheck" type="checkbox" name="ColorBox" value="@color" /><span style="color:#392C36"> @color</span><br>
+                        }
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <script>
+                function PriceChecker() {
+                    if (document.getElementByName('maxPrice').value <= document.getElementsById('minPrice').value) {
+                        var difference = document.getElementsById('minPrice').value - document.getElementsById('maxPrice').value + 1;
+                        document.getElementsById('maxPrice').value = document.getElementsById('maxPrice').value - difference;
+                    }
+
+                }
+            </script>
+            <div>
+                <h4 data-toggle="collapse" data-target="#group-4">
+                    <i class="fa fa-fw fa-caret-down parent-expanded"></i>
+                    <i class="fa fa-fw fa-caret-right parent-collapsed"></i>
+                    Price
+                </h4>
+                <div id="group-4" class="list-group collapse in">
+                    <div class="form-group">
+                        <label for="price-min">Minimum:</label>
+                        <input class="form-control" type="number" onkeypress='validate(event)' oninput="PriceChecker()" name="minPrice" id="priceMinSlider" placeholder="8" min="8" max="1500" value="@ViewBag.miniPrice" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="priceMaxSlider">Maximum:</label>
+                        <input class="form-control" type="number" onkeypress='validate(event)' oninput="PriceChecker()" name="maxPrice" id="priceMaxSlider" placeholder="1500" min="8" max="1500" value="@ViewBag.maxiPrice" required>
+                    </div>
+
+                </div>
+            </div>
+            <hr />
+        </form>
+    </div>
+    <div class="col-lg-3">
+        
+    </div>
+    @*<div class="col-lg-9">*@
+        @*@foreach (var item in Model)
+        {
+            @*<div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box" style="width:33%">
+                <div class="thumbnail">
+                    <a href="#"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;" /></a>
+                    <div class="desc_box">
+                        <p>&euro;@item.price</p>
+                        <p class="description">@item.description</p>
+                        <p class="desc">@item.long_description</p>
+                        <div class="shoppingcart">
+                            @if (item.quantity != 0)
                             {
-                                item_id = item.id
-                            },
-                            htmlAttributes: new {@class = "shop" })
-                        }
+                                @Html.ActionLink("ADD ", "SaveItemInShoppingCart", "ShoppingCart", routeValues: new
+                           {
+                               item_id = item.id
+                           },
+                                htmlAttributes: new {@class = "shop" })
+                            }
+                        </div>
                     </div>
                 </div>
+            </div>*@
+
+            <div class="col-lg-9">
+                @foreach (var item in Model)
+                {
+                    @if (ie++ < 21)
+                    {
+                            <div class="col-sm-3 col-md-3 col-lg-4 col-xs-4" id="page_@i _@ie" style="width:33%">
+                                <div class="thumbnail">
+                                    <a href="#"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;" /></a>
+                                    <div class="desc_box">
+                                        <p>&euro;@item.price</p>
+                                        <p class="description">@item.description</p>
+                                        <p class="desc">@item.long_description</p>
+                                        <div class="shoppingcart">
+                                            @if (item.quantity != 0)
+                                            {
+                                                @Html.ActionLink("ADD ", "SaveItemInShoppingCart", "ShoppingCart", routeValues: new
+                                           {
+                                               item_id = item.id
+                                           },
+                                                htmlAttributes: new {@class = "shop" })
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    
+                    else if (ie == 22) { i++; }
+
+                    if (ie <= 21 * i && ie >= 22)
+                    {
+                        
+                            <div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box" id="page_@i _@ie" style="display:none; width:33%" >
+                                <div class="thumbnail">
+                                    <a href="#"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;" /></a>
+                                    <div class="desc_box">
+                                        <p>&euro;@item.price</p>
+                                        <p class="description">@item.description</p>
+                                        <p class="desc">@item.long_description</p>
+                                        <div class="shoppingcart">
+                                            @if (item.quantity != 0)
+                                            {
+                                                @Html.ActionLink("ADD ", "SaveItemInShoppingCart", "ShoppingCart", routeValues: new
+                                           {
+                                               item_id = item.id
+                                           },
+                                                htmlAttributes: new {@class = "shop" })
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                        if (ie == 21 * i) { i++; }
+                    }
+                }
+
+                <script>
+                    var pagecurr = 2;
+                    function LoadMore() {
+                        for (l = (21 * (pagecurr - 1)) + 1; l < (21 * pagecurr) + 1; l++) {
+                            var iddef = "page_" + pagecurr + " _" + l;
+                            var page = document.getElementById(iddef);
+                            if (page != null) { page.style.display = "block"; }
+                        }
+
+
+                        pagecurr = pagecurr + 1;
+                    }
+                </script>
+                <button id="loadmore" class="btn" onclick="LoadMore()" style="margin-left:0%; width:100%" value="1">Load more products..</button>
             </div>
-        </div>
-    }
+        
 
-    <div class="row text-center">
-        <br>
-        <ul class="pagination">
-            <li class="@prevDisabled">
-                @if (!String.IsNullOrEmpty(prevDisabled))
-                {
-                    <a href="#!">
-                        <i class="glyphicon glyphicon-chevron-left"></i>
-                    </a>
-                }
-                else
-                {
-                    <a asp-action="Products" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-page="@(Model.PageIndex - 1)" class="@prevDisabled">
-                        <i class="glyphicon glyphicon-chevron-left"></i>
-                    </a>
-                }
-            </li>
-            @for (int i = 1; i <= totalPages; i++)
-            {
-                @if (i == pageIndex)
-                {
-                    <li class="active">
-                        <a asp-action="Products" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-page="@i" class="disabled">@i</a>
-                    </li>
-                }
-                else if (i > 3 && i <= (totalPages - 3))
-                {
-                    if (i < pageIndex)
-                    {
-                        if (!isPreExist)
-                        {
-                            <li><a asp-action="Products" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-page="@i">@i</a></li>
-                            isPreExist = true;
-                        }
-                    }
-                    else if (i > pageIndex)
-                    {
-                        if (!isLateExist)
-                        {
-                            <li><a asp-action="Products" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-page="@i">@i</a></li>
-                            isLateExist = true;
-                        }
-                    }
-                    else
-                    {
-                        <li>
-                            <a asp-action="Products" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-page="@i">@i</a>
-                        </li>
-                    }
-                }
-                else
-                {
-                    <li>
-                        <a asp-action="Products" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-page="@i">@i</a>
-                    </li>
-                }
-            }
+    
 
-            <li class="@nextDisabled">
-                @if (!String.IsNullOrEmpty(nextDisabled))
-                {
-                    <a href="#!" class="@nextDisabled">
-                        <i class="glyphicon glyphicon-chevron-right"></i>
-                    </a>
-                }
-                else
-                {
-                    <a asp-action="Products" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-page="@(Model.PageIndex + 1)" class="@nextDisabled">
-                        <i class="glyphicon glyphicon-chevron-right"></i>
-                    </a>
-                }
-            </li>
-        </ul>
-        <br />
-    </div>
 }
 else
 {
