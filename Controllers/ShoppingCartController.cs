@@ -61,12 +61,17 @@ namespace bytme.Controllers
             }
 
             var CheckItemId = _context.OrderLines.Where(o => o.item_id == item_id && o.order_id == _order_id).FirstOrDefault();
+            var CheckItemStock = _context.Items.Where(o => o.id == item_id).FirstOrDefault();
 
             if (CheckItemId != null)
             {
-                CheckItemId.qty = CheckItemId.qty + 1;
-                _context.Update(CheckItemId);
-                _context.SaveChanges();
+                if(CheckItemId.qty < CheckItemStock.quantity)
+                {
+                    CheckItemId.qty = CheckItemId.qty + 1;
+                    _context.Update(CheckItemId);
+                    _context.SaveChanges();
+                }
+                else {}
             }
             else
             {
