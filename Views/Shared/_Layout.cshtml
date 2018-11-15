@@ -121,6 +121,13 @@
             .navbar{
                 text-align: center;
             }
+
+        .sayos-header {
+            display: block;
+            height: 0px;
+            margin: 0 auto;
+            width: 110px;
+        }
     </style>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -154,15 +161,6 @@
             <div class="navbar" style="background-color: #B388B8; margin-top:-65px; ">
                 <p style="position:relative;top:22px; text-align:center; color:#F3F3F3;">Orders above &euro;100,- have FREE DELIVERY!</p>
             </div>
-
-            <div class="navbar-collapse collapse">
-                <div class="brand-centered">
-                    <a class="navbar-brand" asp-controller="Home" asp-action="Index">
-                        <img style="margin-right: 10px; width:150px" src="~/images/sayos_new.png" alt="Sayos">
-                    </a>
-                </div>
-
-
                 <div class="navbar">
                     <div class="navbar-left" style="margin-top:10px; margin-left:15px;">
                         @using (Html.BeginForm("Products", "Home", FormMethod.Get))
@@ -171,6 +169,11 @@
                                 <li><input class="searchbox" placeholder="Search.." type=@Html.TextBox("SearchString")</li>
                             </ul>
                         }
+                    </div>
+                    <div>
+                        <a href="/" class="sayos-header">
+                            <img style="width:150px" src="~/images/sayos_new.png" alt="Sayos">
+                        </a>
                     </div>
                     @if (SignInManager.IsSignedIn(User))
                     {
