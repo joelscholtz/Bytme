@@ -44,6 +44,7 @@
                     <h3 class="row text-center">@item.description</h3>
                     <p class="row text-center">@item.long_description</p>
                     <p class="row text-center">>&euro;@item.price</p>
+                    <center>
                     @if (item.quantity != 0)
                     {
                         @Html.ActionLink("Add to cart", "SaveItemInShoppingCart", "ShoppingCart", routeValues: new
@@ -52,6 +53,7 @@
                         },
                         htmlAttributes: new {@class = "btn btn-success btn-large"})
                     }
+                    </center>
                     <p class="row text-center"><a href="#" class="btn btn-danger" role="button"><span class="glyphicon glyphicon-heart-empty" aria-hidden="true"></span></a></p>
                 </div>
             </div>

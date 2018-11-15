@@ -23,6 +23,15 @@
     }
 </script>
 
+<script language="javascript">
+    function testForEnter() {
+        if (event.keyCode == 13) {
+            event.cancelBubble = true;
+            event.returnValue = false;
+        }
+    }
+</script>
+
 <h2>Your Shoppingcart</h2>
 
 <div class="container">
@@ -64,11 +73,13 @@
                                 }
                             }
                             </script>
-                            <td data-th="Quantity">
-                                <input asp-for="@Model[i].qty" type="number" min="1" max="@Html.DisplayFor(model => model[i].stock)" id="_data_qty_@Model[i].orderline_id" onchange="UpdateQtyOrder(@Model[i].orderline_id , this.value)" class="form-control" value="@Model[i].qty" oninput="checkGreaterStock(this.value, @Model[i].orderline_id)" required>
 
-                            <td data-th="Price">&euro;@Html.DisplayFor(model => model[i].price) </td>
-                            <td data-th="Subtotal" class="text-center"><span id="_data_subtotal_@Model[i].orderline_id"> &euro;  @{var total = (@Model[i].price * @Model[i].qty); } @{ @total.ToString("0.00") } </span></td>
+                            <td data-th="Quantity">
+                                <input asp-for="@Model[i].qty" type="number" min="1" max="@Html.DisplayFor(model => model[i].stock)" id="_data_qty_@Model[i].orderline_id" onkeydown="testForEnter();" onchange="UpdateQtyOrder(@Model[i].orderline_id , this.value)" class="form-control" value="@Model[i].qty" oninput="checkGreaterStock(this.value, @Model[i].orderline_id)" required>
+
+                            <td data-th="Price">&euro; @{ var price = (Model[i].price); } @{ @price.ToString("N")}</td>
+
+                            <td data-th="Subtotal" class="text-center"><span id="_data_subtotal_@Model[i].orderline_id"> &euro;  @{var total = (@Model[i].price * @Model[i].qty); } @{ @total.ToString("N") } </span></td>
                             <td class="actions" data-th="">
                             <td>
                                 <a href='@Url.Action("DeleteItemFromShoppingCart", "ShoppingCart", new { orderline_id = Model[i].orderline_id })' class="btn btn-danger btn-block">Remove product</a>
@@ -80,7 +91,6 @@
             </tbody>
             <tfoot>
                 <tr>
-
                     <td colspan="2" class="hidden-xs"></td>
                     @if (ViewBag.model_view != null)
                     {
@@ -91,12 +101,20 @@
                         }
                         @if (ViewBag.totalPrice >= 100)
                         {
-                            <td colspan="5" class="hidden-xs text-center"><h4><strong><span id="result_sub_total">Total &euro;@ViewBag.totalPrice.ToString("0.00")</span></strong></h4></td>
+                            <td colspan="5" class="hidden-xs text-center"><h4><strong><span id="result_sub_total">Total &euro;@ViewBag.totalPrice.ToString("N")</span></strong></h4></td>
                         }
+                    }
+                </tr>
+                <tr>
+                    <td colspan="5" class="hidden-xs"></td>
+                    @if(ViewBag.count > 0 )
+                    {
+                    <td style="margin-left:50%"><button type="submit" class="btn btn-success btn-block">Check out</button></td>
                     }
                 </tr>
             </tfoot>
         </table>
+
         @if (ViewBag.count == 0)
         {
             <center>

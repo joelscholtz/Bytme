@@ -61,7 +61,8 @@ namespace bytme.Controllers
             }
 
             var CheckItemId = _context.OrderLines.Where(o => o.item_id == item_id && o.order_id == _order_id).FirstOrDefault();
-            if(CheckItemId != null)
+
+            if (CheckItemId != null)
             {
                 CheckItemId.qty = CheckItemId.qty + 1;
                 _context.Update(CheckItemId);
@@ -182,6 +183,25 @@ namespace bytme.Controllers
             ViewBag.model_view = model;
 
             return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Index(List<ShoppingCartModel> shoppingCartModels)
+        {
+            List<OrderLines> orderLines = new List<OrderLines>();
+
+            foreach (var s in shoppingCartModels)
+            {
+                orderLines.Add(new OrderLines { id = s.orderline_id, qty = s.qty, order_id = s.orderline_id, item_id = s.item_id });
+            }
+
+            foreach (var o in orderLines)
+            {
+                _context.OrderLines.Update(o);
+                _context.SaveChanges();
+            }
+            return View(nameof(Checkout));
         }
 
         public IActionResult Checkout()
