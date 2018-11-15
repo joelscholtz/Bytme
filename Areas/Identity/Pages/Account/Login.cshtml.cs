@@ -80,6 +80,12 @@ namespace bytme.Areas.Identity.Pages.Account
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: true);
                 var user = await _userManager.FindByEmailAsync(Input.Email);
+                if (user == null)
+                {
+                    ModelState.AddModelError(string.Empty, "Account not registered.");
+                    return Page();
+                }
+
                 if (result.Succeeded && user.EmailConfirmed)
                 {
                     _logger.LogInformation("User logged in.");
