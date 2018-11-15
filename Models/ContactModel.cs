@@ -14,8 +14,8 @@ namespace bytme.Models
         [StringLength(30, MinimumLength = 2, ErrorMessage = "Your name must be between 2 and 30 letters.")]
         public string name { get; set; }
         [Required]
-        [EmailAddress]
-        [RegularExpression("^[_a-z0-9-]+(.[a-z0-9-]+)@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,10})$", ErrorMessage = "Must be a valid email address")]
+        [EmailAddress(ErrorMessage = "Must be a valid email address")]
+        [RegularExpression(@"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$", ErrorMessage = "Please enter a valid e-mail adress")]
         [StringLength(100, ErrorMessage = "Must be a valid email address")]
         public string email { get; set; }
         [Required]
