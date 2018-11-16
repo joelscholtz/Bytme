@@ -70,10 +70,17 @@ namespace bytme.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
-                
+
+                var email = await _userManager.FindByEmailAsync(Input.Email);
                 var user = new UserModel { UserName = Input.Email, Email = Input.Email };
                 var result = await _userManager.CreateAsync(user, Input.Password);
-                if (result.Succeeded)
+
+                if (email != null)
+                {
+                    ModelState.AddModelError(string.Empty, "Email already in use.");
+                    return Page();
+                }
+                if (result.Succeeded && email == null)
                 {
                     _logger.LogInformation("User created a new account with password.");
 
