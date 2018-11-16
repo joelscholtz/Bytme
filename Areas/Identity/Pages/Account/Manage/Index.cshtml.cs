@@ -42,10 +42,23 @@ namespace bytme.Areas.Identity.Pages.Account.Manage
 
         public class InputModel
         {
-            [Required]
+            
             [EmailAddress]
             public string Email { get; set; }
 
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "Name")]
+            [RegularExpression(@"^[a-zA-Z ]+$", ErrorMessage = "A name can only contain letters.")]
+            [StringLength(100, ErrorMessage = "Invalid input. Maximum is 100 characters.")]
+            public string name { get; set; }
+
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "Surname")]
+            [RegularExpression(@"^[a-zA-Z ]+$", ErrorMessage = "A surname can only contain letters.")]
+            [StringLength(100, ErrorMessage = "Invalid input. Maximum is 100 characters.")]
+            public string surname { get; set; }
             //[Phone]
             //[Display(Name = "Phone number")]
             //public string PhoneNumber { get; set; }
@@ -76,6 +89,8 @@ namespace bytme.Areas.Identity.Pages.Account.Manage
             return Page();
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
@@ -88,6 +103,14 @@ namespace bytme.Areas.Identity.Pages.Account.Manage
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
+            if (Input.name != user.name)
+            {
+                user.name = Input.name;
+            }
+            if (Input.surname != user.surname)
+            {
+                user.surname = Input.surname;
+            }
 
             var email = await _userManager.GetEmailAsync(user);
             if (Input.Email != email)
@@ -98,6 +121,7 @@ namespace bytme.Areas.Identity.Pages.Account.Manage
                     var userId = await _userManager.GetUserIdAsync(user);
                     throw new InvalidOperationException($"Unexpected error occurred setting email for user with ID '{userId}'.");
                 }
+                
             }
 
             //var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
@@ -111,7 +135,9 @@ namespace bytme.Areas.Identity.Pages.Account.Manage
             //    }
             //}
 
+            var result = await _userManager.UpdateAsync(user);
             await _signInManager.RefreshSignInAsync(user);
+
             StatusMessage = "Your profile has been updated";
             return RedirectToPage();
         }

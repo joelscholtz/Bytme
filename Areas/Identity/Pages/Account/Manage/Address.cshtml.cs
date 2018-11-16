@@ -37,20 +37,7 @@ namespace bytme.Areas.Identity.Pages.Account.Manage
 
         public class InputModel
         {
-            [Required]
-            [DataType(DataType.Text)]
-            [Display(Name = "Name")]
-            [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "A name can only contain letters.")]
-            [StringLength(100, ErrorMessage = "Invalid input. Maximum is 100 characters.")]
-            public string name { get; set; }
-
-            [Required]
-            [DataType(DataType.Text)]
-            [Display(Name = "Surname")]
-            [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "A surname can only contain letters.")]
-            [StringLength(100, ErrorMessage = "Invalid input. Maximum is 100 characters.")]
-            public string surname { get; set; }
-
+           
             [Required]
             [DataType(DataType.Text)]
             [Display(Name = "Street")]
@@ -113,14 +100,7 @@ namespace bytme.Areas.Identity.Pages.Account.Manage
 
             // checks if current value is equal to new value
             // changes old value to input if false
-            if (Input.name != user.name)
-            {
-                user.name = Input.name;
-            }
-            if (Input.surname != user.surname)
-            {
-                user.surname = Input.surname;
-            }
+            
             if (Input.street != user.street)
             {
                 user.street = Input.street;
