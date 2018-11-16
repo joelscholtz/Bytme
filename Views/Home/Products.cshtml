@@ -30,69 +30,27 @@
         font-size: 10px;
     }
 
-    .pagination {
-        margin-left: 275px;
-        position:page;
-    }
-
     .shoppingcart {
         margin-top: -30px;
         text-align: end;
     }
-    
-    .shoppingcart > a {
+
+        .shoppingcart > a {
             font-size: 15px;
             color: #8F6B93;
             text-decoration: none;
-    }
-
-        .shoppingcart > a:hover {
-            font-size: 15px;
-            color: #C7B5C9;
-            text-decoration: none;
         }
 
-    .pagination > li > a:hover,
-    .pagination > li > span:hover,
-    .pagination > li > a:focus,
-    .pagination > li > span:focus {
-        z-index: 2;
-        color: #8F6B93;
-        background-color: #C7B5C9;
-        border-color: #ddd;
-    }
-
-    .pagination > .active > a,
-    .pagination > .active > span,
-    .pagination > .active > a:hover,
-    .pagination > .active > span:hover,
-    .pagination > .active > a:focus,
-    .pagination > .active > span:focus {
-        z-index: 3;
-        color: #fff;
-        cursor: default;
-        background-color: #8F6B93;
-        border-color: #8F6B93;
-    }
-
-    .pagination > li > a,
-    .pagination > li > span {
-        position: relative;
-        float: left;
-        padding: 6px 12px;
-        margin-left: -1px;
-        line-height: 1.42857143;
-        color: #8F6B93;
-        text-decoration: none;
-        background-color: #fff;
-        border: 1px solid #ddd;
-    }
+            .shoppingcart > a:hover {
+                font-size: 15px;
+                color: #C7B5C9;
+                text-decoration: none;
+            }
 
     .description {
         margin-top: -8px;
     }
 
-    /*filter sidebar css*/
     [data-toggle="collapse"] {
         cursor: pointer;
     }
@@ -109,19 +67,6 @@
         vertical-align: middle !important;
     }
 
-    .sortBy {
-        float: right;
-        width: 275px;
-        margin-bottom: 10px;
-        margin-top: -40px;
-    }
-
-    .sortBy > .form-control:focus {
-            border-color: #C7B5C9;
-            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.100), 0 0 8px rgba(143, 107, 147, .6);
-            box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(143, 107, 147, .6);
-    }
-
     select option:hover {
         box-shadow: 0 0 10px 10px #e1358f inset;
     }
@@ -131,7 +76,7 @@
     }
 
     .hr {
-        margin-top:auto;
+        margin-top: auto;
     }
 
     .thumbnail > a > img:hover {
@@ -139,14 +84,14 @@
     }
 
     .cat {
-        margin-top:-10px;
+        margin-top: -4px;
     }
 
     .shop:after {
-            font-family: "Glyphicons Halflings";
-            content: "\e116";
-            margin-top: -30px;
-            text-align: end;
+        font-family: "Glyphicons Halflings";
+        content: "\e116";
+        margin-top: -30px;
+        text-align: end;
     }
 
     .shop:hover {
@@ -155,206 +100,247 @@
         text-decoration: none;
     }
 
+    #filter-sidebar {
+        position: sticky;
+        top: 0;
+    }
+
+    .sortby {
+        margin-top:-60px;
+    }
 </style>
 <script>
     function validate(evt) {
         var theEvent = evt || window.event;
 
         // Handle paste
-        if (theEvent.type === 'paste')
-        {
+        if (theEvent.type === 'paste') {
             key = event.clipboardData.getData('text/plain');
         }
-        else
-        {
+        else {
             // Handle key press
             var key = theEvent.keyCode || theEvent.which;
             key = String.fromCharCode(key);
         }
         var regex = /[0-9]/;
-        if (!regex.test(key))
-        {
+        if (!regex.test(key)) {
             theEvent.returnValue = false;
             if (theEvent.preventDefault) theEvent.preventDefault();
         }
     }
 </script>
+<script>
+    //submit data with jQuery AJAX
+    function submit() {
+        var data = {
+            TextBoxStringData: $('#text').val(),
+            TextBoxIntData: $('#number').val(),
+            CheckboxData: $('#checkbox').is(':checked')
+        };
+</script>
 @if (!String.IsNullOrEmpty(ViewBag.Message))
 {
-    <div class="row text-center">
-        <h2>Products for '@ViewBag.Message'</h2>
-        <p>@ViewBag.Count products</p>
-        <div class="sortBy">
-            <select class="form-control" form="Filters" name="SortBy">
-                <option>Recommended</option>
-                <option value="@ViewData["PriceDesc"]">Price low - high</option>
-                <option>Price high - low</option>
-                <option>Brand A - Z</option>
-                <option>Brand Z - A</option>
-            </select>
+<div class="row text-center">
+    <h2>Products for '@ViewBag.Message'</h2>
+    <p>@ViewBag.Count products</p>
+    <div class="btn-group pull-right sortby">
+        @if (ViewData["SortOrder"] == null)
+        {
+            <button type="button" class="btn btn-light" disabled>Price low - high</button>
+        }
+        @if (ViewData["SortOrder"] is "name_desc")
+        {
+            <button type="button" class="btn btn-light" disabled>Price high - low</button>
+        }
+        @if (ViewData["SortOrder"] is "Date")
+        {
+            <button type="button" class="btn btn-light" disabled>Brand A-Z</button>
+        }
+        @if (ViewData["SortOrder"] is "date_desc")
+        {
+            <button type="button" class="btn btn-light" disabled>Brand Z-A</button>
+        }
+        <button type="button" class="btn dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span class="sr-only">Toggle Dropdown</span>▼
+        </button>
+        <div class="dropdown-menu" style="text-decoration:none;">
+            <a class="dropdown-item btn" style="text-decoration:none;color:black;" asp-action="Products" asp-route-gender="@ViewBag.Gender" asp-route-searchString="@ViewBag.Message" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentColor="@ViewBag.CurrentColor" asp-route-categoryWomen="@ViewBag.CurrentCategoryWomen" asp-route-categoryMen="@ViewBag.CurrentCategoryMen">Price</a><br />
+            <a class="dropdown-item btn" style="text-decoration:none;color:black;" asp-action="Products" asp-route-gender="@ViewBag.Gender" asp-route-searchString="@ViewBag.Message" asp-route-sortOrder="@ViewData["DateSortParm"]" asp-route-currentColor="@ViewBag.CurrentColor" asp-route-categoryWomen="@ViewBag.CurrentCategoryWomen" asp-route-categoryMen="@ViewBag.CurrentCategoryMen">Brand</a>
         </div>
     </div>
+</div>
     <hr class="hr" />
+    <div class="container" id="filter-sidebar">
 
-
-    <div id="filter-sidebar" class="col-xs-6 col-sm-3 visible-sm visible-md visible-lg collapse sliding-sidebar">
-        <form id="Filters" asp-action="Products" method="post">
-            <div>
-                <h4 class="cat" data-toggle="collapse" data-target="#group-1">
-                    <i class="fa fa-fw fa-caret-down parent-expanded"></i>
-                    <i class="fa fa-fw fa-caret-right parent-collapsed"></i>
-                    Categories
-                </h4>
-                <div id="group-1" class="list-group collapse in">
-                    <a asp-action="Products" class="list-group-item">Women</a>
-                    <a asp-action="Products" class="list-group-item">Men</a>
-                </div>
-            </div>
-            <hr />
-            <div>
-                <h4 data-toggle="collapse" data-target="#group-2">
-                    <i class="fa fa-fw fa-caret-down parent-expanded"></i>
-                    <i class="fa fa-fw fa-caret-right parent-collapsed"></i>
-                    Brands
-                </h4>
-                <div id="group-2" class="list-group collapse in">
-                    <div class="form-group" style="overflow:scroll; height:300px; color:#392C36; overflow-y: scroll;  overflow-x: hidden;">
-                        @foreach (var item in ViewBag.currentBrands)
-                        {
-                            <input class="BrandCheck" type="checkbox" name="BrandBox" value="@item" /><span style="color:#392C36"> @item</span><br>
-
-                        }
-                    </div>
-                </div>
-            </div>
-            <hr />
-            <div>
-                <h4 data-toggle="collapse" data-target="#group-3">
-                    <i class="fa fa-fw fa-caret-down parent-expanded"></i>
-                    <i class="fa fa-fw fa-caret-right parent-collapsed"></i>
-                    Color
-                </h4>
-                <div id="group-3" class="list-group collapse in">
-                    <div class="form-group" style="overflow:scroll; height:150px; color:#392C36; overflow-y: scroll;  overflow-x: hidden;">
-                        @foreach (var color in ViewBag.ColorList)
-                        {
-                            <input class="BrandCheck" type="checkbox" name="ColorBox" value="@color" /><span style="color:#392C36"> @color</span><br>
-                        }
-                    </div>
-                </div>
-            </div>
-            <hr />
-            <script>
-                function PriceChecker() {
-                    if (document.getElementByName('maxPrice').value <= document.getElementsById('minPrice').value) {
-                        var difference = document.getElementsById('minPrice').value - document.getElementsById('maxPrice').value + 1;
-                        document.getElementsById('maxPrice').value = document.getElementsById('maxPrice').value - difference;
-                    }
-
-                }
-            </script>
-            <div>
-                <h4 data-toggle="collapse" data-target="#group-4">
-                    <i class="fa fa-fw fa-caret-down parent-expanded"></i>
-                    <i class="fa fa-fw fa-caret-right parent-collapsed"></i>
-                    Price
-                </h4>
-                <div id="group-4" class="list-group collapse in">
-                    <div class="form-group">
-                        <label for="price-min">Minimum:</label>
-                        <input class="form-control" type="number" onkeypress='validate(event)' oninput="PriceChecker()" name="minPrice" id="priceMinSlider" placeholder="8" min="8" max="1500" value="@ViewBag.miniPrice" required />
-                    </div>
-
-                    <div class="form-group">
-                        <label for="priceMaxSlider">Maximum:</label>
-                        <input class="form-control" type="number" onkeypress='validate(event)' oninput="PriceChecker()" name="maxPrice" id="priceMaxSlider" placeholder="1500" min="8" max="1500" value="@ViewBag.maxiPrice" required>
-                    </div>
-
-                </div>
-            </div>
-            <hr />
-        </form>
-    </div>
-    <div class="col-lg-3">
+        <div class="btn-group pull-left">
+            <a class="dropdown-item btn" style="text-decoration:none;color:black;" asp-action="Products" asp-route-searchString="@ViewBag.Message">Reset Filters</a><br />
+        </div>
         
-    </div>
-    @*<div class="col-lg-9">*@
-        @*@foreach (var item in Model)
-        {
-            @*<div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box" style="width:33%">
-                <div class="thumbnail">
-                    <a href="#"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;" /></a>
-                    <div class="desc_box">
-                        <p>&euro;@item.price</p>
-                        <p class="description">@item.description</p>
-                        <p class="desc">@item.long_description</p>
-                        <div class="shoppingcart">
-                            @if (item.quantity != 0)
-                            {
-                                @Html.ActionLink("ADD ", "SaveItemInShoppingCart", "ShoppingCart", routeValues: new
-                           {
-                               item_id = item.id
-                           },
-                                htmlAttributes: new {@class = "shop" })
-                            }
+        <br /><br /><br />
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="form-group-lg row center-block" role="group">
+                    <h4 class="cat" data-toggle="collapse" data-target="#group-1">Categories</h4>
+                    <div id="group-1" class="list-group collapse in">
+                        <span></span>
+                        @if (ViewBag.Gender == null)
+                        {
+                            <a asp-action="Products" asp-route-gender="female" asp-route-searchString="@ViewBag.Message" asp-route-sortOrder="@ViewData["SortOrder"]" asp-route-currentColor="@ViewBag.CurrentColor" style="text-decoration:none;color:black;">Women</a><br />
+                            <a asp-action="Products" asp-route-gender="male" asp-route-searchString="@ViewBag.Message" asp-route-sortOrder="@ViewData["SortOrder"]" asp-route-currentColor="@ViewBag.CurrentColor" style="text-decoration:none;color:black;">Men</a>
+                            <br />
+                        }
+                        @if (ViewBag.Gender == "male")
+                        {
+                            <a asp-action="Products" asp-route-gender="male" asp-route-searchString="@ViewBag.Message" asp-route-sortOrder="@ViewData["SortOrder"]" asp-route-categoryMen="Blazers" asp-route-currentColor="@ViewBag.CurrentColor"style="text-decoration:none;color:black;">Blazers</a><br />
+                            <a asp-action="Products" asp-route-gender="male" asp-route-searchString="@ViewBag.Message" asp-route-sortOrder="@ViewData["SortOrder"]" asp-route-categoryMen="Blouses" asp-route-currentColor="@ViewBag.CurrentColor"style="text-decoration:none;color:black;">Blouses</a><br />
+                            <a asp-action="Products" asp-route-gender="male" asp-route-searchString="@ViewBag.Message" asp-route-sortOrder="@ViewData["SortOrder"]" asp-route-categoryMen="Jeans" asp-route-currentColor="@ViewBag.CurrentColor" style="text-decoration:none;color:black;">Jeans</a><br />
+                            <a asp-action="Products" asp-route-gender="male" asp-route-searchString="@ViewBag.Message" asp-route-sortOrder="@ViewData["SortOrder"]" asp-route-categoryMen="Laptop Bags" asp-route-currentColor="@ViewBag.CurrentColor" style="text-decoration:none;color:black;">Laptop Bags</a><br />
+                            <a asp-action="Products" asp-route-gender="male" asp-route-searchString="@ViewBag.Message" asp-route-sortOrder="@ViewData["SortOrder"]" asp-route-categoryMen="Shirts" asp-route-currentColor="@ViewBag.CurrentColor" style="text-decoration:none;color:black;">Shirts</a><br />
+                            <a asp-action="Products" asp-route-gender="male" asp-route-searchString="@ViewBag.Message" asp-route-sortOrder="@ViewData["SortOrder"]" asp-route-categoryMen="Short Coats" asp-route-currentColor="@ViewBag.CurrentColor" style="text-decoration:none;color:black;">Short Coats</a><br />
+                            <a asp-action="Products" asp-route-gender="male" asp-route-searchString="@ViewBag.Message" asp-route-sortOrder="@ViewData["SortOrder"]" asp-route-categoryMen="Suit Jackets" asp-route-currentColor="@ViewBag.CurrentColor" style="text-decoration:none;color:black;">Suit Jackets</a><br />
+                            <a asp-action="Products" asp-route-gender="male" asp-route-searchString="@ViewBag.Message" asp-route-sortOrder="@ViewData["SortOrder"]" asp-route-categoryMen="Suit Pants" asp-route-currentColor="@ViewBag.CurrentColor" style="text-decoration:none;color:black;">Suit Pants</a><br />
+                            <a asp-action="Products" asp-route-gender="male" asp-route-searchString="@ViewBag.Message" asp-route-sortOrder="@ViewData["SortOrder"]" asp-route-categoryMen="Suits" asp-route-currentColor="@ViewBag.CurrentColor"  style="text-decoration:none;color:black;">Suits</a><br />
+                            <a asp-action="Products" asp-route-gender="male" asp-route-searchString="@ViewBag.Message" asp-route-sortOrder="@ViewData["SortOrder"]" asp-route-categoryMen="Waist Coats" asp-route-currentColor="@ViewBag.CurrentColor" style="text-decoration:none;color:black;">Waist Coats</a><br />
+                        }
+                        @if (ViewBag.Gender == "female")
+                        {
+                            <a asp-action="Products" asp-route-gender="female" asp-route-searchString="@ViewBag.Message" asp-route-sortOrder="@ViewData["SortOrder"]" asp-route-categoryWomen="Blazers" asp-route-currentColor="@ViewBag.CurrentColor" style="text-decoration:none;color:black;">Blazers</a><br />
+                            <a asp-action="Products" asp-route-gender="female" asp-route-searchString="@ViewBag.Message" asp-route-sortOrder="@ViewData["SortOrder"]" asp-route-categoryWomen="Blouses" asp-route-currentColor="@ViewBag.CurrentColor" style="text-decoration:none;color:black;">Blouses</a><br />
+                            <a asp-action="Products" asp-route-gender="female" asp-route-searchString="@ViewBag.Message" asp-route-sortOrder="@ViewData["SortOrder"]" asp-route-categoryWomen="Boots" asp-route-currentColor="@ViewBag.CurrentColor" style="text-decoration:none;color:black;">Boots</a><br />
+                            <a asp-action="Products" asp-route-gender="female" asp-route-searchString="@ViewBag.Message" asp-route-sortOrder="@ViewData["SortOrder"]" asp-route-categoryWomen="Coats" asp-route-currentColor="@ViewBag.CurrentColor" style="text-decoration:none;color:black;">Coats</a><br />
+                            <a asp-action="Products" asp-route-gender="female" asp-route-searchString="@ViewBag.Message" asp-route-sortOrder="@ViewData["SortOrder"]" asp-route-categoryWomen="Cardigans" asp-route-currentColor="@ViewBag.CurrentColor" style="text-decoration:none;color:black;">Cardigans</a><br />
+                            <a asp-action="Products" asp-route-gender="female" asp-route-searchString="@ViewBag.Message" asp-route-sortOrder="@ViewData["SortOrder"]" asp-route-categoryWomen="Dresses" asp-route-currentColor="@ViewBag.CurrentColor" style="text-decoration:none;color:black;">Dresses</a><br />
+                            <a asp-action="Products" asp-route-gender="female" asp-route-searchString="@ViewBag.Message" asp-route-sortOrder="@ViewData["SortOrder"]" asp-route-categoryWomen="Heels" asp-route-currentColor="@ViewBag.CurrentColor" style="text-decoration:none;color:black;">Heels</a><br />
+                            <a asp-action="Products" asp-route-gender="female" asp-route-searchString="@ViewBag.Message" asp-route-sortOrder="@ViewData["SortOrder"]" asp-route-categoryWomen="Jumpers" asp-route-currentColor="@ViewBag.CurrentColor" style="text-decoration:none;color:black;">Jumpers</a><br />
+                            <a asp-action="Products" asp-route-gender="female" asp-route-searchString="@ViewBag.Message" asp-route-sortOrder="@ViewData["SortOrder"]" asp-route-categoryWomen="Skirts" asp-route-currentColor="@ViewBag.CurrentColor" style="text-decoration:none;color:black;">Skirts</a><br />
+                            <a asp-action="Products" asp-route-gender="female" asp-route-searchString="@ViewBag.Message" asp-route-sortOrder="@ViewData["SortOrder"]" asp-route-categoryWomen="Trousers" asp-route-currentColor="@ViewBag.CurrentColor" style="text-decoration:none;color:black;">Trousers</a><br />
+                        }
+                    </div>
+                    <hr />
+                    <div>
+                        <h4 data-toggle="collapse" data-target="#group-2">Brands</h4>
+                        <div id="group-2" class="list-group collapse in">
+                            <div class="form-group" style="overflow:scroll; height:300px; color:#392C36; overflow-y: scroll;  overflow-x: hidden;">
+                                @foreach (var item in ViewBag.currentBrands)
+                                {
+                                    <a asp-action="Products" asp-route-searchString="@ViewBag.Message" asp-route-currentBrands="@item" style="text-decoration:none;color:black;">@item</a><br />
+                                }
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>*@
+                    <hr />
+                    <div>
+                        <h4 data-toggle="collapse" data-target="#group-3">Color</h4>
+                            <div id="group-3" class="list-group collapse in">
+                                <div class="form-group" style="overflow:scroll; height:150px; color:#392C36; overflow-y: scroll;  overflow-x: hidden;">
+                                    <a asp-action="Products" asp-route-gender="@ViewBag.Gender" asp-route-searchString="@ViewBag.Message" asp-route-categoryWomen="@ViewBag.CurrentCategoryWomen" asp-route-sortOrder="@ViewData["SortOrder"]" asp-route-categoryMen="@ViewBag.CurrentCategoryMen" asp-route-currentColor="black" style="text-decoration:none;color:black;" >Black</a><br />
+                                    <a asp-action="Products" asp-route-gender="@ViewBag.Gender" asp-route-searchString="@ViewBag.Message" asp-route-categoryWomen="@ViewBag.CurrentCategoryWomen" asp-route-sortOrder="@ViewData["SortOrder"]" asp-route-categoryMen="@ViewBag.CurrentCategoryMen" asp-route-currentColor="blue" style="text-decoration:none;color:black;" >Blue</a><br />
+                                    <a asp-action="Products" asp-route-gender="@ViewBag.Gender" asp-route-searchString="@ViewBag.Message" asp-route-categoryWomen="@ViewBag.CurrentCategoryWomen" asp-route-sortOrder="@ViewData["SortOrder"]" asp-route-categoryMen="@ViewBag.CurrentCategoryMen" asp-route-currentColor="cyan" style="text-decoration:none;color:black;" >Cyan</a><br />
+                                    <a asp-action="Products" asp-route-gender="@ViewBag.Gender" asp-route-searchString="@ViewBag.Message" asp-route-categoryWomen="@ViewBag.CurrentCategoryWomen" asp-route-sortOrder="@ViewData["SortOrder"]" asp-route-categoryMen="@ViewBag.CurrentCategoryMen" asp-route-currentColor="green" style="text-decoration:none;color:black;" >Green</a><br />
+                                    <a asp-action="Products" asp-route-gender="@ViewBag.Gender" asp-route-searchString="@ViewBag.Message" asp-route-categoryWomen="@ViewBag.CurrentCategoryWomen" asp-route-sortOrder="@ViewData["SortOrder"]" asp-route-categoryMen="@ViewBag.CurrentCategoryMen" asp-route-currentColor="orange" style="text-decoration:none;color:black;" >Orange</a><br />
+                                    <a asp-action="Products" asp-route-gender="@ViewBag.Gender" asp-route-searchString="@ViewBag.Message" asp-route-categoryWomen="@ViewBag.CurrentCategoryWomen" asp-route-sortOrder="@ViewData["SortOrder"]" asp-route-categoryMen="@ViewBag.CurrentCategoryMen" asp-route-currentColor="pink" style="text-decoration:none;color:black;" >Pink</a><br />
+                                    <a asp-action="Products" asp-route-gender="@ViewBag.Gender" asp-route-searchString="@ViewBag.Message" asp-route-categoryWomen="@ViewBag.CurrentCategoryWomen" asp-route-sortOrder="@ViewData["SortOrder"]" asp-route-categoryMen="@ViewBag.CurrentCategoryMen" asp-route-currentColor="red" style="text-decoration:none;color:black;" >Red</a><br />
+                                    <a asp-action="Products" asp-route-gender="@ViewBag.Gender" asp-route-searchString="@ViewBag.Message" asp-route-categoryWomen="@ViewBag.CurrentCategoryWomen" asp-route-sortOrder="@ViewData["SortOrder"]" asp-route-categoryMen="@ViewBag.CurrentCategoryMen" asp-route-currentColor="white" style="text-decoration:none;color:black;" >White</a><br />
+                                    <a asp-action="Products" asp-route-gender="@ViewBag.Gender" asp-route-searchString="@ViewBag.Message" asp-route-categoryWomen="@ViewBag.CurrentCategoryWomen" asp-route-sortOrder="@ViewData["SortOrder"]" asp-route-categoryMen="@ViewBag.CurrentCategoryMen" asp-route-currentColor="yellow" style="text-decoration:none;color:black;" >Yellow</a><br />
+                                </div>
+                            </div>
+                    </div>
+                    <hr />
+                    <script>
+                        function PriceChecker() {
+                            if (document.getElementByName('maxPrice').value <= document.getElementsById('minPrice').value) {
+                                var difference = document.getElementsById('minPrice').value - document.getElementsById('maxPrice').value + 1;
+                                document.getElementsById('maxPrice').value = document.getElementsById('maxPrice').value - difference;
+                            }
 
+                        }
+                        function validate(evt) {
+                            var theEvent = evt || window.event;
+
+                            if (theEvent.type === 'paste') {
+                                key = event.clipboardData.getData('text/plain');
+                            }
+                            else {
+                                var key = theEvent.keyCode || theEvent.which;
+                                key = String.fromCharCode(key);
+                            }
+                            var regex = /[0-9]/;
+                            if (!regex.test(key)) {
+                                theEvent.returnValue = false;
+                                if (theEvent.preventDefault) theEvent.preventDefault();
+                            }
+                        }
+                    </script>
+                    <div>
+                        <h4 data-toggle="collapse" data-target="#group-4">Price</h4>
+                        <div id="group-4" class="list-group collapse in">
+                            <div class="form-group">
+                                <label for="price-min">Minimum:</label>
+                                <input class="form-control" type="number" onkeypress='validate(event)' oninput="PriceChecker()" name="minPrice" id="priceMinSlider" placeholder="8" min="8" max="1500" value="@ViewBag.miniPrice" required />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="priceMaxSlider">Maximum:</label>
+                                <input class="form-control" type="number" onkeypress='validate(event)' oninput="PriceChecker()" name="maxPrice" id="priceMaxSlider" placeholder="1500" min="8" max="1500" value="@ViewBag.maxiPrice" required>
+                            </div>
+                            <input type="submit" class="btn btn-default" value="Set price" />
+                        </div>
+                    </div>
+
+                </div>
+                <hr />
+                <br />
+            </div>
             <div class="col-lg-9">
                 @foreach (var item in Model)
                 {
                     @if (ie++ < 21)
                     {
-                            <div class="col-sm-3 col-md-3 col-lg-4 col-xs-4" id="page_@i _@ie" style="width:33%">
-                                <div class="thumbnail">
-                                    <a href="#"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;" /></a>
-                                    <div class="desc_box">
-                                        <p>&euro;@item.price</p>
-                                        <p class="description">@item.description</p>
-                                        <p class="desc">@item.long_description</p>
-                                        <div class="shoppingcart">
-                                            @if (item.quantity != 0)
-                                            {
-                                                @Html.ActionLink("ADD ", "SaveItemInShoppingCart", "ShoppingCart", routeValues: new
-                                           {
-                                               item_id = item.id
-                                           },
-                                                htmlAttributes: new {@class = "shop" })
-                                            }
-                                        </div>
+                        <div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box" id="page_@i _@ie" style="width:33%">
+                            <div class="thumbnail">
+                                <a href="#"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;" /></a>
+                                <div class="desc_box">
+                                    <p>&euro;@item.price</p>
+                                    <p class="description">@item.description</p>
+                                    <p class="desc">@item.long_description</p>
+                                    <div class="shoppingcart">
+                                        @if (item.quantity != 0)
+                                        {
+                                            @Html.ActionLink("ADD ", "SaveItemInShoppingCart", "ShoppingCart", routeValues: new
+                                       {
+                                           item_id = item.id
+                                       },
+                                            htmlAttributes: new { @class = "shop" })
+                                        }
                                     </div>
                                 </div>
                             </div>
-                        }
-                    
+                        </div>
+                    }
                     else if (ie == 22) { i++; }
 
                     if (ie <= 21 * i && ie >= 22)
                     {
-                        
-                            <div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box" id="page_@i _@ie" style="display:none; width:33%" >
-                                <div class="thumbnail">
-                                    <a href="#"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;" /></a>
-                                    <div class="desc_box">
-                                        <p>&euro;@item.price</p>
-                                        <p class="description">@item.description</p>
-                                        <p class="desc">@item.long_description</p>
-                                        <div class="shoppingcart">
-                                            @if (item.quantity != 0)
-                                            {
-                                                @Html.ActionLink("ADD ", "SaveItemInShoppingCart", "ShoppingCart", routeValues: new
-                                           {
-                                               item_id = item.id
-                                           },
-                                                htmlAttributes: new {@class = "shop" })
-                                            }
-                                        </div>
+                        <div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box" id="page_@i _@ie" style="display:none;width:33%">
+                            <div class="thumbnail">
+                                <a href="#"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;" /></a>
+                                <div class="desc_box">
+                                    <p>&euro;@item.price</p>
+                                    <p class="description">@item.description</p>
+                                    <p class="desc">@item.long_description</p>
+                                    <div class="shoppingcart">
+                                        @if (item.quantity != 0)
+                                        {
+                                            @Html.ActionLink("ADD ", "SaveItemInShoppingCart", "ShoppingCart", routeValues: new
+                                       {
+                                           item_id = item.id
+                                       },
+                                            htmlAttributes: new { @class = "shop" })
+                                        }
                                     </div>
                                 </div>
                             </div>
-                        
+                        </div>
                         if (ie == 21 * i) { i++; }
                     }
                 }
@@ -362,22 +348,22 @@
                 <script>
                     var pagecurr = 2;
                     function LoadMore() {
+                        document.getElementById('loadmore').innerHTML = "Loading...";
                         for (l = (21 * (pagecurr - 1)) + 1; l < (21 * pagecurr) + 1; l++) {
                             var iddef = "page_" + pagecurr + " _" + l;
                             var page = document.getElementById(iddef);
                             if (page != null) { page.style.display = "block"; }
                         }
-
-
+                        document.getElementById('loadmore').innerHTML = "Load more products..";
                         pagecurr = pagecurr + 1;
                     }
                 </script>
                 <button id="loadmore" class="btn" onclick="LoadMore()" style="margin-left:0%; width:100%" value="1">Load more products..</button>
             </div>
-        
 
-    
 
+        </div>
+    </div>
 }
 else
 {
