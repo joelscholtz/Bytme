@@ -42,21 +42,21 @@ namespace bytme.Areas.Identity.Pages.Account.Manage
             [DataType(DataType.Text)]
             [Display(Name = "Street")]
             [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "A street name can only contain letters. If you want to add a house number, do it in the next field.")]
-            [StringLength(48, ErrorMessage = "The longest street name in the Netherlands is 48 characters.")]
+            [StringLength(48, ErrorMessage = "The longest street name in the Netherlands has 48 characters.")]
             public string street { get; set; }
 
             [Required]
             [DataType(DataType.Text)]
             [Display(Name = "House Number")]
             [RegularExpression(@"^[0-9]{1,5}([a-z]{1,2})?$", ErrorMessage ="A house number starts with at least 1 digit. House number addition is possible.")]
-            [StringLength(7, ErrorMessage = "The longest house number in the Netherlands is 7 characters.")] // for example: 18999AA
+            [StringLength(7, ErrorMessage = "The longest house number in the Netherlands has 7 characters.")] // for example: 18999AA
             public string streetnumber { get; set; }
             
             [Required]
             [DataType(DataType.Text)]
             [Display(Name = "City")]
             [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "A city can only contain letters.")]
-            [StringLength(28, ErrorMessage = "The longest place name in the Netherlands is 28 characters.")]
+            [StringLength(28, ErrorMessage = "The longest place name in the Netherlands has 28 characters.")]
             public string city { get; set; }
 
             [Required]

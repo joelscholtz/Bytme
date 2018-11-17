@@ -1,6 +1,8 @@
 ﻿@model List<bytme.Models.ShoppingCartModel>
 
 @{
+    ViewData["Title"] = "Shopping Cart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <script>
     function UpdateQtyOrder(ordline_id, new_qty) {
@@ -107,9 +109,9 @@
                 </tr>
                 <tr>
                     <td colspan="5" class="hidden-xs"></td>
-                    @if(ViewBag.count > 0 )
+                    @if (ViewBag.count > 0)
                     {
-                    <td style="margin-left:50%"><button type="submit" class="btn btn-success btn-block">Check out</button></td>
+                        <td style="margin-left:50%"><button type="submit" class="btn btn-success btn-block">Check out</button></td>
                     }
                 </tr>
             </tfoot>

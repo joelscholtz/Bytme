@@ -8,6 +8,7 @@ using System.Net.Mail;
 using System.Net;
 using bytme.Data;
 using System.Security.Claims;
+using System.Web;
 
 namespace bytme.Controllers
 {
@@ -130,6 +131,50 @@ namespace bytme.Controllers
             return result;
         }
 
+        public void CreateOrderHistory(OrderMain m)
+        {
+            string UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            OrderHistory history = new OrderHistory();
+            var result = (from orderline in _context.OrderLines
+                          join ordermain in _context.OrderMains on orderline.order_id equals ordermain.id
+                          join item in _context.Items on orderline.item_id equals item.id
+                          join user in _context.UserModels on ordermain.user_id equals user.Id
+                          where orderline.order_id == m.id && UserId == m.user_id
+                          select new OrderHistory
+                          {
+                              item_description = item.description,
+                              ord_id = orderline.order_id,
+                              oderline_id = orderline.id,
+                              user_id = UserId,
+                              price_payed = item.price,
+                              qty_bought = orderline.qty,
+                              street = user.street,
+                              streetnumber = user.streetnumber,
+                              city = user.city,
+                              zipcode = user.zipcode,
+                              dt_created = DateTime.Now,
+                              
+                          }).ToList();
+
+            foreach(var r in result)
+            {
+                _context.Add(r);
+                _context.SaveChanges();
+            }
+        }
+
+        public void DecreaseStock(int item_id, int qty)
+        {
+            var item = (from i in _context.Items
+                        where i.id == item_id
+                        select i).FirstOrDefault();
+
+            item.quantity = item.quantity - qty;
+
+            var result = _context.Items.Update(item);
+            _context.SaveChanges();
+        }
+
         [HttpGet]
         public IActionResult Index()
         {
@@ -211,6 +256,19 @@ namespace bytme.Controllers
 
         public IActionResult Checkout()
         {
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var result = _context.UserModels.Where(u => u.Id == userId).FirstOrDefault();
+
+            ViewBag.street = result.street;
+            ViewBag.streetnumber = result.streetnumber;
+            ViewBag.city = result.city;
+            ViewBag.zipcode = result.zipcode;
+            ViewBag.name = result.name;
+            ViewBag.surname = result.surname;
+
+            int order_id = CheckIfOrderExists();
+            int count = CountItemsInShoppingCart(order_id);
+            ViewBag.count = count;
             return View();
         }
     }

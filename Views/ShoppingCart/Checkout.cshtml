@@ -1,4 +1,5 @@
-﻿
+﻿@model List<bytme.Models.UserModel>
+
 @{
     ViewData["Title"] = "Checkout";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -6,3 +7,10 @@
 
 <h2>Checkout</h2>
 
+@if (ViewBag.count != 0)
+{
+    @if (User.Identity.IsAuthenticated)
+    {
+           <center><h2>You are logged in</h2></center>
+        }
+    }

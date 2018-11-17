@@ -20,9 +20,15 @@ namespace bytme.Models
     public class OrderHistory
     {
         public int id { get; set; }
-        public string itm_description { get; set; }
+        public string item_description { get; set; }
+        public string street { get; set; }
+        public string streetnumber { get; set; }
+        public string city { get; set; }
+        public string zipcode { get; set; }
         public int qty_bought { get; set; }
         public int ord_id { get; set; }
+        public int oderline_id { get; set; }
+        public string user_id { get; set; }
         public float price_payed { get; set; }
         public DateTime dt_created { get; set; }
     }

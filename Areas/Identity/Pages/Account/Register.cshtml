@@ -104,26 +104,41 @@
 <div class="login-card">
     <h1>Register</h1><br>
     <section>
-       <div asp-validation-summary="All" class="text-danger" style="margin-right:20%"></div>
         <form method="post">
             <div class="form-group">
-                <input asp-for="Input.Email" class="email" placeholder="Email"/>
+                <input asp-for="Input.Email" class="email" placeholder="Email" />
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input asp-for="Input.Password" class="password" placeholder="Password"/>
+                <input asp-for="Input.Password" class="password" placeholder="Password" />
                 <span asp-validation-for="Input.Password" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input asp-for="Input.ConfirmPassword" class="password" placeholder="Confirm password"/>
+                <input asp-for="Input.ConfirmPassword" class="password" placeholder="Confirm password" />
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="Input.street" class="password" placeholder="Street" />
+                <span asp-validation-for="Input.street" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="Input.streetnumber" class="password" placeholder="House number" />
+                <span asp-validation-for="Input.streetnumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="Input.zipcode" class="password" placeholder="Zip code" />
+                <span asp-validation-for="Input.zipcode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="Input.city" class="password" placeholder="City" />
+                <span asp-validation-for="Input.city" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-default">Register</button>
             </div>
         </form>
         <p>
-            <a asp-page="./Login"> Already have an account?</a>
+            <a asp-page="./Login"> Already have an account</a>
         </p>
         <p>
             <a asp-page="./ResendVerification">Resend Verification</a>

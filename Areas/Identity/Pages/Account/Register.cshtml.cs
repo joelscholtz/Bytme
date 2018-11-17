@@ -58,6 +58,33 @@ namespace bytme.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "Street")]
+            [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "A street name can only contain letters. If you want to add a house number, do it in the next field.")]
+            [StringLength(48, ErrorMessage = "The longest street name in the Netherlands is 48 characters.")]
+            public string street { get; set; }
+
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "House Number")]
+            [RegularExpression(@"^[0-9]{1,5}([a-z]{1,2})?$", ErrorMessage = "A house number starts with at least 1 digit. House number addition is possible.")]
+            [StringLength(7, ErrorMessage = "The longest house number in the Netherlands is 7 characters.")]
+            public string streetnumber { get; set; }
+
+            [Required]
+            [DataType(DataType.PostalCode)]
+            [Display(Name = "Postal Code")]
+            [RegularExpression(@"^[1-9][0-9]{3}\s?[a-zA-Z]{2}$", ErrorMessage = "Invalid zip, for example: 1234AB")]
+            public string zipcode { get; set; }
+
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "City")]
+            [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "A city can only contain letters.")]
+            [StringLength(28, ErrorMessage = "The longest place name in the Netherlands has 28 characters.")]
+            public string city { get; set; }
         }
 
         public void OnGet(string returnUrl = null)
@@ -72,7 +99,7 @@ namespace bytme.Areas.Identity.Pages.Account
             {
 
                 var email = await _userManager.FindByEmailAsync(Input.Email);
-                var user = new UserModel { UserName = Input.Email, Email = Input.Email };
+                var user = new UserModel { UserName = Input.Email, Email = Input.Email, street = Input.street, streetnumber = Input.streetnumber, city = Input.city, zipcode = Input.zipcode};
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (email != null)
