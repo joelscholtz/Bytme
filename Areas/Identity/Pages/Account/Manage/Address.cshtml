@@ -29,19 +29,19 @@
                     <form id="change-password-form" method="post">
                         <div asp-validation-summary="All" class="text-danger"></div>
                         <div class="form-group">
-                            <input asp-for="Input.street" class="password" placeholder="Street" />
+                            <input asp-for="Input.street" class="form-control" placeholder="@user.street" />
                             <span asp-validation-for="Input.street" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <input asp-for="Input.streetnumber" class="password" placeholder="House number" />
+                            <input asp-for="Input.streetnumber" class="form-control" placeholder="@user.streetnumber" />
                             <span asp-validation-for="Input.streetnumber" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <input asp-for="Input.zipcode" class="password" placeholder="Zip code" />
+                            <input asp-for="Input.zipcode" class="form-control" placeholder="@user.zipcode" />
                             <span asp-validation-for="Input.zipcode" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <input asp-for="Input.city" class="password" placeholder="City" />
+                            <input asp-for="Input.city" class="form-control" placeholder="@user.city" />
                             <span asp-validation-for="Input.city" class="text-danger"></span>
                         </div>
                         <button type="submit" class="btn btn-default">Submit</button>
