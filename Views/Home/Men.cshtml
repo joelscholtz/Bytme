@@ -9,8 +9,9 @@
     int i = 1;
     int ie = 0;
     int pageCurrent = 2;
+    List<string> colors = ViewBag.Colorschecked;
+    List<string> brands = ViewBag.Brandschecked;
     string iei = i + "_" + ie;
-
 
 }
 
@@ -155,25 +156,32 @@
 </style>
 
 
+<form id="Men" name="Men" asp-action="Men" method="post">
+    <div class="container">
+        <img src="~/images/products_men.png" style="width:1180px" />
+        <br /><br /><br />
+        <script>
+            var form = document.getElementById("Men");
+            var selection = document.getElementById("sortBy");
+            var hiddeninput = document.getElementById("SelectIndex");
+            function executeform66()
+            {
+                form.submit()
+            }
+        </script>
+        <select class="form-control pull-right" form="Men" id="sortBy" name="sortBy" style="width:20%; height:40px; margin-right:2%" onchange="executeform66()">
+            <option value="" disabled selected hidden>@ViewBag.currentSort</option>
+            <option value="Name A - Z">Name A - Z</option>
+            <option value="Name Z- A">Name Z- A</option>
+            <option value="Price Low - High">Price Low - High</option>
+            <option value="Price High - Low">Price High - Low</option>
+        </select>
+        <input type="hidden" id="SelectIndex" name="currentSort" value="@ViewBag.currentSort" />
+        
+        <br /><br /><br />
+        <div class="row">
+            <div class="col-lg-3">
 
-<div class="container">
-    <img src="~/images/products_men.png" style="width:1180px" />
-    <br /><br /><br />
-    <!-- Example split danger button -->
-    <div class="btn-group pull-right">
-        <button type="button" class="btn btn-light">Sort By</button>
-        <button type="button" class="btn dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span class="sr-only">Toggle Dropdown</span>▼
-        </button>
-        <div class="dropdown-menu" style="text-decoration:none;">
-            <a class="dropdown-item btn" style="text-decoration:none" asp-action="Men" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Name</a><br />
-            <a class="dropdown-item btn" style="text-decoration:none" asp-action="Men" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" class="btn dropdown-item">Price</a>
-        </div>
-    </div>
-    <br /><br /><br />
-    <div class="row">
-        <div class="col-lg-3">
-            <form asp-action="Men" method="post">
                 <div class="form-group-lg row center-block" role="group">
 
                     <div>
@@ -183,16 +191,19 @@
                             Categories
                         </h4>
                         <div id="group-1" class="list-group collapse in">
-                            <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Blazers"><br />
-                            <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Blouses"><br />
-                            <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Jeans"><br />
-                            <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Laptop Bags"><br />
+                            <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="All"><br />
                             <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Shirts"><br />
+                            <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Blazer Jackets"><br />
+                            <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="T-shirts"><br />
                             <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Short Coats"><br />
                             <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Suit Jackets"><br />
                             <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Suit Pants"><br />
                             <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Suits"><br />
                             <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Waist Coats"><br />
+                            <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Briefcases"><br />
+                            <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Laptop Bags"><br />
+
+                            <input type="hidden" name="currentCategory" value="@ViewBag.currentCategory" />
                         </div>
                     </div>
                     <hr />
@@ -208,7 +219,22 @@
 
                                 @foreach (var item in ViewBag.currentBrands)
                                 {
-                                    <input class="BrandCheck" type="checkbox" name="BrandBox" value="@item" /><span style="color:#392C36"> @item</span><br>
+                                    if (brands.Count() != 0)
+                                    {
+                                        if (brands.Contains(item))
+                                        {
+                                            <input class="BrandCheck" type="checkbox" id="@item" name="BrandBox" value="@item" checked /><label for="@item" style="color:#392C36"> @item</label><br>
+                                        }
+                                        else
+                                        {
+                                            <input class="BrandCheck" type="checkbox" id="@item" name="BrandBox" value="@item" /><label for="@item" style="color:#392C36"> @item</label><br>
+                                        }
+                                    }
+                                    else if (brands.Count() == 0)
+                                    {
+                                        <input class="BrandCheck" type="checkbox" id="@item" name="BrandBox" value="@item" /><label for="@item" style="color:#392C36"> @item</label><br>
+                                    }
+
 
                                 }
                             </div>
@@ -223,10 +249,35 @@
                         </h4>
                         <div id="group-3" class="list-group collapse in">
                             <div class="form-group" style="overflow:scroll; height:150px; color:#392C36; overflow-y: scroll;  overflow-x: hidden;">
+
+                                <script>
+                                    function ColorChecked(color) {
+                                        document.getElementById(color).checked = true;
+                                    }
+                                </script>
+
                                 @foreach (var color in ViewBag.ColorList)
                                 {
-                                    <input class="BrandCheck" type="checkbox" name="ColorBox" value="@color" /><span style="color:#392C36"> @color</span><br>
+                                    if (colors.Count() != 0)
+                                    {
+                                        @if (colors.Contains(color))
+                                        {
+                                            <input class="BrandCheck" type="checkbox" id="@color" name="ColorBox" value="@color" checked /><label for="@color" style="color:#392C36"> @color</label><br>
+                                        }
+                                        else
+                                        {
+                                            <input class="BrandCheck" type="checkbox" id="@color" name="ColorBox" value="@color" /><label for="@color" style="color:#392C36"> @color</label><br>
+                                        }
+
+
+                                    }
+                                    else if (colors.Count() == 0)
+                                    {
+                                        <input class="BrandCheck" type="checkbox" id="@color" name="ColorBox" value="@color" /><label for="@color" style="color:#392C36"> @color</label><br>
+                                    }
                                 }
+
+
                             </div>
                         </div>
                     </div>
@@ -278,74 +329,76 @@
                         </div>
                     </div>
                     <input type="submit" class="btn btn-success" />
-            </form>
-        </div>
-        <br />
-    </div>
-    <div class="col-lg-9">
-        @foreach (var item in Model)
+
+                </div>
+                <br />
+            </div>
+</form>
+
+<div class="col-lg-9">
+    @foreach (var item in Model)
+    {
+        @if (item.gender == "male")
         {
-            @if (item.gender == "male")
+            @if (ie++ < 21)
             {
-                @if (ie++ < 21)
-                {
 
-                    <div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box" id="page_page_@i _@ie" style="width:33%">
-                        <div class="thumbnail">
-                            <a href="#"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;" /></a>
-                            <div class="desc_box">
-                                <p>&euro;@item.price</p>
-                                <p class="description">@item.description</p>
-                                <p class="desc">@item.long_description</p>
-                                <div class="shoppingcart">
-                                    @if (item.quantity != 0)
-                                    {
-                                        @Html.ActionLink("ADD ", "SaveItemInShoppingCart", "ShoppingCart", routeValues: new
-                                   {
-                                       item_id = item.id
-                                   },
-                                        htmlAttributes: new { @class = "shop" })
-                                    }
-                                </div>
+                <div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box" id="page_page_@i _@ie" style="width:33%">
+                    <div class="thumbnail">
+                        <a href="#"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;" /></a>
+                        <div class="desc_box">
+                            <p>&euro;@item.price</p>
+                            <p class="description">@item.description</p>
+                            <p class="desc">@item.long_description</p>
+                            <div class="shoppingcart">
+                                @if (item.quantity != 0)
+                                {
+                                    @Html.ActionLink("ADD ", "SaveItemInShoppingCart", "ShoppingCart", routeValues: new
+                               {
+                                   item_id = item.id
+                               },
+                                    htmlAttributes: new { @class = "shop" })
+                                }
                             </div>
                         </div>
                     </div>
-                }
-                else if (ie == 22) { i++; }
+                </div>
             }
-
-
-            if (item.gender == "male")
-            {
-                @if (ie <= 21 * i && ie >= 22)
-                {
-                    <div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box" id="page_@i _@ie" style="display:none;width:33%">
-                        <div class="thumbnail">
-                            <a href="#"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;" /></a>
-                            <div class="desc_box">
-                                <p>&euro;@item.price</p>
-                                <p class="description">@item.description</p>
-                                <p class="desc">@item.long_description</p>
-                                <div class="shoppingcart">
-                                    @if (item.quantity != 0)
-                                    {
-                                        @Html.ActionLink("ADD ", "SaveItemInShoppingCart", "ShoppingCart", routeValues: new
-                                   {
-                                       item_id = item.id
-                                   },
-                                        htmlAttributes: new { @class = "shop" })
-                                    }
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    if (ie == 21 * i) { i++; }
-                }
-
-            }
+            else if (ie == 22) { i++; }
         }
 
-        <script>
+
+        if (item.gender == "male")
+        {
+            @if (ie <= 21 * i && ie >= 22)
+            {
+                <div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box" id="page_@i _@ie" style="display:none;width:33%">
+                    <div class="thumbnail">
+                        <a href="#"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;" /></a>
+                        <div class="desc_box">
+                            <p>&euro;@item.price</p>
+                            <p class="description">@item.description</p>
+                            <p class="desc">@item.long_description</p>
+                            <div class="shoppingcart">
+                                @if (item.quantity != 0)
+                                {
+                                    @Html.ActionLink("ADD ", "SaveItemInShoppingCart", "ShoppingCart", routeValues: new
+                               {
+                                   item_id = item.id
+                               },
+                                    htmlAttributes: new { @class = "shop" })
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                if (ie == 21 * i) { i++; }
+            }
+
+        }
+    }
+
+    <script>
             var pagecurr = 2;
             function LoadMore() {
                 for (l = (21 * (pagecurr - 1)) + 1; l < (21 * pagecurr) + 1; l++) {
@@ -354,22 +407,19 @@
                     if (page != null) { page.style.display = "block"; }
                 }
 
-
+                if (pagecurr > @ViewBag.PageCount) { document.getElementById("loadmore").style.display = "none"; document.getElementById("notinMore").style.display = "block"; }
                 pagecurr = pagecurr + 1;
+
             }
-        </script>
-        @if (ViewBag.PageCount > 1)
-        {
-            <button id="loadmore" class="btn" onclick="LoadMore()" style="margin-left:0%; width:100%" value="1">Load more products..</button>
-        }
-
-    </div>
+    </script>
+    <button id="loadmore" class="btn" onclick="LoadMore()" style="margin-left:0%; width:100%" value="1">Load more products..</button>
 
 
 </div>
-</div>
+<br />
 
 
+<h4 id="notinMore" style="display:none; margin-left:0%; width:100%; text-align:center"> there are no more products of this type..</h4>
 
 
 
