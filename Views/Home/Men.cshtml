@@ -2,13 +2,15 @@
 
 @using bytme.Models;
 @using System;
-
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<UserModel> SignInManager
+@inject UserManager<UserModel> UserManager
 @{
     ViewData["Title"] = "Men";
     Layout = "~/Views/Shared/_Layout.cshtml";
     int i = 1;
     int ie = 0;
-    int pageCurrent = 2;
+    int pageCurrent = ViewBag.PageCount;
     List<string> colors = ViewBag.Colorschecked;
     List<string> brands = ViewBag.Brandschecked;
     string iei = i + "_" + ie;
@@ -108,6 +110,7 @@
         vertical-align: middle !important;
     }
 
+
     .sortBy {
         float: right;
         width: 275px;
@@ -153,6 +156,46 @@
         color: #C7B5C9;
         text-decoration: none;
     }
+    .heart:after {
+        font-family: "Glyphicons Halflings";
+        content: "\e143";
+        margin-top: -30px;
+        text-align: end;
+    }
+    input[type="submit"] {
+        text-align: start;
+        display: inline-block;
+        padding: 6px 12px;
+        margin-bottom: 0;
+        font-size: 14px;
+        font-weight: normal;
+        width: 100%;
+        line-height: 1.42857143;
+        white-space: nowrap;
+        vertical-align: middle;
+        -ms-touch-action: manipulation;
+        touch-action: manipulation;
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        background-color: white;
+        border: 1px solid transparent;
+    }
+
+        input[type="submit"]:hover {
+            background: #ddd;
+        }
+    .wishlist {
+        margin-top: -30px;
+        text-align: end;
+    }
+        .wishlist > a {
+            font-size: 25px;
+            color: #8F6B93;
+        }  
+
 </style>
 
 
@@ -164,8 +207,7 @@
             var form = document.getElementById("Men");
             var selection = document.getElementById("sortBy");
             var hiddeninput = document.getElementById("SelectIndex");
-            function executeform66()
-            {
+            function executeform66() {
                 form.submit()
             }
         </script>
@@ -177,7 +219,7 @@
             <option value="Price High - Low">Price High - Low</option>
         </select>
         <input type="hidden" id="SelectIndex" name="currentSort" value="@ViewBag.currentSort" />
-        
+
         <br /><br /><br />
         <div class="row">
             <div class="col-lg-3">
@@ -190,18 +232,18 @@
                             <i class="fa fa-fw fa-caret-right parent-collapsed"></i>
                             Categories
                         </h4>
-                        <div id="group-1" class="list-group collapse in">
-                            <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="All"><br />
-                            <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Shirts"><br />
-                            <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Blazer Jackets"><br />
-                            <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="T-shirts"><br />
-                            <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Short Coats"><br />
-                            <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Suit Jackets"><br />
-                            <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Suit Pants"><br />
-                            <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Suits"><br />
-                            <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Waist Coats"><br />
-                            <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Briefcases"><br />
-                            <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Laptop Bags"><br />
+                        <div id="group-1" class="hovered list-group collapse in">
+                            <input type="submit" name="category" class=" btn-light" value="All"><br />
+                            <input type="submit" name="category" class=" btn-light" value="Shirts"><br />
+                            <input type="submit" name="category" class=" btn-light" value="Blazer Jackets"><br />
+                            <input type="submit" name="category" class=" btn-light" value="T-shirts"><br />
+                            <input type="submit" name="category" class=" btn-light" value="Short Coats"><br />
+                            <input type="submit" name="category" class=" btn-light" value="Suit Jackets"><br />
+                            <input type="submit" name="category" class=" btn-light" value="Suit Pants"><br />
+                            <input type="submit" name="category" class=" btn-light" value="Suits"><br />
+                            <input type="submit" name="category" class=" btn-light" value="Waist Coats"><br />
+                            <input type="submit" name="category" class=" btn-light" value="Briefcases"><br />
+                            <input type="submit" name="category" class=" btn-light" value="Laptop Bags"><br />
 
                             <input type="hidden" name="currentCategory" value="@ViewBag.currentCategory" />
                         </div>
@@ -346,10 +388,22 @@
                 <div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box" id="page_page_@i _@ie" style="width:33%">
                     <div class="thumbnail">
                         <a href="#"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;" /></a>
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <div class="wishlist">
+                                @Html.ActionLink("", "AddToWishList", "WishList", routeValues: new
+                                {
+                                    itm_id = item.id
+                                },
+                                htmlAttributes: new { @class = "heart" })
+                            </div>
+                        }
+
                         <div class="desc_box">
                             <p>&euro;@item.price</p>
                             <p class="description">@item.description</p>
                             <p class="desc">@item.long_description</p>
+
                             <div class="shoppingcart">
                                 @if (item.quantity != 0)
                                 {
@@ -375,6 +429,16 @@
                 <div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box" id="page_@i _@ie" style="display:none;width:33%">
                     <div class="thumbnail">
                         <a href="#"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;" /></a>
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <div class="wishlist">
+                                @Html.ActionLink("", "AddToWishList", "WishList", routeValues: new
+                                {
+                                    itm_id = item.id
+                                },
+                                htmlAttributes: new { @class = "heart" })
+                            </div>
+                        }
                         <div class="desc_box">
                             <p>&euro;@item.price</p>
                             <p class="description">@item.description</p>
@@ -412,7 +476,7 @@
 
             }
     </script>
-    <button id="loadmore" class="btn" onclick="LoadMore()" style="margin-left:0%; width:100%" value="1">Load more products..</button>
+    <button id="loadmore" type="button" class="btn" onclick="LoadMore()" style="margin-left:0%; width:100%" value="1">Load more products..</button>
 
 
 </div>

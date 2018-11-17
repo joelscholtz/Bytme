@@ -2,7 +2,9 @@
 
 @using bytme.Models;
 @using System;
-
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<UserModel> SignInManager
+@inject UserManager<UserModel> UserManager
 @{
     ViewData["Title"] = "Women";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -13,6 +15,7 @@
 
     List<string> colors = ViewBag.Colorschecked;
     List<string> brands = ViewBag.Brandschecked;
+    //Pushable
 
 }
 
@@ -109,6 +112,7 @@
         vertical-align: middle !important;
     }
 
+
     .sortBy {
         float: right;
         width: 275px;
@@ -154,6 +158,49 @@
         color: #C7B5C9;
         text-decoration: none;
     }
+
+    .heart:after {
+        font-family: "Glyphicons Halflings";
+        content: "\e143";
+        margin-top: -30px;
+        text-align: end;
+    }
+
+    input[type="submit"] {
+        text-align: start;
+        display: inline-block;
+        padding: 6px 12px;
+        margin-bottom: 0;
+        font-size: 14px;
+        font-weight: normal;
+        width: 100%;
+        line-height: 1.42857143;
+        white-space: nowrap;
+        vertical-align: middle;
+        -ms-touch-action: manipulation;
+        touch-action: manipulation;
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        background-color: white;
+        border: 1px solid transparent;
+    }
+
+        input[type="submit"]:hover {
+            background: #ddd;
+        }
+
+    .wishlist {
+        margin-top: -30px;
+        text-align: end;
+    }
+
+        .wishlist > a {
+            font-size: 25px;
+            color: #8F6B93;
+        }
 </style>
 
 
@@ -179,9 +226,6 @@
         <div class="row">
             <div class="col-lg-3">
                 <div class="form-group-lg row center-block" role="group">
-
-
-
                     <div>
                         <h4 class="cat" data-toggle="collapse" data-target="#group-1">
                             <i class="fa fa-fw fa-caret-down parent-expanded"></i>
@@ -189,17 +233,18 @@
                             Categories
                         </h4>
                         <div id="group-1" class="list-group collapse in">
-                            <input type="submit" name="category" class="btn btn-light" asp-action="Women" style="background-color:#fff;" value="All" /><br />
-                            <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Blazers"><br />
-                            <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Blouses"><br />
-                            <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Boots"><br />
-                            <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Coats"><br />
-                            <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Cardigans"><br />
-                            <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Dresses"><br />
-                            <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Heels"><br />
-                            <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Jumpers"><br />
-                            <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Skirts"><br />
-                            <input type="submit" name="category" class="btn btn-light" style="background-color:#fff;" value="Trousers"><br />
+
+                            <input type="submit" name="category" class="btn btn-light" value="All"><br />
+                            <input type="submit" name="category" class="btn btn-light" value="Blazers"><br />
+                            <input type="submit" name="category" class="btn btn-light" value="Blouses"><br />
+                            <input type="submit" name="category" class="btn btn-light" value="Boots"><br />
+                            <input type="submit" name="category" class="btn btn-light" value="Coats"><br />
+                            <input type="submit" name="category" class="btn btn-light" value="Cardigans"><br />
+                            <input type="submit" name="category" class="btn btn-light" value="Dresses"><br />
+                            <input type="submit" name="category" class="btn btn-light" value="Heels"><br />
+                            <input type="submit" name="category" class="btn btn-light" value="Jumpers"><br />
+                            <input type="submit" name="category" class="btn btn-light" value="Skirts"><br />
+                            <input type="submit" name="category" class="btn btn-light" value="Trousers"><br />
                         </div>
                         <input type="hidden" name="currentCategory" value="@ViewBag.currentCategory" />
                     </div>
@@ -316,7 +361,7 @@
 
                         </div>
                     </div>
-                    <input type="submit" class="btn btn-success" />
+                    <input type="submit" class="btn btn-success" style="background-color: #5cb85c; border-color: #4cae4c; width:50%" />
                 </div>
                 <hr />
                 <br />
@@ -334,6 +379,16 @@
                 <div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box" id="page_@i _@ie" style="width:33%">
                     <div class="thumbnail">
                         <a href="#"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;" /></a>
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <div class="wishlist">
+                                @Html.ActionLink("", "AddToWishList", "WishList", routeValues: new
+                                {
+                                    itm_id = item.id
+                                },
+                                htmlAttributes: new { @class = "heart" })
+                            </div>
+                        }
                         <div class="desc_box">
                             <p>&euro;@item.price</p>
                             <p class="description">@item.description</p>
@@ -362,6 +417,16 @@
                 <div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box" id="page_@i _@ie" style="display:none;width:33%">
                     <div class="thumbnail">
                         <a href="#"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;" /></a>
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <div class="wishlist">
+                                @Html.ActionLink("", "AddToWishList", "WishList", routeValues: new
+                                {
+                                    itm_id = item.id
+                                },
+                                htmlAttributes: new { @class = "heart" })
+                            </div>
+                        }
                         <div class="desc_box">
                             <p>&euro;@item.price</p>
                             <p class="description">@item.description</p>

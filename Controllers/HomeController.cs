@@ -261,25 +261,14 @@ namespace bytme.Controllers
             IList<string> clrList = new List<string>();
             clrList.Add("red");
             clrList.Add("blue");
-            clrList.Add("pink");
             clrList.Add("green");
             clrList.Add("yellow");
-            clrList.Add("orange");
-            clrList.Add("cyan");
             clrList.Add("black");
             clrList.Add("white");
-            //clrList.Add("grey");
-            //clrList.Add("cream");
-            //clrList.Add("navy");
-            //clrList.Add("nero");
-            //clrList.Add("caviar");
-            //clrList.Add("sapphire");
-            //clrList.Add("charcoal");
-            //clrList.Add("nutmeg");
-            //clrList.Add("brown");
-            //clrList.Add("burgundy");
-            //clrList.Add("marine");
-            //clrList.Add("sky captain");
+            clrList.Add("navy");
+            clrList.Add("grey");
+            clrList.Add("brown");
+            
 
             ViewBag.ColorList = clrList;
             // Retrieve the products from the database.
@@ -664,21 +653,11 @@ namespace bytme.Controllers
             clrList.Add("green");
             clrList.Add("yellow");
             clrList.Add("orange");
-            clrList.Add("cyan");
             clrList.Add("black");
             clrList.Add("white");
-            //clrList.Add("grey");
-            //clrList.Add("cream");
-            //clrList.Add("navy");
-            //clrList.Add("nero");
-            //clrList.Add("caviar");
-            //clrList.Add("sapphire");
-            //clrList.Add("charcoal");
-            //clrList.Add("nutmeg");
-            //clrList.Add("brown");
-            //clrList.Add("burgundy");
-            //clrList.Add("marine");
-            //clrList.Add("sky captain");
+            clrList.Add("grey");
+            clrList.Add("navy");
+            clrList.Add("brown");
 
             ViewBag.ColorList = clrList;
             ViewBag.currentSort = "Sort By";
