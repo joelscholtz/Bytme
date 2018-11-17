@@ -39,7 +39,7 @@ namespace bytme.Controllers
             return View(item);
         }
 
-        public async Task<IActionResult> Products(string searchString, string gender, string sortOrder, string categoryMen, string categoryWomen, string currentColor, string currentBrands)
+        public async Task<IActionResult> Products(string searchString, string gender, string sortOrder, string categoryMen, string categoryWomen, string currentColor, string currentBrands, IEnumerable<string> BrandBox, string maxPrice, string minPrice, IEnumerable<string> ColorBox, string category, string currentCategory, string sortBy, string currentSort)
         {
             var products = from p in _context.Items select p;
             ViewData["SortOrder"] = sortOrder;
@@ -47,6 +47,30 @@ namespace bytme.Controllers
             ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
             ViewData["Female"] = String.IsNullOrEmpty(gender) ? "female" : "";
             ViewData["Male"] = String.IsNullOrEmpty(gender) ? "male" : "male";
+
+            
+
+            ViewData["Gender"] = gender;
+            ViewData["BrandBox"] = BrandBox;
+            ViewData["maxPrice"] = maxPrice;
+            ViewData["minPrice"] = minPrice;
+            ViewData["ColorBox"] = ColorBox;
+            ViewData["category"] = category;
+            ViewData["currentCategory"] = currentCategory;
+            ViewData["currentBrands"] = currentBrands;
+            ViewData["sortBy"] = sortBy;
+            ViewData["currentSort"] = currentSort;
+
+            IList<string> clrList = new List<string>();
+            clrList.Add("red");
+            clrList.Add("blue");
+            clrList.Add("green");
+            clrList.Add("yellow");
+            clrList.Add("black");
+            clrList.Add("white");
+            clrList.Add("navy");
+            clrList.Add("grey");
+            clrList.Add("brown");
 
             switch (sortOrder)
             {
@@ -64,123 +88,419 @@ namespace bytme.Controllers
                     break;
             }
 
-            switch(gender)
-            {
-                case "female":
-                    products = products.Where(o => o.gender == "female");
-                    break;
-                case "male":
-                    products = products.Where(o => o.gender == "male");
-                    break;
-            }
-
-            ViewBag.Gender = gender;
-
-            switch (categoryMen)
-            {
-                case "Blazers":
-                    products = products.Where(o => o.long_description.Contains("Blazer") || o.long_description.Contains("blazer") && !o.long_description.Contains("navy blazer"));
-                    break;
-                case "Blouses":
-                    products = products.Where(o => o.long_description.Contains("Blouse") || o.long_description.Contains("blouse"));
-                    break;
-                case "Jeans":
-                    products = products.Where(o => o.long_description.Contains("Jeans") || o.long_description.Contains("jeans"));
-                    break;
-                case "Laptop Bags":
-                    products = products.Where(o => o.long_description.Contains("Laptop bag") || o.long_description.Contains("laptop bag"));
-                    break;
-                case "Shirts":
-                    products = products.Where(o => o.long_description.Contains("Shirt") || o.long_description.Contains("shirt"));
-                    break;
-                case "Suit Jackets":
-                    products = products.Where(o => (o.long_description.Contains("Suit Jackets") || o.long_description.Contains("suit jacket")));
-                    break;
-                case "Suit Pants":
-                    products = products.Where(o => o.long_description.Contains("Suit pants") || o.long_description.Contains("suit pants"));
-                    break;
-                case "Suits":
-                    products = products.Where(o => (o.long_description.Contains("Suit") || o.long_description.Contains("Suit")) && !(o.long_description.Contains("Suit Pants") || o.long_description.Contains("suit pants")) && !(o.long_description.Contains("Suit Jackets") || o.long_description.Contains("suit jacket")));
-                    break;
-                case "Short Coats":
-                    products = products.Where(o => o.long_description.Contains("Short coat") || o.long_description.Contains("short coat"));
-                    break;
-                case "Waist Coats":
-                    products = products.Where(o => o.long_description.Contains("Waist coats") || o.long_description.Contains("waist coats"));
-                    break;
-            }
-
-            switch (categoryWomen)
-            {
-                case "Blazers":
-                    products = products.Where(o => o.long_description.Contains("Blazer") || o.long_description.Contains("blazer"));
-                    break;
-                case "Blouses":
-                    products = products.Where(o => o.long_description.Contains("Blouse") || o.long_description.Contains("blouse"));
-                    break;
-                case "Boots":
-                    products = products.Where(o => o.long_description.Contains("Boots") || o.long_description.Contains("boots"));
-                    break;
-                case "Coats":
-                    products = products.Where(o => o.long_description.Contains("Coat") || o.long_description.Contains("coat"));
-                    break;
-                case "Cardigans":
-                    products = products.Where(o => o.long_description.Contains("Cardigan") || o.long_description.Contains("cardigan"));
-                    break;
-                case "Dresses":
-                    products = products.Where(o => (o.long_description.Contains("Dress") || o.long_description.Contains("dress")) && !o.long_description.Contains("shirt"));
-                    break;
-                case "Heels":
-                    products = products.Where(o => o.long_description.Contains("Heels") || o.long_description.Contains("heels"));
-                    break;
-                case "Jumpers":
-                    products = products.Where(o => o.long_description.Contains("Jumper") || o.long_description.Contains("jumper"));
-                    break;
-                case "Skirts":
-                    products = products.Where(o => o.long_description.Contains("Skirt") || o.long_description.Contains("skirt"));
-                    break;
-                case "Trousers":
-                    products = products.Where(o => o.long_description.Contains("Trousers") || o.long_description.Contains("trousers"));
-                    break;
-            }
-
+            ViewBag.currentSort = "Sort By";
             ViewBag.CurrentCategoryWomen = categoryWomen;
             ViewBag.CurrentCategoryMen = categoryMen;
-
-            switch (currentColor)
+            ViewBag.currentBrands = products.Select(o => o.description).Distinct().ToList();
+            ViewBag.maxiPrice = "695";
+            ViewBag.miniPrice = "12";
+            if (HttpContext.Request.Method == "POST")
             {
-                case "red":
-                    products = products.Where(o => o.long_description.Contains("red"));
-                    break;
-                case "blue":
-                    products = products.Where(o => o.long_description.Contains("blue"));
-                    break;
-                case "pink":
-                    products = products.Where(o => o.long_description.Contains("pink"));
-                    break;
-                case "green":
-                    products = products.Where(o => o.long_description.Contains("green"));
-                    break;
-                case "yellow":
-                    products = products.Where(o => o.long_description.Contains("yellow"));
-                    break;
-                case "orange":
-                    products = products.Where(o => o.long_description.Contains("orange"));
-                    break;
-                case "cyan":
-                    products = products.Where(o => o.long_description.Contains("cyan"));
-                    break;
-                case "black":
-                    products = products.Where(o => o.long_description.Contains("black"));
-                    break;
-                case "white":
-                    products = products.Where(o => o.long_description.Contains("white"));
-                    break;
+                //Array definitions for where clause and filtersColor
+                Expression<Func<Item, bool>>[] WhereColor = new Expression<Func<Item, bool>>[300];
+
+                IQueryable<Item>[] filtersColor = new IQueryable<Item>[300];
+
+                //bools for if 1 checkbox has been checked
+                bool ColorBox_OnlyOne = false;
+
+
+
+                //COLORBOX MANAGEMENT {
+
+
+                //for every colorbox selected create a where clause that filtersColor color and put the result in the where clause array
+
+                int i = 0;
+                foreach (var filter in ColorBox)
+                {
+                    WhereColor[i++] = a => a.long_description.Contains(filter);
+                }
+                if (i == 1)
+                {
+                    ColorBox_OnlyOne = true;
+                }
+
+                //for every wheereclause that is not null create an IQueryable with the WhereColor and put it in the array for filtersColor
+                //every previous filter will be merged with the current filter
+                bool inital = true;
+                i = 0;
+                IQueryable<Item> resultsColor = products;
+                foreach (var clause in WhereColor)
+                {
+                    
+                    if (clause != null)
+                    {
+                        if (ColorBox_OnlyOne)
+                        {
+                            resultsColor = filtersColor[0] = products.Where(clause);
+                        }
+                        else if (ColorBox_OnlyOne == false)
+                        {
+
+                            filtersColor[i] = products.Where(clause);
+                            if (i >= 1)
+                            {
+                                if (inital)
+                                {
+                                    resultsColor = Queryable.Union(
+                                    filtersColor[i].AsQueryable(),
+                                    filtersColor[i - 1].AsQueryable()
+                                    );
+                                    inital = false;
+                                }
+                                else if (inital == false)
+                                {
+                                    resultsColor = Queryable.Union(
+                                    resultsColor, filtersColor[i]
+                                    );
+                                }
+
+                            }
+
+                            i++;
+                        }
+                    }
+
+
+                }
+                //}
+
+                //BRANDBOX LIST {
+                //Array definitions for where clause and filters
+                Expression<Func<Item, bool>>[] whereBrand = new Expression<Func<Item, bool>>[300];
+
+                IQueryable<Item>[] filtersBrand = new IQueryable<Item>[300];
+
+                //for every colorbox selected create a where clause that filterBrand color and put the result in the where clause array
+                bool BrandBox_OnlyOne = false;
+                int j = 0;
+                foreach (var filter in BrandBox)
+                {
+                    whereBrand[j++] = a => a.description == filter;
+                }
+                if (j == 1)
+                {
+                    BrandBox_OnlyOne = true;
+                }
+                //for every wheereclause that is not null create an IQueryable with the whereBrand and put it in the array for filterBrand
+                //every previous filter will be merged with the current filter
+                j = 0;
+                bool initial = true;
+                IQueryable<Item> resultsBrand = products;
+                foreach (var clause in whereBrand)
+                {
+                    if (clause != null)
+                    {
+                        if (BrandBox_OnlyOne)
+                        {
+                            resultsBrand = filtersBrand[0] = products.Where(clause);
+                        }
+                        else if (BrandBox_OnlyOne == false)
+                        {
+
+                            filtersBrand[j] = products.Where(clause);
+                            if (j >= 1 && initial == true)
+                            {
+                                resultsBrand = Queryable.Union(
+                                filtersBrand[j].AsQueryable(),
+                                filtersBrand[j - 1].AsQueryable()
+                                );
+                                initial = false;
+                            }
+                            else if (j >= 1 && initial == false)
+                            {
+                                resultsBrand = Queryable.Union(
+                                    resultsBrand, filtersBrand[j]
+                                    );
+                            }
+
+
+                            j++;
+                        }
+                    }
+                }
+                //}
+                //final products list
+                if (resultsColor != products && resultsBrand != products)
+                {
+                    IQueryable<Item> endresult = products;
+                    for (int count = 0; count < ColorBox.Count(); count++)
+                    {
+                        string currCol = ColorBox.ToList()[count];
+                        if (count == 0)
+                        {
+
+                            endresult = resultsBrand.Where(r => r.long_description.Contains(currCol));
+                        }
+                        else if (count >= 1)
+                        {
+                            IQueryable<Item> extraresult = resultsBrand.Where(r => r.long_description.Contains(currCol));
+                            endresult = Queryable.Concat(endresult, extraresult);
+                        }
+
+
+                    }
+
+                    products = endresult;
+
+                }
+                else if (resultsColor != products && resultsBrand == products)
+                {
+
+                    products = resultsColor;
+                }
+                else if (resultsBrand != products && resultsColor == products)
+                {
+                    products = resultsBrand;
+                }
+                
+                if (ViewData["currentCategory"] != null)
+                {
+                    ViewBag.currentCategory = ViewData["currentCategory"];
+                    if (String.IsNullOrEmpty(category)) { category = currentCategory; }
+                }
+                if (minPrice != null && maxPrice != null)
+                {
+                    int minimum = Convert.ToInt32(minPrice);
+                    int maximum = Convert.ToInt32(maxPrice);
+
+                    if (maximum <= minimum)
+                    {
+                        int difference = Convert.ToInt32(minPrice) - Convert.ToInt32(maxPrice) + 1;
+                        maximum = Convert.ToInt32(maxPrice) + difference;
+                    }
+                    else if (minimum >= maximum)
+                    {
+                        int difference = Convert.ToInt32(minPrice) - Convert.ToInt32(maxPrice) - 1;
+                        minimum = Convert.ToInt32(minPrice) - difference;
+                    }
+
+                    ViewBag.maxiPrice = maximum;
+                    ViewBag.miniPrice = minimum;
+
+                    products = products.Where(p => p.price > minimum && p.price < maximum);
+                    var blyat = products;
+
+                }
+                switch (gender)
+                {
+                    case "Women":
+                        products = products.Where(o => o.gender == "female");
+                        ViewBag.Gender = gender;
+                        ViewBag.currentBrands = products.Select(o => o.description).Distinct().ToList();
+                        break;
+                    case "Men":
+                        products = products.Where(o => o.gender == "male");
+                        ViewBag.Gender = gender;
+                        ViewBag.currentBrands = products.Select(o => o.description).Distinct().ToList();
+                        break;
+                }
+                var items = products;
+                switch (category)
+                {
+                    case "All":
+                        products = from p in _context.Items select p;
+                        ViewBag.currentBrands = products.Select(o => o.description).Distinct().ToList();
+                        break;
+                    case "Blazer Jackets":
+                        products = products.Where(o => (o.long_description.Contains("Blazer jacket") || o.long_description.Contains("blazer jacket")) && o.gender == "male");
+                        ViewBag.currentCategory = "Blazer Jackets";
+                        items = from p in _context.Items select p;
+                        items = items.Where(o => o.long_description.Contains("Blazer jacket") || o.long_description.Contains("blazer jacket"));
+                        ViewBag.currentBrands = items.Select(o => o.description).Distinct().ToList();
+                        break;
+                    case "Briefcases":
+                        products = products.Where(o => o.long_description.Contains("Briefcase") || o.long_description.Contains("briefcase"));
+                        ViewBag.currentCategory = "Briefcases";
+                        items = from p in _context.Items select p;
+                        items = items.Where(o => o.long_description.Contains("Briefcase") || o.long_description.Contains("briefcase"));
+                        ViewBag.currentBrands = items.Select(o => o.description).Distinct().ToList();
+                        break;
+                    case "Laptop Bags":
+                        products = products.Where(o => o.long_description.Contains("Laptop bag") || o.long_description.Contains("laptop bag"));
+                        ViewBag.currentCategory = "Laptop Bags";
+                        items = from p in _context.Items select p;
+                        items = items.Where(o => o.long_description.Contains("Laptop bag") || o.long_description.Contains("laptop bag"));
+                        ViewBag.currentBrands = items.Select(o => o.description).Distinct().ToList();
+                        break;
+                    case "Shirts":
+                        products = products.Where(o => (o.long_description.Contains("Shirt") || o.long_description.Contains("shirt")) && !(o.long_description.Contains("T-shirt")) && o.gender == "male");
+                        ViewBag.currentCategory = "Shirts";
+                        items = from p in _context.Items select p;
+                        items = items.Where(o => (o.long_description.Contains("Shirt") || o.long_description.Contains("shirt")) && !(o.long_description.Contains("T-shirt")) && o.gender == "male");
+                        ViewBag.currentBrands = items.Select(o => o.description).Distinct().ToList();
+                        break;
+                    case "T-shirts":
+                        products = products.Where(o => o.long_description.Contains("T-shirt") && o.gender == "male");
+                        ViewBag.currentCategory = "T-shirts";
+                        items = from p in _context.Items select p;
+                        items = items.Where(o => o.long_description.Contains("T-shirt") && o.gender == "male");
+                        ViewBag.currentBrands = items.Select(o => o.description).Distinct().ToList();
+                        break;
+                    case "Suit Jackets":
+                        products = products.Where(o => (o.long_description.Contains("Suit Jackets") || o.long_description.Contains("suit jacket")));
+                        ViewBag.currentCategory = "Suit Jackets";
+                        items = from p in _context.Items select p;
+                        items = items.Where(o => (o.long_description.Contains("Suit Jackets") || o.long_description.Contains("suit jacket")));
+                        ViewBag.currentBrands = items.Select(o => o.description).Distinct().ToList();
+                        break;
+                    case "Suit Pants":
+                        products = products.Where(o => o.long_description.Contains("Suit pants") || o.long_description.Contains("suit pants") || o.long_description.Contains("Suit trousers") || o.long_description.Contains("suit trousers"));
+                        ViewBag.currentCategory = "Suit Pants";
+                        items = from p in _context.Items select p;
+                        items = items.Where(o => o.long_description.Contains("Suit pants") || o.long_description.Contains("suit pants") || o.long_description.Contains("Suit trousers") || o.long_description.Contains("suit trousers"));
+                        ViewBag.currentBrands = items.Select(o => o.description).Distinct().ToList();
+                        break;
+                    case "Suits":
+                        products = products.Where(o => (o.long_description.Contains("Suit") || o.long_description.Contains("Suit")) && !(o.long_description.Contains("Suit Pants") || o.long_description.Contains("suit pants")) && !(o.long_description.Contains("Suit Jackets") || o.long_description.Contains("suit jacket") || o.long_description.Contains("Suit trousers") || o.long_description.Contains("suit trousers")));
+                        ViewBag.currentCategory = "Suits";
+                        items = from p in _context.Items select p;
+                        items = items.Where(o => (o.long_description.Contains("Suit") || o.long_description.Contains("Suit")) && !(o.long_description.Contains("Suit Pants") || o.long_description.Contains("suit pants")) && !(o.long_description.Contains("Suit Jackets") || o.long_description.Contains("suit jacket") || o.long_description.Contains("Suit trousers") || o.long_description.Contains("suit trousers")));
+                        ViewBag.currentBrands = items.Select(o => o.description).Distinct().ToList();
+                        break;
+                    case "Short Coats":
+                        products = products.Where(o => o.long_description.Contains("Short coat") || o.long_description.Contains("short coat"));
+                        ViewBag.currentCategory = "Short Coats";
+                        items = from p in _context.Items select p;
+                        items = items.Where(o => o.long_description.Contains("Short coat") || o.long_description.Contains("short coat"));
+                        ViewBag.currentBrands = items.Select(o => o.description).Distinct().ToList();
+                        break;
+                    case "Waist Coats":
+                        products = products.Where(o => o.long_description.Contains("Waistcoat") || o.long_description.Contains("waistcoat"));
+                        ViewBag.currentCategory = "Waist Coats";
+                        items = from p in _context.Items select p;
+                        items = items.Where(o => o.long_description.Contains("Waistcoat") || o.long_description.Contains("waistcoat"));
+                        ViewBag.currentBrands = items.Select(o => o.description).Distinct().ToList();
+                        break;
+                    case "Blazers":
+                        products = products.Where(o => (o.long_description.Contains("Blazer") || o.long_description.Contains("blazer")) && o.gender == "female");
+                        ViewBag.currentCategory = "Blazer";
+                        items = from p in _context.Items select p;
+                        items = items.Where(o => (o.long_description.Contains("Blazer") || o.long_description.Contains("blazer")) && o.gender == "female");
+                        ViewBag.currentBrands = items.Select(o => o.description).Distinct().ToList();
+                        break;
+                    case "Blouses":
+                        products = products.Where(o => o.long_description.Contains("Blouse") || o.long_description.Contains("blouse"));
+                        ViewBag.currentCategory = "Blouse";
+                        items = from p in _context.Items select p;
+                        items = items.Where(o => (o.long_description.Contains("Blouse") || o.long_description.Contains("blouse")) && o.gender == "female");
+                        ViewBag.currentBrands = items.Select(o => o.description).Distinct().ToList();
+                        break;
+                    case "Boots":
+                        products = products.Where(o => o.long_description.Contains("Boots") || o.long_description.Contains("boots"));
+                        ViewBag.currentCategory = "Boots";
+                        items = from p in _context.Items select p;
+                        items = items.Where(o => (o.long_description.Contains("Boots") || o.long_description.Contains("boots")) && o.gender == "female");
+                        ViewBag.currentBrands = items.Select(o => o.description).Distinct().ToList();
+                        break;
+                    case "Coats":
+                        products = products.Where(o => o.long_description.Contains("Coat") || o.long_description.Contains("coat"));
+                        ViewBag.currentCategory = "Coat";
+                        items = from p in _context.Items select p;
+                        items = items.Where(o => (o.long_description.Contains("Coat") || o.long_description.Contains("coat")) && o.gender == "female");
+                        ViewBag.currentBrands = items.Select(o => o.description).Distinct().ToList();
+                        break;
+                    case "Cardigans":
+                        products = products.Where(o => o.long_description.Contains("Cardigan") || o.long_description.Contains("cardigan"));
+                        ViewBag.currentCategory = "Cardigan";
+                        items = from p in _context.Items select p;
+                        items = items.Where(o => (o.long_description.Contains("Cardigan") || o.long_description.Contains("cardigan")) && o.gender == "female");
+                        ViewBag.currentBrands = items.Select(o => o.description).Distinct().ToList();
+                        break;
+                    case "Dresses":
+                        products = products.Where(o => (o.long_description.Contains("Dress") || o.long_description.Contains("dress")) && !o.long_description.Contains("shirt"));
+                        ViewBag.currentCategory = "Dress";
+                        items = from p in _context.Items select p;
+                        items = items.Where(o => (o.long_description.Contains("Dress") || o.long_description.Contains("dress")) && !o.long_description.Contains("shirt"));
+                        ViewBag.currentBrands = items.Select(o => o.description).Distinct().ToList();
+                        break;
+                    case "Heels":
+                        products = products.Where(o => o.long_description.Contains("Heels") || o.long_description.Contains("heels"));
+                        ViewBag.currentCategory = "Heels";
+                        items = from p in _context.Items select p;
+                        items = items.Where(o => (o.long_description.Contains("Heels") || o.long_description.Contains("heels")) && o.gender == "female");
+                        ViewBag.currentBrands = items.Select(o => o.description).Distinct().ToList();
+                        break;
+                    case "Jumpers":
+                        products = products.Where(o => o.long_description.Contains("Jumper") || o.long_description.Contains("jumper"));
+                        ViewBag.currentCategory = "Jumper";
+                        items = from p in _context.Items select p;
+                        items = items.Where(o => (o.long_description.Contains("Jumper") || o.long_description.Contains("jumper")) && o.gender == "female");
+                        ViewBag.currentBrands = items.Select(o => o.description).Distinct().ToList();
+                        break;
+                    case "Skirts":
+                        products = products.Where(o => o.long_description.Contains("Skirt") || o.long_description.Contains("skirt"));
+                        ViewBag.currentCategory = "Skirt";
+                        items = from p in _context.Items select p;
+                        items = items.Where(o => (o.long_description.Contains("Skirt") || o.long_description.Contains("skirt")) && o.gender == "female");
+                        ViewBag.currentBrands = items.Select(o => o.description).Distinct().ToList();
+                        break;
+                    case "Trousers":
+                        products = products.Where(o => o.long_description.Contains("Trousers") || o.long_description.Contains("trousers"));
+                        ViewBag.currentCategory = "Trousers";
+                        items = from p in _context.Items select p;
+                        items = items.Where(o => (o.long_description.Contains("Trousers") || o.long_description.Contains("trousers")) && o.gender == "female");
+                        ViewBag.currentBrands = items.Select(o => o.description).Distinct().ToList();
+                        break;
+                }
+                
+                if (String.IsNullOrEmpty(sortBy) && !String.IsNullOrEmpty(currentSort))
+                {
+                    switch (currentSort)
+                    {
+                        case "Name A - Z":
+                            sortBy = "Name A - Z";
+                            break;
+                        case "Name Z- A":
+                            sortBy = "Name Z- A";
+                            break;
+                        case "Price Low - High":
+                            sortBy = "Price Low - High";
+                            break;
+                        case "Price High - Low":
+                            sortBy = "Price High - Low";
+                            break;
+
+                            //<option value="Name A - Z">Name A - Z</option>
+                            //<option value="Name Z- A">Name Z- A</option>
+                            //<option value="Price Low - High">Price Low - High</option>
+                            //<option value="Price High - Low">Price High - Low</option>
+                    }
+                }
+                switch (sortBy)
+                {
+                    case "Price Low - High":
+                        ViewBag.currentSort = "Price Low - High";
+                        products = products.OrderBy(s => s.price);
+                        break;
+                    case "Price High - Low":
+                        ViewBag.currentSort = "Price High - Low";
+                        products = products.OrderByDescending(s => s.price);
+                        break;
+                    case "Name A - Z":
+                        ViewBag.currentSort = "Name A - Z";
+                        products = products.OrderBy(s => s.description);
+                        break;
+                    case "Name Z- A":
+                        ViewBag.currentSort = "Name Z- A";
+                        products = products.OrderByDescending(s => s.description);
+                        break;
+                }
+                ViewData["searchString"] = searchString;
+
             }
 
+
+
+            //ping pong session
+            ViewBag.ColorList = clrList;
+
             ViewBag.CurrentColor = currentColor;
-            ViewData["CurrentBrands"] = currentBrands;
-            ViewBag.CurrentBrands = products.Select(o => o.description).Distinct().ToList();
+
+            ViewBag.Colorschecked = ColorBox.ToList();
+            ViewBag.Brandschecked = BrandBox.ToList();
+            //search stuff
 
             ViewData["SearchString"] = searchString;
 
