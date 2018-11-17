@@ -42,7 +42,7 @@ namespace bytme.Areas.Identity.Pages.Account.Manage
 
         public class InputModel
         {
-            
+            [Required]
             [EmailAddress]
             public string Email { get; set; }
 

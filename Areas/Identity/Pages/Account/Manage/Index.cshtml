@@ -32,42 +32,14 @@
                         </div>
                         <div class="form-group">
                             <label asp-for="Input.Email"></label>
-                            @if (Model.IsEmailConfirmed)
-                            {
-                                <div class="input-group">
-                                    <input asp-for="Input.Email" class="form-control" disabled/>
-                                    <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
-                                </div>
-                            }
-                            else
-                            {
-                                <input asp-for="Input.Email" class="form-control" disabled/>
-                                <button id="email-verification" type="submit" asp-page-handler="SendVerificationEmail" class="btn btn-link">Send verification email</button>
-                            }
-                            <span asp-validation-for="Input.Email" class="text-danger"></span>
+                            <input asp-for="Input.Email" class="form-control" disabled placeholder="@user.Email" />
                         </div>
                         <div class="form-group">
-                            <label asp-for="Input.name"></label>
-                            @if (user.name != null)
-                            {
-                                <input asp-for="Input.name" class="form-control" placeholder="@user.name" />
-                            }
-                            else
-                            {
-                                <input asp-for="Input.name" class="form-control" placeholder="Name" />
-                            }
+                            <input asp-for="Input.name" class="password" placeholder="Name" />
                             <span asp-validation-for="Input.name" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="Input.surname"></label>
-                            @if (user.surname != null)
-                            {
-                                <input asp-for="Input.surname" class="form-control" placeholder="@user.surname" />
-                            }
-                            else
-                            {
-                                <input asp-for="Input.surname" class="form-control" placeholder="Surname" />
-                            }
+                            <input asp-for="Input.surname" class="password" placeholder="Surname" />
                             <span asp-validation-for="Input.surname" class="text-danger"></span>
                         </div>
                         <button type="submit" class="btn btn-default">Save</button>

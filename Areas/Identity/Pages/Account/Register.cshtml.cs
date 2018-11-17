@@ -85,6 +85,20 @@ namespace bytme.Areas.Identity.Pages.Account
             [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "A city can only contain letters.")]
             [StringLength(28, ErrorMessage = "The longest place name in the Netherlands has 28 characters.")]
             public string city { get; set; }
+
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "Name")]
+            [RegularExpression(@"^[a-zA-Z ]+$", ErrorMessage = "A name can only contain letters.")]
+            [StringLength(100, ErrorMessage = "Invalid input. Maximum is 100 characters.")]
+            public string name { get; set; }
+
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "Surname")]
+            [RegularExpression(@"^[a-zA-Z ]+$", ErrorMessage = "A surname can only contain letters.")]
+            [StringLength(100, ErrorMessage = "Invalid input. Maximum is 100 characters.")]
+            public string surname { get; set; }
         }
 
         public void OnGet(string returnUrl = null)
@@ -99,7 +113,7 @@ namespace bytme.Areas.Identity.Pages.Account
             {
 
                 var email = await _userManager.FindByEmailAsync(Input.Email);
-                var user = new UserModel { UserName = Input.Email, Email = Input.Email, street = Input.street, streetnumber = Input.streetnumber, city = Input.city, zipcode = Input.zipcode};
+                var user = new UserModel { UserName = Input.Email, Email = Input.Email, street = Input.street, streetnumber = Input.streetnumber, city = Input.city, zipcode = Input.zipcode, name = Input.name, surname = Input.surname};
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (email != null)
