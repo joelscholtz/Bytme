@@ -1,8 +1,15 @@
-﻿@model List<bytme.Models.UserModel>
+﻿@model List<bytme.Models.ShoppingCartModel>
+
+@inject UserManager<UserModel> userManager
+
+@using Microsoft.AspNetCore.Identity
 
 @{
     ViewData["Title"] = "Checkout";
     Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    var user = await userManager.GetUserAsync(User);
 }
 
 <h2>Checkout</h2>
@@ -11,6 +18,31 @@
 {
     @if (User.Identity.IsAuthenticated)
     {
-           <center><h2>You are logged in</h2></center>
-        }
+        <br />
+        <br />
+        <div style="width: 100%">
+            <div style="float:left; width: 80%">
+                <h3><b>Data</b></h3>
+                <h4>@user.name @user.surname</h4>
+                <h4>@user.street @user.streetnumber</h4>
+                <h4>@user.zipcode, @user.city</h4>
+                <h4><a asp-area="Identity" asp-page="/Account/Manage/Index" text-decoration:none;">Change Name</a></h4>
+                <h4><a asp-area="Identity" asp-page="/Account/Manage/Address" text-decoration:none;">Change Address</a></h4>
+            </div>
+            <div style="float: right">
+                <h3><b>Payment option</b></h3>
+                <form>
+                   <center><h4><input checked="checked" name="payment" type="radio" value="true" /> Paypal</h4></center>
+                </form>
+            </div>
+        </div>
     }
+    @if (!User.Identity.IsAuthenticated)
+    {
+        <h1><b><center>This feature is not yet built in. Please register. Our sincere apologies.</center></b></h1>
+    }
+}
+@if (ViewBag.count == 0)
+{
+    <h1><b><center>Put something in your shoppingcart first!</center></b></h1>
+}
