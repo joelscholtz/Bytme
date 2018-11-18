@@ -9,6 +9,7 @@ using System.Net;
 using bytme.Data;
 using System.Security.Claims;
 using System.Web;
+using Microsoft.AspNetCore.Identity;
 
 namespace bytme.Controllers
 {
@@ -258,7 +259,7 @@ namespace bytme.Controllers
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var result = _context.UserModels.Where(u => u.Id == userId).FirstOrDefault();
-
+            
             ViewBag.street = result.street;
             ViewBag.streetnumber = result.streetnumber;
             ViewBag.city = result.city;
