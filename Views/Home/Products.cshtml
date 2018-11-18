@@ -357,9 +357,7 @@
                         {
                             <div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box" id="page_@i _@ie" style="width:33%">
                                 <div class="thumbnail">
-                                    <a href="#"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;" /></a>
-                                    @if (SignInManager.IsSignedIn(User))
-                                    {
+                                    <a onclick="@("window.location.href=' " + Url.Action("ProductDetail", "ProductDetail", new { id = item.id}) + " ' ");"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;cursor:pointer;" /></a>
                                         <div class="wishlist">
                                             @Html.ActionLink("", "AddToWishList", "WishList", routeValues: new
                                             {
@@ -367,7 +365,6 @@
                                             },
                                             htmlAttributes: new { @class = "heart" })
                                         </div>
-                                    }
                                     <div class="desc_box">
                                         <p>&euro;@item.price</p>
                                         <p class="description">@item.description</p>
@@ -392,9 +389,7 @@
                         {
                             <div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box" id="page_@i _@ie" style="display:none;width:33%">
                                 <div class="thumbnail">
-                                    <a href="#"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;" /></a>
-                                    @if (SignInManager.IsSignedIn(User))
-                                    {
+                                    <a onclick="@("window.location.href=' " + Url.Action("ProductDetail", "ProductDetail", new { id = item.id}) + " ' ");"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;cursor:pointer;" /></a>
                                         <div class="wishlist">
                                             @Html.ActionLink("", "AddToWishList", "WishList", routeValues: new
                                             {
@@ -402,7 +397,6 @@
                                             },
                                             htmlAttributes: new { @class = "heart" })
                                         </div>
-                                    }
                                     <div class="desc_box">
                                         <p>&euro;@item.price</p>
                                         <p class="description">@item.description</p>
