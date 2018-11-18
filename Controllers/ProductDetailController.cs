@@ -28,10 +28,10 @@ namespace bytme.Controllers
             model.long_description = item.long_description;
             model.photo_url = item.photo_url;
             model.price = item.price;
-            model.quantity = model.quantity;
-            model.size = model.size;
-            model.issales = model.issales;
-            model.gender = model.gender;
+            model.quantity = item.quantity;
+            model.size = item.size;
+            model.issales = item.issales;
+            model.gender = item.gender;
 
             return View(model);
         }
