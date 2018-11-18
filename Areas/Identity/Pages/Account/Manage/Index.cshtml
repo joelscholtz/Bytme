@@ -29,16 +29,20 @@
                         <div class="form-group">
                             <label asp-for="Username"></label>
                             <input asp-for="Username" class="form-control" disabled placeholder="@user.UserName" />
+                            <span asp-validation-for="Username" class="text-danger"></span>
                         </div>
                         <div class="form-group">
                             <label asp-for="@user.Email"></label>
                             <input asp-for="@user.Email" class="form-control" disabled placeholder="@user.Email" />
+                            <span asp-validation-for="@user.Email" class="text-danger"></span>
                         </div>
                         <div class="form-group">
+                            <label asp-for="Input.name"></label>
                             <input asp-for="Input.name" class="form-control" value="@user.name" />
                             <span asp-validation-for="Input.name" class="text-danger"></span>
                         </div>
                         <div class="form-group">
+                            <label asp-for="Input.surname"></label>
                             <input asp-for="Input.surname" class="form-control" value="@user.surname" />
                             <span asp-validation-for="Input.surname" class="text-danger"></span>
                         </div>
