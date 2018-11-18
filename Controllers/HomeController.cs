@@ -48,8 +48,6 @@ namespace bytme.Controllers
             ViewData["Female"] = String.IsNullOrEmpty(gender) ? "female" : "";
             ViewData["Male"] = String.IsNullOrEmpty(gender) ? "male" : "male";
 
-            
-
             ViewData["Gender"] = gender;
             ViewData["BrandBox"] = BrandBox;
             ViewData["maxPrice"] = maxPrice;
@@ -72,11 +70,9 @@ namespace bytme.Controllers
             clrList.Add("grey");
             clrList.Add("brown");
 
-            
-
-            ViewBag.currentSort = "Price Low - High";
+            ViewBag.currentSort = "Recommended";
             bool SortByRemember = String.IsNullOrEmpty(sortBy);
-            if (String.IsNullOrEmpty(sortBy)) { sortBy = "Price Low - High"; }
+            if (String.IsNullOrEmpty(sortBy)) { sortBy = "Recommended"; }
             ViewBag.CurrentCategoryWomen = categoryWomen;
             ViewBag.CurrentCategoryMen = categoryMen;
             ViewBag.currentBrands = products.Select(o => o.description).Distinct().ToList();
@@ -91,13 +87,6 @@ namespace bytme.Controllers
 
                 //bools for if 1 checkbox has been checked
                 bool ColorBox_OnlyOne = false;
-
-
-
-                //COLORBOX MANAGEMENT {
-
-
-                //for every colorbox selected create a where clause that filtersColor color and put the result in the where clause array
 
                 int i = 0;
                 foreach (var filter in ColorBox)
@@ -152,8 +141,6 @@ namespace bytme.Controllers
 
 
                 }
-                //}
-
                 //BRANDBOX LIST {
                 //Array definitions for where clause and filters
                 Expression<Func<Item, bool>>[] whereBrand = new Expression<Func<Item, bool>>[300];
@@ -444,7 +431,7 @@ namespace bytme.Controllers
                         break;
                 }
                 
-                if (sortBy == "Price Low - High" && !String.IsNullOrEmpty(currentSort) && SortByRemember)
+                if (sortBy == "Recommended" && !String.IsNullOrEmpty(currentSort) && SortByRemember)
                 {
                     switch (currentSort)
                     {
@@ -489,8 +476,6 @@ namespace bytme.Controllers
                 ViewData["searchString"] = searchString;
 
             }
-
-
 
             //ping pong session
             ViewBag.ColorList = clrList;
@@ -593,9 +578,9 @@ namespace bytme.Controllers
             // Retrieve the products from the database.
             var products = from p in _context.Items select p;
             products = products.Where(o => o.gender == "male");
-            ViewBag.currentSort = "Price Low - High";
+            ViewBag.currentSort = "Recommended";
             bool SortByRemember = String.IsNullOrEmpty(sortBy);
-            if (String.IsNullOrEmpty(sortBy)) { sortBy = "Price Low - High"; }
+            if (String.IsNullOrEmpty(sortBy)) { sortBy = "Recommended"; }
             ViewBag.currentBrands = products.Select(o => o.description).Distinct().ToList();
 
             if (HttpContext.Request.Method == "POST")
@@ -866,7 +851,7 @@ namespace bytme.Controllers
                         ViewBag.currentBrands = items.Select(o => o.description).Distinct().ToList();
                         break;
                 }
-                if (sortBy == "Price Low - High" && SortByRemember && !String.IsNullOrEmpty(currentSort))
+                if (sortBy == "Recommended" && SortByRemember && !String.IsNullOrEmpty(currentSort))
                 {
                     switch (currentSort)
                     {
@@ -981,9 +966,9 @@ namespace bytme.Controllers
             clrList.Add("brown");
 
             ViewBag.ColorList = clrList;
-            ViewBag.currentSort = "Price Low - High";
+            ViewBag.currentSort = "Recommended";
             bool SortByRemember = String.IsNullOrEmpty(sortBy);
-            if (String.IsNullOrEmpty(sortBy)) { sortBy = "Price Low - High"; }
+            if (String.IsNullOrEmpty(sortBy)) { sortBy = "Recommended"; }
             // Retrieve the products from the database.
             var products = from p in _context.Items select p;
             products = products.Where(o => o.gender == "female");
@@ -1262,7 +1247,7 @@ namespace bytme.Controllers
                 }
             }
 
-            if (sortBy == "Price Low - High" && !String.IsNullOrEmpty(currentSort) && SortByRemember)
+            if (sortBy == "Recommended" && !String.IsNullOrEmpty(currentSort) && SortByRemember)
             {
                 switch (currentSort)
                 {
