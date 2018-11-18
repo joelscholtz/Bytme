@@ -72,28 +72,16 @@ namespace bytme.Controllers
             clrList.Add("grey");
             clrList.Add("brown");
 
-            switch (sortOrder)
-            {
-                case "name_desc":
-                    products = products.OrderByDescending(s => s.price);
-                    break;
-                case "Date":
-                    products = products.OrderBy(s => s.description);
-                    break;
-                case "date_desc":
-                    products = products.OrderByDescending(s => s.description);
-                    break;
-                default:
-                    products = products.OrderBy(s => s.price);
-                    break;
-            }
+            
 
             ViewBag.currentSort = "Price Low - High";
+            bool SortByRemember = String.IsNullOrEmpty(sortBy);
+            if (String.IsNullOrEmpty(sortBy)) { sortBy = "Price Low - High"; }
             ViewBag.CurrentCategoryWomen = categoryWomen;
             ViewBag.CurrentCategoryMen = categoryMen;
             ViewBag.currentBrands = products.Select(o => o.description).Distinct().ToList();
-            ViewBag.maxiPrice = "695";
-            ViewBag.miniPrice = "12";
+            ViewBag.maxiPrice = "1500";
+            ViewBag.miniPrice = "0";
             if (HttpContext.Request.Method == "POST")
             {
                 //Array definitions for where clause and filtersColor
@@ -296,11 +284,22 @@ namespace bytme.Controllers
                         ViewBag.currentBrands = products.Select(o => o.description).Distinct().ToList();
                         break;
                 }
+                string sex = null;
+                if (gender == "Women")
+                {
+                    sex = "female";
+                }
+                if (gender == "Men")
+                {
+                    sex = "male";
+                }
+
                 var items = products;
                 switch (category)
                 {
                     case "All":
                         products = from p in _context.Items select p;
+                        products = products.Where(o => o.gender == sex);
                         ViewBag.currentBrands = products.Select(o => o.description).Distinct().ToList();
                         break;
                     case "Blazer Jackets":
@@ -445,7 +444,7 @@ namespace bytme.Controllers
                         break;
                 }
                 
-                if (String.IsNullOrEmpty(sortBy) && !String.IsNullOrEmpty(currentSort))
+                if (sortBy == "Price Low - High" && !String.IsNullOrEmpty(currentSort) && SortByRemember)
                 {
                     switch (currentSort)
                     {
@@ -461,6 +460,11 @@ namespace bytme.Controllers
                         case "Price High - Low":
                             sortBy = "Price High - Low";
                             break;
+
+                            //<option value="Name A - Z">Name A - Z</option>
+                            //<option value="Name Z- A">Name Z- A</option>
+                            //<option value="Price Low - High">Price Low - High</option>
+                            //<option value="Price High - Low">Price High - Low</option>
                     }
                 }
                 switch (sortBy)
@@ -485,6 +489,9 @@ namespace bytme.Controllers
                 ViewData["searchString"] = searchString;
 
             }
+
+
+
             //ping pong session
             ViewBag.ColorList = clrList;
 
@@ -550,7 +557,7 @@ namespace bytme.Controllers
 
             if (minPrice == null)
             {
-                ViewBag.miniPrice = 12;
+                ViewBag.miniPrice = 0;
             }
             else
             {
@@ -558,7 +565,7 @@ namespace bytme.Controllers
             }
             if (maxPrice == null)
             {
-                ViewBag.maxiPrice = 695;
+                ViewBag.maxiPrice = 1500;
             }
             else
             {
@@ -587,6 +594,8 @@ namespace bytme.Controllers
             var products = from p in _context.Items select p;
             products = products.Where(o => o.gender == "male");
             ViewBag.currentSort = "Price Low - High";
+            bool SortByRemember = String.IsNullOrEmpty(sortBy);
+            if (String.IsNullOrEmpty(sortBy)) { sortBy = "Price Low - High"; }
             ViewBag.currentBrands = products.Select(o => o.description).Distinct().ToList();
 
             if (HttpContext.Request.Method == "POST")
@@ -857,7 +866,7 @@ namespace bytme.Controllers
                         ViewBag.currentBrands = items.Select(o => o.description).Distinct().ToList();
                         break;
                 }
-                if (String.IsNullOrEmpty(sortBy) && !String.IsNullOrEmpty(currentSort))
+                if (sortBy == "Price Low - High" && SortByRemember && !String.IsNullOrEmpty(currentSort))
                 {
                     switch (currentSort)
                     {
@@ -880,30 +889,30 @@ namespace bytme.Controllers
                             //<option value="Price High - Low">Price High - Low</option>
                     }
                 }
-                switch (sortBy)
-                {
-                    case "Price Low - High":
-                        ViewBag.currentSort = "Price Low - High";
-                        products = products.OrderBy(s => s.price);
-                        break;
-                    case "Price High - Low":
-                        ViewBag.currentSort = "Price High - Low";
-                        products = products.OrderByDescending(s => s.price);
-                        break;
-                    case "Name A - Z":
-                        ViewBag.currentSort = "Name A - Z";
-                        products = products.OrderBy(s => s.description);
-                        break;
-                    case "Name Z- A":
-                        ViewBag.currentSort = "Name Z- A";
-                        products = products.OrderByDescending(s => s.description);
-                        break;
-                }
+                
+            }
+            switch (sortBy)
+            {
+                case "Price Low - High":
+                    ViewBag.currentSort = "Price Low - High";
+                    products = products.OrderBy(s => s.price);
+                    break;
+                case "Price High - Low":
+                    ViewBag.currentSort = "Price High - Low";
+                    products = products.OrderByDescending(s => s.price);
+                    break;
+                case "Name A - Z":
+                    ViewBag.currentSort = "Name A - Z";
+                    products = products.OrderBy(s => s.description);
+                    break;
+                case "Name Z- A":
+                    ViewBag.currentSort = "Name Z- A";
+                    products = products.OrderByDescending(s => s.description);
+                    break;
             }
 
-            
-            
-                    
+
+
             int PageCount = products.Count() / 21;
 
             ViewBag.Colorschecked = ColorBox.ToList();
@@ -938,7 +947,7 @@ namespace bytme.Controllers
 
             if (minPrice == null)
             {
-                ViewBag.miniPrice = 12;
+                ViewBag.miniPrice = 0;
             }
             else
             {
@@ -946,7 +955,7 @@ namespace bytme.Controllers
             }
             if (maxPrice == null)
             {
-                ViewBag.maxiPrice = 695;
+                ViewBag.maxiPrice = 1500;
             }
             else
             {
@@ -973,6 +982,8 @@ namespace bytme.Controllers
 
             ViewBag.ColorList = clrList;
             ViewBag.currentSort = "Price Low - High";
+            bool SortByRemember = String.IsNullOrEmpty(sortBy);
+            if (String.IsNullOrEmpty(sortBy)) { sortBy = "Price Low - High"; }
             // Retrieve the products from the database.
             var products = from p in _context.Items select p;
             products = products.Where(o => o.gender == "female");
@@ -1251,7 +1262,7 @@ namespace bytme.Controllers
                 }
             }
 
-            if (String.IsNullOrEmpty(sortBy) && !String.IsNullOrEmpty(currentSort))
+            if (sortBy == "Price Low - High" && !String.IsNullOrEmpty(currentSort) && SortByRemember)
             {
                 switch (currentSort)
                 {

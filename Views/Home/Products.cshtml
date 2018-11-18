@@ -8,6 +8,9 @@
 
 <!-- (Optional) Latest compiled and minified JavaScript translation files -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/js/i18n/defaults-*.min.js"></script>
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<UserModel> SignInManager
+@inject UserManager<UserModel> UserManager
 @{
     ViewData["Title"] = ViewBag.Message;
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -109,8 +112,9 @@
     }
 
     .sortby {
-        margin-top:-60px;
+        margin-top: -60px;
     }
+
     input[type="submit"] {
         text-align: start;
         display: inline-block;
@@ -136,24 +140,6 @@
         input[type="submit"]:hover {
             background: #ddd;
         }
-
-    .wishlist {
-        margin-top: -30px;
-        text-align: end;
-    }
-
-        .wishlist > a {
-            font-size: 25px;
-            color: #8F6B93;
-        }
-
-    .heart:after {
-        font-family: "Glyphicons Halflings";
-        content: "\e143";
-        margin-top: -30px;
-        text-align: end;
-    }
-
 </style>
 <script>
     function validate(evt) {
@@ -186,17 +172,17 @@
 </script>
 @if (!String.IsNullOrEmpty(ViewBag.Message))
 {
-<div class="row text-center">
-    <h2>Products for '@ViewBag.Message'</h2>
-    <p>@ViewBag.Count products</p>
-    <hr class="hr" />        
-            
-        </div>
-    
-    
+    <div class="row text-center">
+        <h2>Products for '@ViewBag.Message'</h2>
+        <p>@ViewBag.Count products</p>
+        <hr class="hr" />
+
+    </div>
+
+
     <div class="container" id="filter-sidebar">
         <form asp-action="Products" id="products" name="products">
-            
+
             <script>
                 var form = document.getElementById("products");
                 function executeform66() {
@@ -214,8 +200,6 @@
             <br /><br /><br />
             <div class="row">
                 <div class="col-lg-3">
-
-
                     <input type="hidden" name="searchString" value="@ViewBag.Message" />
                     <div class="form-group-lg row center-block" role="group">
                         <h4 class="cat" data-toggle="collapse" data-target="#group-1">Categories</h4>
@@ -348,16 +332,16 @@
                             <div id="group-4" class="list-group collapse in">
                                 <div class="form-group">
                                     <label for="price-min">Minimum:</label>
-                                    <input class="form-control" type="number" onkeypress='validate(event)' oninput="PriceChecker()" name="minPrice" id="priceMinSlider" placeholder="8" min="8" max="1500" value="@ViewBag.miniPrice" required />
+                                    <input class="form-control" type="number" onkeypress='validate(event)' oninput="PriceChecker()" name="minPrice" id="priceMinSlider" placeholder="8" min="0" max="1500" value="@ViewBag.miniPrice" required />
                                 </div>
 
                                 <div class="form-group">
                                     <label for="priceMaxSlider">Maximum:</label>
-                                    <input class="form-control" type="number" onkeypress='validate(event)' oninput="PriceChecker()" name="maxPrice" id="priceMaxSlider" placeholder="1500" min="8" max="1500" value="@ViewBag.maxiPrice" required>
+                                    <input class="form-control" type="number" onkeypress='validate(event)' oninput="PriceChecker()" name="maxPrice" id="priceMaxSlider" placeholder="1500" min="0" max="1500" value="@ViewBag.maxiPrice" required>
                                 </div>
                             </div>
                         </div>
-                        <input type="submit" class="btn btn-success" style="background-color: #5cb85c; border-color: #4cae4c; width:50%" />
+                        <input type="submit" class="btn btn-success" style="background-color: #5cb85c; border-color: #4cae4c; width:40%" value="Apply Filters" />
                     </div>
                     <hr />
                     <br />
@@ -365,20 +349,25 @@
                 </div>
 
                 <div class="col-lg-9">
+
                     @foreach (var item in Model)
                     {
-                        @if (ie++ < 21)
+                        @if
+                           (ie++ < 21)
                         {
                             <div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box" id="page_@i _@ie" style="width:33%">
                                 <div class="thumbnail">
-                                    <a onclick="@("window.location.href=' " + Url.Action("ProductDetail", "ProductDetail", new { id = item.id}) + " ' ");"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;cursor:pointer;" /></a>
-                                    <div class="wishlist">
-                                        @Html.ActionLink("", "AddToWishList", "WishList", routeValues: new
-                                        {
-                                            itm_id = item.id
-                                        },
-                                        htmlAttributes: new { @class = "heart" })
-                                    </div>
+                                    <a href="#"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;" /></a>
+                                    @if (SignInManager.IsSignedIn(User))
+                                    {
+                                        <div class="wishlist">
+                                            @Html.ActionLink("", "AddToWishList", "WishList", routeValues: new
+                                            {
+                                                itm_id = item.id
+                                            },
+                                            htmlAttributes: new { @class = "heart" })
+                                        </div>
+                                    }
                                     <div class="desc_box">
                                         <p>&euro;@item.price</p>
                                         <p class="description">@item.description</p>
@@ -403,14 +392,17 @@
                         {
                             <div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box" id="page_@i _@ie" style="display:none;width:33%">
                                 <div class="thumbnail">
-                                    <a onclick="@("window.location.href=' " + Url.Action("ProductDetail", "ProductDetail", new { id = item.id}) + " ' ");"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;cursor:pointer;" /></a>
-                                    <div class="wishlist">
-                                        @Html.ActionLink("", "AddToWishList", "WishList", routeValues: new
-                                        {
-                                            itm_id = item.id
-                                        },
-                                        htmlAttributes: new { @class = "heart" })
-                                    </div>
+                                    <a href="#"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;" /></a>
+                                    @if (SignInManager.IsSignedIn(User))
+                                    {
+                                        <div class="wishlist">
+                                            @Html.ActionLink("", "AddToWishList", "WishList", routeValues: new
+                                            {
+                                                itm_id = item.id
+                                            },
+                                            htmlAttributes: new { @class = "heart" })
+                                        </div>
+                                    }
                                     <div class="desc_box">
                                         <p>&euro;@item.price</p>
                                         <p class="description">@item.description</p>

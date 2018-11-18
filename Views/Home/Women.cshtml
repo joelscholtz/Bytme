@@ -351,17 +351,17 @@
                         <div id="group-4" class="list-group collapse in">
                             <div class="form-group">
                                 <label for="price-min">Minimum:</label>
-                                <input class="form-control" type="number" onkeypress='validate(event)' oninput="PriceChecker()" name="minPrice" id="priceMinSlider" placeholder="8" min="8" max="1500" value="@ViewBag.miniPrice" required />
+                                <input class="form-control" type="number" onkeypress='validate(event)' oninput="PriceChecker()" name="minPrice" id="priceMinSlider" placeholder="8" min="0" max="1500" value="@ViewBag.miniPrice" required />
                             </div>
 
                             <div class="form-group">
                                 <label for="priceMaxSlider">Maximum:</label>
-                                <input class="form-control" type="number" onkeypress='validate(event)' oninput="PriceChecker()" name="maxPrice" id="priceMaxSlider" placeholder="1500" min="8" max="1500" value="@ViewBag.maxiPrice" required />
+                                <input class="form-control" type="number" onkeypress='validate(event)' oninput="PriceChecker()" name="maxPrice" id="priceMaxSlider" placeholder="1500" min="0" max="1500" value="@ViewBag.maxiPrice" required />
                             </div>
 
                         </div>
                     </div>
-                    <input type="submit" class="btn btn-success" style="background-color: #5cb85c; border-color: #4cae4c; width:50%" />
+                    <input type="submit" class="btn btn-success" style="width:40%; background-color: #5cb85c; border-color: #4cae4c;" value="Apply Filters" />
                 </div>
                 <hr />
                 <br />
@@ -378,7 +378,9 @@
 
                 <div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box" id="page_@i _@ie" style="width:33%">
                     <div class="thumbnail">
-                        <a onclick="@("window.location.href=' " + Url.Action("ProductDetail", "ProductDetail", new { id = item.id}) + " ' ");"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;cursor:pointer;" /></a>
+                        <a href="#"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;" /></a>
+                        @if (SignInManager.IsSignedIn(User))
+                        {
                             <div class="wishlist">
                                 @Html.ActionLink("", "AddToWishList", "WishList", routeValues: new
                                 {
@@ -386,6 +388,7 @@
                                 },
                                 htmlAttributes: new { @class = "heart" })
                             </div>
+                        }
                         <div class="desc_box">
                             <p>&euro;@item.price</p>
                             <p class="description">@item.description</p>
@@ -413,7 +416,9 @@
             {
                 <div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box" id="page_@i _@ie" style="display:none;width:33%">
                     <div class="thumbnail">
-                        <a onclick="@("window.location.href=' " + Url.Action("ProductDetail", "ProductDetail", new { id = item.id}) + " ' ");"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;cursor:pointer;" /></a>
+                        <a href="#"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;" /></a>
+                        @if (SignInManager.IsSignedIn(User))
+                        {
                             <div class="wishlist">
                                 @Html.ActionLink("", "AddToWishList", "WishList", routeValues: new
                                 {
@@ -421,6 +426,7 @@
                                 },
                                 htmlAttributes: new { @class = "heart" })
                             </div>
+                        }
                         <div class="desc_box">
                             <p>&euro;@item.price</p>
                             <p class="description">@item.description</p>
