@@ -88,7 +88,7 @@ namespace bytme.Controllers
                     break;
             }
 
-            ViewBag.currentSort = "Sort By";
+            ViewBag.currentSort = "Price Low - High";
             ViewBag.CurrentCategoryWomen = categoryWomen;
             ViewBag.CurrentCategoryMen = categoryMen;
             ViewBag.currentBrands = products.Select(o => o.description).Distinct().ToList();
@@ -461,11 +461,6 @@ namespace bytme.Controllers
                         case "Price High - Low":
                             sortBy = "Price High - Low";
                             break;
-
-                            //<option value="Name A - Z">Name A - Z</option>
-                            //<option value="Name Z- A">Name Z- A</option>
-                            //<option value="Price Low - High">Price Low - High</option>
-                            //<option value="Price High - Low">Price High - Low</option>
                     }
                 }
                 switch (sortBy)
@@ -490,9 +485,6 @@ namespace bytme.Controllers
                 ViewData["searchString"] = searchString;
 
             }
-
-
-
             //ping pong session
             ViewBag.ColorList = clrList;
 
@@ -594,7 +586,7 @@ namespace bytme.Controllers
             // Retrieve the products from the database.
             var products = from p in _context.Items select p;
             products = products.Where(o => o.gender == "male");
-            ViewBag.currentSort = "Sort By";
+            ViewBag.currentSort = "Price Low - High";
             ViewBag.currentBrands = products.Select(o => o.description).Distinct().ToList();
 
             if (HttpContext.Request.Method == "POST")
@@ -980,7 +972,7 @@ namespace bytme.Controllers
             clrList.Add("brown");
 
             ViewBag.ColorList = clrList;
-            ViewBag.currentSort = "Sort By";
+            ViewBag.currentSort = "Price Low - High";
             // Retrieve the products from the database.
             var products = from p in _context.Items select p;
             products = products.Where(o => o.gender == "female");

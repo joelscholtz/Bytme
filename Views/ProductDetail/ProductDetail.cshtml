@@ -1,0 +1,210 @@
+﻿@model bytme.Models.Item
+@{
+    ViewData["Title"] = "ProductDetail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    body {
+        background: #fff;
+        font-family: "Open Sans";
+        font-weight: 300;
+    }
+
+    h1.product-page {
+        font-weight: 800;
+        margin: 0 0 20px;
+        padding: 0;
+        font-size: 26px;
+        color: #8f6b93;
+    }
+
+    h2.product-page {
+        font-weight: 800;
+        margin: 0 0 20px;
+        padding: 0;
+        font-size: 18px;
+        color: #1bb0ce;
+    }
+
+    p {
+        margin: 0 0 20px;
+        padding: 0;
+    }
+
+        p.product-info-meta {
+            margin: 0;
+        }
+
+        p.product-body {
+            font-size: 12px;
+            line-height: 20px;
+            font-weight: 400;
+        }
+
+    .padding {
+        padding: 20px;
+    }
+
+    .product-container {
+        margin: 0 0 20px;
+    }
+
+    .product-left-container {
+        width: 542px;
+        float: left;
+    }
+
+    .product-col-container {
+        width: 360px;
+        padding: 20px;
+        min-height: 200px;
+        float: left;
+    }
+
+    .main-product-container .product-left-container {
+        background: #fff;
+        min-height: 440px;
+    }
+
+    .main-product-container .product-col-container {
+        background: #fafafa;
+        min-height: 440px;
+        border-bottom: 1px solid #ddd;
+        border-left: 1px solid #ddd;
+        border-right: 1px solid #ddd;
+        border-top: 1px solid #ddd;
+        width: 359px;
+    }
+
+    .quantity {
+        height: 40px;
+        line-height: 38px;
+        float: left;
+        border: 1px solid #ddd;
+        display: inline-block;
+        border-right: 0;
+        padding: 0 20px;
+        font-family: "Open Sans";
+        font-size: 14px;
+        font-weight: 400;
+    }
+
+    button {
+        display: inline-block;
+        border-left: 0;
+        margin: 0;
+        float: left;
+        height: 40px;
+        border: 1px solid #ddd;
+        padding: 0 20px;
+        font-family: "Open Sans";
+        font-size: 14px;
+        font-weight: 400;
+    }
+
+    .product-price {
+        border-top: 1px solid #ddd;
+        border-bottom: 1px solid #ddd;
+        padding: 10px;
+        background: #fff;
+    }
+
+    .product-price-meta {
+        font-size: 12px;
+        font-style: italic;
+        font-weight: 400;
+    }
+
+    .price {
+        color: #8f6b93;
+        font-weight: 800;
+    }
+
+    .old-price {
+        text-decoration: line-through;
+        font-weight: 400;
+        color: #888;
+        display: inline-block;
+        margin: 0 5px 0;
+    }
+
+    .wishlist > a {
+        font-size: 25px;
+        color: #8F6B93;
+    }  
+
+    .wishlist > a:hover {
+        color: rgba(143, 107, 147, .6);
+        text-decoration: none;
+    }
+
+    .wishlist {
+        text-align: end;
+    }
+
+    .heart:after {
+        font-family: "Glyphicons Halflings";
+        content: "\e143";
+        font-size: 25px;
+        text-align: end;
+    }
+
+    .container {
+
+    }
+</style>
+<html>
+<head>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,800" type="text/css">
+</head>
+<body>
+    <div class="container">
+        <div class="top-right">
+            <a href="javascript:void(0);" onclick="history.go(-1);" style="color:#8f6b93; text-align: right;">← GO BACK</a>
+        </div>
+        <hr />
+        <div class="product-container main-product-container">
+            <div class="product-left-container">
+                <img style="width:400px;" src="@Html.DisplayFor(o => o.photo_url)" />
+            </div>
+
+            <div class="product-col-container">
+                <p class="product-info-meta">Product</p>
+                <h1 class="product-page">@Html.DisplayFor(o => o.description)</h1>
+                <p>
+                    <b>@Html.DisplayFor(o => o.long_description)</b><br />
+                    All products sold on our website are genuine. We only trade with reputable manufacturers who provide the highest quality of products. We do not sell fake, counterfeit, or replica goods.
+                </p>
+
+                <p class="product-price">
+                    <b>Price:</b>
+                    <span class="price">&euro;@Html.DisplayFor(o => o.price)</span>
+
+                    <span class="product-price-meta" style="float:right;">
+                        Free returns
+                    </span>
+                </p>
+
+                <p>
+                    <span class="quantity">Stock: @Html.DisplayFor(o => o.quantity)</span>
+                    <button onclick="@("window.location.href=' " + Url.Action("SaveItemInShoppingCart", "ShoppingCart", new { item_id = Model.id}) + " ' ");">Add to cart</button>
+                </p>
+
+                <p>
+                    <div class="wishlist">
+                        @Html.ActionLink("", "AddToWishList", "WishList", routeValues: new
+                        {
+                            itm_id = Model.id
+                        },
+                        htmlAttributes: new { @class = "heart" })
+                    </div>
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
+</html>

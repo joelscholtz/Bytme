@@ -387,9 +387,7 @@
 
                 <div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box" id="page_page_@i _@ie" style="width:33%">
                     <div class="thumbnail">
-                        <a href="#"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;" /></a>
-                        @if (SignInManager.IsSignedIn(User))
-                        {
+                        <a onclick="@("window.location.href=' " + Url.Action("ProductDetail", "ProductDetail", new { id = item.id}) + " ' ");"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;cursor:pointer;" /></a>
                             <div class="wishlist">
                                 @Html.ActionLink("", "AddToWishList", "WishList", routeValues: new
                                 {
@@ -397,7 +395,6 @@
                                 },
                                 htmlAttributes: new { @class = "heart" })
                             </div>
-                        }
 
                         <div class="desc_box">
                             <p>&euro;@item.price</p>
@@ -429,8 +426,6 @@
                 <div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box" id="page_@i _@ie" style="display:none;width:33%">
                     <div class="thumbnail">
                         <a href="#"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;" /></a>
-                        @if (SignInManager.IsSignedIn(User))
-                        {
                             <div class="wishlist">
                                 @Html.ActionLink("", "AddToWishList", "WishList", routeValues: new
                                 {
@@ -438,7 +433,7 @@
                                 },
                                 htmlAttributes: new { @class = "heart" })
                             </div>
-                        }
+                        
                         <div class="desc_box">
                             <p>&euro;@item.price</p>
                             <p class="description">@item.description</p>
@@ -470,19 +465,13 @@
                     var page = document.getElementById(iddef);
                     if (page != null) { page.style.display = "block"; }
                 }
-
                 if (pagecurr > @ViewBag.PageCount) { document.getElementById("loadmore").style.display = "none"; document.getElementById("notinMore").style.display = "block"; }
                 pagecurr = pagecurr + 1;
-
             }
     </script>
     <button id="loadmore" type="button" class="btn" onclick="LoadMore()" style="margin-left:0%; width:100%" value="1">Load more products..</button>
-
-
 </div>
 <br />
-
-
 <h4 id="notinMore" style="display:none; margin-left:0%; width:100%; text-align:center"> there are no more products of this type..</h4>
 
 
