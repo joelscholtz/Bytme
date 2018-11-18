@@ -31,7 +31,7 @@
     {
         <div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box">
             <div class="thumbnail" style="text-align:center;">
-                <a href="#"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;" /></a>
+                <a onclick="@("window.location.href=' " + Url.Action("ProductDetail", "ProductDetail", new { id = item.item_id}) + " ' ");"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;cursor:pointer;" /></a>
                 <div class="desc_box">
                     <p>&euro;@item.price</p>
                     <p class="description">@item.description</p>
