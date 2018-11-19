@@ -41,8 +41,8 @@
     }
 
     .login-card {
-        padding: 40px;
-        width: 274px;
+        padding: 30px;
+        width: 395px;
         background-color: #F7F7F7;
         margin: 0 auto 10px;
         border-radius: 2px;
@@ -79,10 +79,9 @@
             opacity: 1;
         }
 
-    .login-help {
-        width: 100%;
-        text-align: center;
-        font-size: 12px;
+    .login-card h1 {
+        margin-top:2px;
+        margin-bottom:-5px;
     }
 
     .password, .email {
@@ -99,57 +98,89 @@
         box-sizing: border-box;
         -moz-box-sizing: border-box;
     }
+
+    .validation-summary-errors ul {
+        list-style: none;
+        margin-left: -40px
+    }
+
+    input {
+        outline: none;
+    }
+
+    input:focus {
+        background-color: #fff;
+        border-color: #B388B8;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.100), 0 0 8px rgba(143, 107, 147, .6);
+        -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,.100), 0 0 8px rgba(143, 107, 147, .6);
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.100), 0 0 8px rgba(143, 107, 147, .6);
+    }
+
+    .form-group {
+        margin-bottom: 2px;
+        margin-right: -20px;
+    }
+
+
 </style>
 <!--https://codepen.io/Mongeed/pen/IuBLt-->
 <div class="login-card">
     <h1>Register</h1><br>
-    <section>
         <form method="post">
-            <div class="form-group">
-                <input asp-for="Input.Email" class="email" placeholder="Email" />
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            <div asp-validation-summary="All" class="text-danger" style="list-style-type: none;"></div>
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <input asp-for="Input.Email" class="email" placeholder="Email" />
+                </div>
             </div>
-            <div class="form-group">
-                <input asp-for="Input.Password" class="password" placeholder="Password" />
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <input asp-for="Input.Password" class="password" placeholder="Password" />
+                </div>
             </div>
-            <div class="form-group">
-                <input asp-for="Input.ConfirmPassword" class="password" placeholder="Confirm password" />
-                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <input asp-for="Input.ConfirmPassword" class="password" placeholder="Confirm password" />
+                </div>
             </div>
-            <div class="form-group">
-                <input asp-for="Input.name" class="password" placeholder="Name" />
-                <span asp-validation-for="Input.name" class="text-danger"></span>
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <input asp-for="Input.name" class="password" placeholder="Name" />
+                </div>
             </div>
-            <div class="form-group">
-                <input asp-for="Input.surname" class="password" placeholder="Surname" />
-                <span asp-validation-for="Input.surname" class="text-danger"></span>
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <input asp-for="Input.surname" class="password" placeholder="Surname" />
+                </div>
             </div>
-            <div class="form-group">
-                <input asp-for="Input.street" class="password" placeholder="Street" />
-                <span asp-validation-for="Input.street" class="text-danger"></span>
+            <div class="col-xs-8">
+                <div class="form-group">
+                    <input asp-for="Input.street" class="password" placeholder="Street" />
+                </div>
             </div>
-            <div class="form-group">
-                <input asp-for="Input.streetnumber" class="password" placeholder="House number" />
-                <span asp-validation-for="Input.streetnumber" class="text-danger"></span>
+            <div class="col-xs-4">
+                <div class="form-group">
+                    <input asp-for="Input.streetnumber" class="password" placeholder="Number" />
+                </div>
             </div>
-            <div class="form-group">
-                <input asp-for="Input.zipcode" class="password" placeholder="Zip code" />
-                <span asp-validation-for="Input.zipcode" class="text-danger"></span>
+            <div class="col-xs-4">
+                <div class="form-group">
+                    <input asp-for="Input.zipcode" class="password" placeholder="Zip code" />
+                </div>
             </div>
-            <div class="form-group">
-                <input asp-for="Input.city" class="password" placeholder="City" />
-                <span asp-validation-for="Input.city" class="text-danger"></span>
+            <div class="col-xs-8">
+                <div class="form-group">
+                    <input asp-for="Input.city" class="password" placeholder="City" />
+                </div>
             </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-default">Register</button>
+            <div class="col-xs-12">
+                    <button type="submit" class="btn btn-default">Register</button>
             </div>
-        </form>
-        <p>
-            <a asp-page="./Login"> Already have an account</a>
-        </p>
-        <p>
-            <a asp-page="./ResendVerification">Resend Verification</a>
-        </p>        
-    </section>
+            <div class="col-xs-12">
+                <a asp-page="./Login">Already have an account?</a>
+                </div>
+            <div class="col-xs-12">
+                <a asp-page="./ResendVerification">Resend verification email</a>
+            </div>
+        </form>  
 </div>

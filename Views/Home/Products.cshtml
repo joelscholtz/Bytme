@@ -86,7 +86,8 @@
         margin-top: -40px;
     }
 
-        .sortBy > .form-control:focus {
+        .sortBy > .form-control:focus, {
+            outline: none;
             border-color: #C7B5C9;
             -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.100), 0 0 8px rgba(143, 107, 147, .6);
             box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(143, 107, 147, .6);
@@ -168,6 +169,18 @@
             color: #8F6B93;
             text-decoration: none;
         }
+
+    input, .form-control {
+        outline: none !important;
+    }
+
+        input:focus, .form-control:focus {
+            background-color: #fff;
+            border-color: #B388B8;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.100), 0 0 8px rgba(143, 107, 147, .6);
+            -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,.100), 0 0 8px rgba(143, 107, 147, .6);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.100), 0 0 8px rgba(143, 107, 147, .6);
+        }
 </style>
 <script>
     function validate(evt) {
@@ -244,8 +257,8 @@
                                 <span></span>
                                 @if (ViewBag.Gender == null)
                                 {
-                                    <input class="btn-light" type="submit" name="gender" value="Women" />
-                                    <input class="btn-light" type="submit" name="gender" value="Men" />
+                                    <input class="btn btn-light" type="submit" name="gender" value="Women" />
+                                    <input class="btn btn-light" type="submit" name="gender" value="Men" />
                                     <br />
                                 }
                                 @if (ViewBag.Gender == "Men")
@@ -364,7 +377,7 @@
                                     }
                                 }
                             </script>
-                            <div>
+                            <div class="price">
                                 <h4 data-toggle="collapse" data-target="#group-4">Price</h4>
                                 <div id="group-4" class="list-group collapse in">
                                     <div class="form-group">
@@ -378,7 +391,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <input type="submit" class="btn btn-success" style="background-color: #5cb85c; border-color: #4cae4c; width:40%" value="Apply Filters" />
+                            <input type="submit" class="btn btn-default" style="background-color: #fff; border-color: #8F6B93; width:40%" value="Apply Filters" />
                         </div>
                         <hr />
                         <br />
