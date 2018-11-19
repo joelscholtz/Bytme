@@ -358,25 +358,28 @@
                         <div class="desc_box">
                             <p>&euro;@item.price</p>
                             <p class="description">@item.description</p>
-                            <div class="wishlist">
-                                @Html.ActionLink("", "AddToWishList", "WishList", routeValues: new
-                                {
-                                    itm_id = item.id
-                                },
-                                htmlAttributes: new { @class = "heart" })
-                            </div>
-                            <p class="desc">@item.long_description</p>
-                            <div class="shoppingcart">
-                                @if (item.quantity != 0)
-                                {
-                                    @Html.ActionLink("ADD ", "SaveItemInShoppingCart", "ShoppingCart", routeValues: new
+                            @if (SignInManager.IsSignedIn(User))
+                            {
+                                <div class="wishlist">
+                                    @Html.ActionLink("", "AddToWishList", "WishList", routeValues: new
                                {
-                                   item_id = item.id
+                                   itm_id = item.id
                                },
-                                    htmlAttributes: new { @class = "shop" })
-                                }
+                                     htmlAttributes: new { @class = "heart" })
+                                </div>
+                            }
+                                <p class="desc">@item.long_description</p>
+                                <div class="shoppingcart">
+                                    @if (item.quantity != 0)
+                                    {
+                                        @Html.ActionLink("ADD ", "SaveItemInShoppingCart", "ShoppingCart", routeValues: new
+                                   {
+                                       item_id = item.id
+                                   },
+                                        htmlAttributes: new { @class = "shop" })
+                                    }
+                                </div>
                             </div>
-                        </div>
                     </div>
                 </div>
             }
@@ -393,25 +396,28 @@
                         <div class="desc_box">
                             <p>&euro;@item.price</p>
                             <p class="description">@item.description</p>
-                            <div class="wishlist">
-                                @Html.ActionLink("", "AddToWishList", "WishList", routeValues: new
-                                {
-                                    itm_id = item.id
-                                },
-                                htmlAttributes: new { @class = "heart" })
-                            </div>
-                            <p class="desc">@item.long_description</p>
-                            <div class="shoppingcart">
-                                @if (item.quantity != 0)
-                                {
-                                    @Html.ActionLink("ADD ", "SaveItemInShoppingCart", "ShoppingCart", routeValues: new
+                            @if (SignInManager.IsSignedIn(User))
+                            {
+                                <div class="wishlist">
+                                    @Html.ActionLink("", "AddToWishList", "WishList", routeValues: new
                                {
-                                   item_id = item.id
+                                   itm_id = item.id
                                },
-                                    htmlAttributes: new { @class = "shop" })
-                                }
+                                     htmlAttributes: new { @class = "heart" })
+                                </div>
+                            }
+                                <p class="desc">@item.long_description</p>
+                                <div class="shoppingcart">
+                                    @if (item.quantity != 0)
+                                    {
+                                        @Html.ActionLink("ADD ", "SaveItemInShoppingCart", "ShoppingCart", routeValues: new
+                                   {
+                                       item_id = item.id
+                                   },
+                                        htmlAttributes: new { @class = "shop" })
+                                    }
+                                </div>
                             </div>
-                        </div>
                     </div>
                 </div>
             }
