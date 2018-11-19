@@ -2,12 +2,29 @@
 
 @inject SignInManager<UserModel> SignInManager
 @inject UserManager<UserModel> UserManager
+
 @using bytme.Models;
 
 <!DOCTYPE html>
 <html>
 <head>
     <style>
+        #ex4 .p1[data-count]:after {
+            position: absolute;
+            right: 10%;
+            top: 8%;
+            content: attr(data-count);
+            font-size: 80%;
+            padding: .2em;
+            border-radius: 50%;
+            line-height: 1em;
+            color: white;
+            background: rgba(255,0,0,.85);
+            text-align: center;
+            min-width: 1em;
+            //font-weight:bold;
+        }
+
         body {
             overflow-x: hidden;
         }
@@ -48,7 +65,7 @@
             -moz-transition: all .5s;
             transition: all .5s;
             margin-left: 300px;
-            margin-top:-5px;
+            margin-top: -5px;
         }
 
             .searchbox:focus {
@@ -102,26 +119,25 @@
                 margin-top: 7px;
             }
 
-            .navbar .navbar-nav {
-                display: inline-block;
-                float: none;
-                vertical-align: top;
-            }
+        .navbar .navbar-nav {
+            display: inline-block;
+            float: none;
+            vertical-align: top;
+        }
 
-            .navbar{
-                text-align: center;
-            }
+        .navbar {
+            text-align: center;
+        }
 
         .sayos-header {
             display: block;
             height: 0px;
             margin: 0 auto;
             width: 110px;
-            margin-right:48%;
+            margin-right: 48%;
         }
-
-
     </style>
+
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" type="image/x-icon" href="~/images/sayos_icon_head.png" />
@@ -154,40 +170,39 @@
             <div class="navbar" style="background-color: #B388B8; margin-top:-65px; ">
                 <p style="position:relative;top:22px; text-align:center; color:#F3F3F3;">Orders above &euro;100,- have FREE DELIVERY!</p>
             </div>
-                <div class="navbar">
-                    <div class="navbar-left" style="margin-top:10px; margin-left:15px;">
-                        @using (Html.BeginForm("Products", "Home", FormMethod.Get))
-                        {
-                            <ul class="nav navbar-nav">
-                                <li><input class="searchbox" placeholder="Search.." type=@Html.TextBox("SearchString")</li>
-                            </ul>
-                        }
-                    </div>
-                    <div>
-                        <a href="/" class="sayos-header">
-                            <img style="width:150px" src="~/images/sayos_new.png" alt="Sayos">
-                        </a>
-                    </div>
-                    @if (SignInManager.IsSignedIn(User))
+            <div class="navbar">
+                <div class="navbar-left" style="margin-top:10px; margin-left:15px;">
+                    @using (Html.BeginForm("Products", "Home", FormMethod.Get))
                     {
-                        <div class="navbar-right">
-                            <ul class="nav navbar-nav" style="margin-left: -700px;">
-                                <li><a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><span style="color:black;" class="glyphicon glyphicon-user"></span></a></li>
-                                <li><a asp-controller="Wishlist" asp-action="Index"><span style="color:black;" class="glyphicon glyphicon-heart-empty"></span></a></li>
-                                <li><a asp-area="" asp-controller="ShoppingCart" asp-action="Index"><span style="color:black;" class="glyphicon glyphicon-shopping-cart"></span></a></li>
-                            </ul>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="navbar-right">
-                            <ul class="nav navbar-nav" style="margin-left: -700px;">
-                                <li><a asp-controller="Wishlist" asp-action="Index"><span style="color:black;" class="glyphicon glyphicon-heart-empty"></span></a></li>
-                                <li><a asp-area="" asp-controller="ShoppingCart" asp-action="Index"><span style="color:black;" class="glyphicon glyphicon-shopping-cart"></span></a></li>
-                            </ul>
-                        </div>
+                        <ul class="nav navbar-nav">
+                            <li><input class="searchbox" placeholder="Search.." type=@Html.TextBox("SearchString")</li>
+                        </ul>
                     }
                 </div>
+                <div>
+                    <a href="/" class="sayos-header">
+                        <img style="width:150px" src="~/images/sayos_new.png" alt="Sayos">
+                    </a>
+                </div>
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <div class="navbar-right">
+                        <ul class="nav navbar-nav" style="margin-left: -700px;">
+                            <li><a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><span style="color:black;" class="glyphicon glyphicon-user"></span></a></li>
+                            <li><a asp-controller="Wishlist" asp-action="Index"><span style="color:black;" class="glyphicon glyphicon-heart-empty"></span></a></li>
+                            <li><a asp-area="" asp-controller="ShoppingCart" asp-action="Index"><span style="color:black;" class="glyphicon glyphicon-shopping-cart"></span></a></li>
+                        </ul>
+                    </div>
+                }
+                else
+                {
+                    <div class="navbar-right" id="ex4">
+                        <ul class="nav navbar-nav" style="margin-left: -700px;">
+                                <li class="p1 fa-stack fa-2x has-badge" data-count="5"><a asp-area="" asp-controller="ShoppingCart" asp-action="Index"><span style="color:black;" class="glyphicon glyphicon-shopping-cart"></span></a></li>
+                        </ul>
+                    </div>
+                }
+            </div>
                 <div class="navbar" style="background-color:#F3F3F3;">
                     <ul class="nav navbar-nav">
                         <li><a asp-area="" asp-controller="Home" asp-action="Women" style="color:#000;">Women</a></li>
@@ -196,7 +211,7 @@
                     <partial name="_LoginPartial"/>
                 </div>
             </div>
-        </nav>
+    </nav>
     </div>
 
     <div class="container body-content">

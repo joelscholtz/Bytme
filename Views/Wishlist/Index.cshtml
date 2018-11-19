@@ -25,26 +25,33 @@
 </style>
 <h2 style="text-align:center;">Favorites List</h2>
 <hr />
-@if (ViewBag.model_for_view != null)
+@if (User.Identity.IsAuthenticated)
 {
-    @foreach (var item in Model)
+    @if (ViewBag.model_for_view != null)
     {
-        <div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box">
-            <div class="thumbnail" style="text-align:center;">
-                <a onclick="@("window.location.href=' " + Url.Action("ProductDetail", "ProductDetail", new { id = item.item_id}) + " ' ");"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;cursor:pointer;" /></a>
-                <div class="desc_box">
-                    <p>&euro;@item.price</p>
-                    <p class="description">@item.description</p>
-                    <p class="desc">@item.long_description</p>
-                    <a class="btn btn-default" href='@Url.Action("SaveItemInShoppingCart", "ShoppingCart", new { item_id = item.item_id })'><span class="glyphicon glyphicon-shopping-cart"></span></a>
-                    <a class="btn btn-danger" href='@Url.Action("RemoveFromWishList", "WishList", new { ordline_id = item.ordline_id })'>X</a>
-                    @ViewBag.ErrorMessage
+        @foreach (var item in Model)
+        {
+            <div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box">
+                <div class="thumbnail" style="text-align:center;">
+                    <a onclick="@("window.location.href=' " + Url.Action("ProductDetail", "ProductDetail", new { id = item.item_id }) + " ' ");"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;cursor:pointer;" /></a>
+                    <div class="desc_box">
+                        <p>&euro;@item.price</p>
+                        <p class="description">@item.description</p>
+                        <p class="desc">@item.long_description</p>
+                        <a class="btn btn-default" href='@Url.Action("SaveItemInShoppingCart", "ShoppingCart", new { item_id = item.item_id })'><span class="glyphicon glyphicon-shopping-cart"></span></a>
+                        <a class="btn btn-danger" href='@Url.Action("RemoveFromWishList", "WishList", new { ordline_id = item.ordline_id })'>X</a>
+                        @ViewBag.ErrorMessage
+                    </div>
                 </div>
             </div>
-        </div>
+        }
+    }
+    else
+    {
+        <h4 style="color: rgba(158, 1, 1, 0.9);">Your favorites list is empty.</h4>
     }
 }
 else
 {
-    <h4 style="color: rgba(158, 1, 1, 0.9);">Your favorites list is empty.</h4>
+    <h1><b><center>Create a account first!</center></b></h1>
 }

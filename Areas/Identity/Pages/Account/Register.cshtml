@@ -130,47 +130,65 @@
             <div asp-validation-summary="All" class="text-danger" style="list-style-type: none;"></div>
             <div class="col-xs-12">
                 <div class="form-group">
-                    <input asp-for="Input.Email" class="email" placeholder="Email" />
+                    <label asp-for="Input.Email"></label>
+                    <input asp-for="Input.Email" class="email" />
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-xs-6">
                 <div class="form-group">
-                    <input asp-for="Input.Password" class="password" placeholder="Password" />
+                    <label asp-for="Input.Password"></label>
+                    <input asp-for="Input.Password" class="password" oninput="checkPassStrength(this.value)" pattern="^(?=.\d)(?=.[a-z])(?=.*[A-Z]).$" title="please insert at least 8 characters, from which at least 1 has to be upper case, one lower case, one number and a non-alphanumeric character" />
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-xs-6">
                 <div class="form-group">
-                    <input asp-for="Input.ConfirmPassword" class="password" placeholder="Confirm password" />
+                    <label asp-for="Input.ConfirmPassword"></label>
+                    <input asp-for="Input.ConfirmPassword" class="password" />
+                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-xs-6">
                 <div class="form-group">
-                    <input asp-for="Input.name" class="password" placeholder="Name" />
+                    <label asp-for="Input.name"></label>
+                    <input asp-for="Input.name" class="password" />
+                    <span asp-validation-for="Input.name" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-xs-6">
                 <div class="form-group">
-                    <input asp-for="Input.surname" class="password" placeholder="Surname" />
+                    <label asp-for="Input.surname"></label>
+                    <input asp-for="Input.surname" class="password" />
+                    <span asp-validation-for="Input.surname" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-xs-8">
                 <div class="form-group">
-                    <input asp-for="Input.street" class="password" placeholder="Street" />
+                    <label asp-for="Input.street"></label>
+                    <input asp-for="Input.street" class="password" />
+                    <span asp-validation-for="Input.street" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-xs-4">
                 <div class="form-group">
-                    <input asp-for="Input.streetnumber" class="password" placeholder="Number" />
+                    <label asp-for="Input.streetnumber"></label>
+                    <input asp-for="Input.streetnumber" class="password" />
+                    <span asp-validation-for="Input.streetnumber" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-xs-4">
                 <div class="form-group">
-                    <input asp-for="Input.zipcode" class="password" placeholder="Zip code" />
+                    <label asp-for="Input.zipcode"></label>
+                    <input asp-for="Input.zipcode" class="password" />
+                    <span asp-validation-for="Input.zipcode" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-xs-8">
                 <div class="form-group">
-                    <input asp-for="Input.city" class="password" placeholder="City" />
+                    <label asp-for="Input.city"></label>
+                    <input asp-for="Input.city" class="password" />
+                    <span asp-validation-for="Input.city" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-xs-12">

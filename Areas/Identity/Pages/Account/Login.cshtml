@@ -127,10 +127,14 @@
     <form method="post">
         <div asp-validation-summary="All" class="text-danger" style="margin-left:-40px;"></div>
         <div class="form-group">
-            <input asp-for="Input.Email" class="email" placeholder="Email" />
+            <label asp-for="Input.Email"></label>
+            <input asp-for="Input.Email" class="email" />
+            <span asp-validation-for="Input.Email" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <input asp-for="Input.Password" class="password" placeholder="Password" />
+            <label asp-for="Input.Password"></label>
+            <input asp-for="Input.Password" class="password" />
+            <span asp-validation-for="Input.Password" class="text-danger"></span>
         </div>
         <div class="form-group">
             <div class="checkbox">

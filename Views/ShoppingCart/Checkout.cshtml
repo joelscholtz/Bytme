@@ -37,12 +37,12 @@
             </div>
         </div>
     }
-    @if (!User.Identity.IsAuthenticated)
+    else
     {
         <h1><b><center>This feature is not yet built in. Please register. Our sincere apologies.</center></b></h1>
     }
 }
-@if (ViewBag.count == 0)
+else
 {
     <h1><b><center>Put something in your shoppingcart first!</center></b></h1>
 }
