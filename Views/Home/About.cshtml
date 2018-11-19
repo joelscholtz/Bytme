@@ -8,14 +8,8 @@
 @inject SignInManager<UserModel> SignInManager
 @inject UserManager<UserModel> UserManager
 
-@if (SignInManager.IsSignedIn(User))
-{
-    <h2 style="text-align:center;">Hello @UserManager.GetUserName(User), how can we help you?</h2>
-}
-else
-{
-    <h2 style="text-align:center;">Hello, how can we help you?</h2>
-}
+    <h2 style="text-align:center;">Hello fellow human, how can we help you?</h2>
+
 
 <hr />
 
