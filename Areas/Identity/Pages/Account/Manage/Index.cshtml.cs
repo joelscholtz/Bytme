@@ -55,9 +55,6 @@ namespace bytme.Areas.Identity.Pages.Account.Manage
             [RegularExpression(@"^[a-zA-Z ]+$", ErrorMessage = "A surname can only contain letters.")]
             [StringLength(100, ErrorMessage = "Invalid input. Maximum is 100 characters.")]
             public string surname { get; set; }
-            //[Phone]
-            //[Display(Name = "Phone number")]
-            //public string PhoneNumber { get; set; }
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -101,16 +98,6 @@ namespace bytme.Areas.Identity.Pages.Account.Manage
             {
                 user.surname = Input.surname;
             }
-            //var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-            //if (Input.PhoneNumber != phoneNumber)
-            //{
-            //    var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
-            //   if (!setPhoneResult.Succeeded)
-            //    {
-            //        var userId = await _userManager.GetUserIdAsync(user);
-            //        throw new InvalidOperationException($"Unexpected error occurred setting phone number for user with ID '{userId}'.");
-            //    }
-            //}
 
             var result = await _userManager.UpdateAsync(user);
             await _signInManager.RefreshSignInAsync(user);

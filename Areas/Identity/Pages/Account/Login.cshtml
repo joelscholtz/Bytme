@@ -1,6 +1,13 @@
 ﻿@page
 @model LoginModel
 
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<UserModel> SignInManager
+@inject UserManager<UserModel> UserManager
+
+@using bytme.Models;
+
 @{
     ViewData["Title"] = "Log in";
 }
@@ -122,34 +129,45 @@
 </style>
 
 <!--https://codepen.io/Mongeed/pen/IuBLt-->
-<div class="login-card">
-    <h1>Log-in</h1><br>
-    <form method="post">
-        <div asp-validation-summary="All" class="text-danger" style="margin-left:-40px;"></div>
-        <div class="form-group">
-            <label asp-for="Input.Email"></label>
-            <input asp-for="Input.Email" class="email" />
-            <span asp-validation-for="Input.Email" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Input.Password"></label>
-            <input asp-for="Input.Password" class="password" />
-            <span asp-validation-for="Input.Password" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <div class="checkbox">
-                <label asp-for="Input.RememberMe">
-                    <input asp-for="Input.RememberMe" />
-                    @Html.DisplayNameFor(m => m.Input.RememberMe)
-                </label>
+@if (!SignInManager.IsSignedIn(User))
+{
+    <div class="login-card">
+        <h1>Log-in</h1><br>
+        <form method="post">
+            <div asp-validation-summary="All" class="text-danger" style="margin-left:-40px;"></div>
+            <div class="form-group">
+                <label asp-for="Input.Email"></label>
+                <input asp-for="Input.Email" class="email" />
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
-        </div>
-        <div class="form-group">
-            <button type="submit" class="btn btn-default">Log in</button>
-        </div>
-        <a asp-page="./ForgotPassword">Forgot your password?</a>
-        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
-        <a asp-page="./ResendVerification">Resend verification email</a>
-    </form>
+            <div class="form-group">
+                <label asp-for="Input.Password"></label>
+                <input asp-for="Input.Password" class="password" />
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label asp-for="Input.RememberMe">
+                        <input asp-for="Input.RememberMe" />
+                        @Html.DisplayNameFor(m => m.Input.RememberMe)
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-default">Log in</button>
+            </div>
+            <a asp-page="./ForgotPassword">Forgot your password?</a>
+            <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+            <a asp-page="./ResendVerification">Resend verification email</a>
+        </form>
 
-</div>
+    </div>
+}
+else
+{
+    <h3>You are already logged-in..</h3>
+    <h4>You will be redirected to the home page, or <a href="/" style="text-decoration:none;color:#8f6b93;">click</a> here to go back to the home page.</h4>
+    <script>
+        window.setTimeout(function () { window.location.replace('/'); }, 4000);
+    </script>
+}
