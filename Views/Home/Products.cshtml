@@ -211,6 +211,42 @@
             CheckboxData: $('#checkbox').is(':checked')
         };
 </script>
+<script>
+        function AddToWishList(item_id) {
+            
+        $.ajax({
+            type: "POST",
+            data: {
+                itm_id: item_id
+            },
+            url: "/WishList/AddToWishList",
+            success: function (data) {
+                $('#modelWindowWish').modal('show');
+            },
+            error: function () {
+                return "error";
+            }
+        });
+    }
+</script>
+<script>
+        function AddToCart(itm_id) {
+
+            $.ajax({
+                type: "POST",
+                data: {
+                    item_id: itm_id
+                },
+                url: "/ShoppingCart/SaveItemInShoppingCart",
+                success: function (data) {
+                    $('#modelWindowShop').modal('show');
+                },
+                error: function () {
+                    return "error";
+                }
+            });
+        }
+</script>
 @if (!String.IsNullOrEmpty(ViewBag.Message))
 {
     <div class="row text-center">
@@ -220,284 +256,333 @@
 
     </div>
 
-        <div class="container">
-            <form asp-action="Products" id="products" name="products">
+    <div class="container">
+        <form asp-action="Products" id="products" name="products">
 
-                <script>
-                    var form = document.getElementById("products");
-                    function executeform66() {
-                        form.submit()
-                    }
-                </script>
-                <div class="pull-left">
-                    @if (ViewBag.Gender == null)
-                    {
-                        <a href="/" style="color:#8f6b93;text-decoration:none;margin-bottom:-50px;">Home</a><span> > a </span>
-                    }
-                    @if (ViewBag.Gender != null)
-                    {
-                        <a asp-action="Products" asp-route-searchString="@ViewBag.Message" style="color:#8f6b93;text-decoration:none;margin-bottom:-50px;">Home > a </a><span> > @ViewBag.Gender</span>
-                    }
-                </div>
-                <select class="form-control pull-right" form="products" id="sortBy" name="sortBy" style="width:20%; height:40px; margin-right:2%" onchange="executeform66()">
-                    <option value="" disabled selected hidden>@ViewBag.currentSort</option>
-                    <option value="Name A - Z">Name A - Z</option>
-                    <option value="Name Z- A">Name Z- A</option>
-                    <option value="Price Low - High">Price Low - High</option>
-                    <option value="Price High - Low">Price High - Low</option>
-                </select>
-                <input type="hidden" id="SelectIndex" name="currentSort" value="@ViewBag.currentSort" />
-                <br /><br /><br />
-                <div class="row" id="sidebar">
-                    <div class="col-lg-3">
-                        <input type="hidden" name="searchString" value="@ViewBag.Message" />
-                        <div class="form-group-lg row center-block" role="group">
-                            <h4 class="cat" data-toggle="collapse" data-target="#group-1">Categories</h4>
-                            <div id="group-1" class="list-group collapse in">
-                                <span></span>
-                                @if (ViewBag.Gender == null)
-                                {
-                                    <input class="btn btn-light" type="submit" name="gender" value="Women" />
-                                    <input class="btn btn-light" type="submit" name="gender" value="Men" />
-                                    <br />
-                                }
-                                @if (ViewBag.Gender == "Men")
-                                {
-                                    <input type="submit" name="category" class=" btn-light" value="All"><br />
-                                    <input type="submit" name="category" class=" btn-light" value="Shirts"><br />
-                                    <input type="submit" name="category" class=" btn-light" value="Blazer Jackets"><br />
-                                    <input type="submit" name="category" class=" btn-light" value="T-shirts"><br />
-                                    <input type="submit" name="category" class=" btn-light" value="Short Coats"><br />
-                                    <input type="submit" name="category" class=" btn-light" value="Suit Jackets"><br />
-                                    <input type="submit" name="category" class=" btn-light" value="Suit Pants"><br />
-                                    <input type="submit" name="category" class=" btn-light" value="Suits"><br />
-                                    <input type="submit" name="category" class=" btn-light" value="Waist Coats"><br />
-                                    <input type="submit" name="category" class=" btn-light" value="Briefcases"><br />
-                                    <input type="submit" name="category" class=" btn-light" value="Laptop Bags"><br />
-                                    <input type="hidden" name="gender" value="@ViewBag.Gender" />
-                                    <input type="hidden" name="currentCategory" value="@ViewBag.currentCategory" />
-                                }
-                                @if (ViewBag.Gender == "Women")
-                                {
-                                    <input type="submit" name="category" class="btn btn-light" value="All"><br />
-                                    <input type="submit" name="category" class="btn btn-light" value="Blazers"><br />
-                                    <input type="submit" name="category" class="btn btn-light" value="Blouses"><br />
-                                    <input type="submit" name="category" class="btn btn-light" value="Boots"><br />
-                                    <input type="submit" name="category" class="btn btn-light" value="Coats"><br />
-                                    <input type="submit" name="category" class="btn btn-light" value="Cardigans"><br />
-                                    <input type="submit" name="category" class="btn btn-light" value="Dresses"><br />
-                                    <input type="submit" name="category" class="btn btn-light" value="Heels"><br />
-                                    <input type="submit" name="category" class="btn btn-light" value="Jumpers"><br />
-                                    <input type="submit" name="category" class="btn btn-light" value="Skirts"><br />
-                                    <input type="submit" name="category" class="btn btn-light" value="Trousers"><br />
-                                    <input type="hidden" name="gender" value="@ViewBag.Gender" />
-                                    <input type="hidden" name="currentCategory" value="@ViewBag.currentCategory" />
-                                }
-                            </div>
-                            <hr />
-                            <div>
-                                <h4 data-toggle="collapse" data-target="#group-2">Brands</h4>
-                                <div id="group-2" class="list-group collapse in">
-                                    <div class="form-group" style="overflow:scroll; height:300px; color:#392C36; overflow-y: scroll;  overflow-x: hidden;">
-                                        <input type="hidden" name="currentBrands" value="@ViewBag.currentBrands" />
-                                        @foreach (var item in ViewBag.currentBrands)
+            <script>
+                var form = document.getElementById("products");
+                function executeform66() {
+                    form.submit()
+                }
+            </script>
+            <div class="pull-left">
+                @if (ViewBag.Gender == null)
+                {
+                    <a href="/" style="color:#8f6b93;text-decoration:none;margin-bottom:-50px;">Home</a><span> > a </span>
+                }
+                @if (ViewBag.Gender != null)
+                {
+                    <a asp-action="Products" asp-route-searchString="@ViewBag.Message" style="color:#8f6b93;text-decoration:none;margin-bottom:-50px;">Home > a </a><span> > @ViewBag.Gender</span>
+                }
+            </div>
+            <select class="form-control pull-right" form="products" id="sortBy" name="sortBy" style="width:20%; height:40px; margin-right:2%" onchange="executeform66()">
+                <option value="" disabled selected hidden>@ViewBag.currentSort</option>
+                <option value="Name A - Z">Name A - Z</option>
+                <option value="Name Z- A">Name Z- A</option>
+                <option value="Price Low - High">Price Low - High</option>
+                <option value="Price High - Low">Price High - Low</option>
+            </select>
+            <input type="hidden" id="SelectIndex" name="currentSort" value="@ViewBag.currentSort" />
+            <br /><br /><br />
+            <div class="row" id="sidebar">
+                <div class="col-lg-3">
+                    <input type="hidden" name="searchString" value="@ViewBag.Message" />
+                    <div class="form-group-lg row center-block" role="group">
+                        <h4 class="cat" data-toggle="collapse" data-target="#group-1">Categories</h4>
+                        <div id="group-1" class="list-group collapse in">
+                            <span></span>
+                            @if (ViewBag.Gender == null)
+                            {
+                                <input class="btn btn-light" type="submit" name="gender" value="Women" />
+                                <input class="btn btn-light" type="submit" name="gender" value="Men" />
+                                <br />
+                            }
+                            @if (ViewBag.Gender == "Men")
+                            {
+                                <input type="submit" name="category" class=" btn-light" value="All"><br />
+                                <input type="submit" name="category" class=" btn-light" value="Shirts"><br />
+                                <input type="submit" name="category" class=" btn-light" value="Blazer Jackets"><br />
+                                <input type="submit" name="category" class=" btn-light" value="T-shirts"><br />
+                                <input type="submit" name="category" class=" btn-light" value="Short Coats"><br />
+                                <input type="submit" name="category" class=" btn-light" value="Suit Jackets"><br />
+                                <input type="submit" name="category" class=" btn-light" value="Suit Pants"><br />
+                                <input type="submit" name="category" class=" btn-light" value="Suits"><br />
+                                <input type="submit" name="category" class=" btn-light" value="Waist Coats"><br />
+                                <input type="submit" name="category" class=" btn-light" value="Briefcases"><br />
+                                <input type="submit" name="category" class=" btn-light" value="Laptop Bags"><br />
+                                <input type="hidden" name="gender" value="@ViewBag.Gender" />
+                                <input type="hidden" name="currentCategory" value="@ViewBag.currentCategory" />
+                            }
+                            @if (ViewBag.Gender == "Women")
+                            {
+                                <input type="submit" name="category" class="btn btn-light" value="All"><br />
+                                <input type="submit" name="category" class="btn btn-light" value="Blazers"><br />
+                                <input type="submit" name="category" class="btn btn-light" value="Blouses"><br />
+                                <input type="submit" name="category" class="btn btn-light" value="Boots"><br />
+                                <input type="submit" name="category" class="btn btn-light" value="Coats"><br />
+                                <input type="submit" name="category" class="btn btn-light" value="Cardigans"><br />
+                                <input type="submit" name="category" class="btn btn-light" value="Dresses"><br />
+                                <input type="submit" name="category" class="btn btn-light" value="Heels"><br />
+                                <input type="submit" name="category" class="btn btn-light" value="Jumpers"><br />
+                                <input type="submit" name="category" class="btn btn-light" value="Skirts"><br />
+                                <input type="submit" name="category" class="btn btn-light" value="Trousers"><br />
+                                <input type="hidden" name="gender" value="@ViewBag.Gender" />
+                                <input type="hidden" name="currentCategory" value="@ViewBag.currentCategory" />
+                            }
+                        </div>
+                        <hr />
+                        <div>
+                            <h4 data-toggle="collapse" data-target="#group-2">Brands</h4>
+                            <div id="group-2" class="list-group collapse in">
+                                <div class="form-group" style="overflow:scroll; height:300px; color:#392C36; overflow-y: scroll;  overflow-x: hidden;">
+                                    <input type="hidden" name="currentBrands" value="@ViewBag.currentBrands" />
+                                    @foreach (var item in ViewBag.currentBrands)
+                                    {
+                                        if (brands.Count() != 0)
                                         {
-                                            if (brands.Count() != 0)
+                                            if (brands.Contains(item))
                                             {
-                                                if (brands.Contains(item))
-                                                {
-                                                    <input class="BrandCheck" type="checkbox" id="@item" name="BrandBox" value="@item" checked /><label for="@item" style="color:#392C36"> @item</label><br>
-                                                }
-                                                else
-                                                {
-                                                    <input class="BrandCheck" type="checkbox" id="@item" name="BrandBox" value="@item" /><label for="@item" style="color:#392C36"> @item</label><br>
-                                                }
+                                                <input class="BrandCheck" type="checkbox" id="@item" name="BrandBox" value="@item" checked /><label for="@item" style="color:#392C36"> @item</label><br>
                                             }
-                                            else if (brands.Count() == 0)
+                                            else
                                             {
                                                 <input class="BrandCheck" type="checkbox" id="@item" name="BrandBox" value="@item" /><label for="@item" style="color:#392C36"> @item</label><br>
                                             }
-
-
                                         }
-                                    </div>
+                                        else if (brands.Count() == 0)
+                                        {
+                                            <input class="BrandCheck" type="checkbox" id="@item" name="BrandBox" value="@item" /><label for="@item" style="color:#392C36"> @item</label><br>
+                                        }
+
+
+                                    }
                                 </div>
                             </div>
-                            <hr />
-                            <div>
-                                <h4 data-toggle="collapse" data-target="#group-3">Color</h4>
-                                <div id="group-3" class="list-group collapse in">
-                                    <div class="form-group" style="overflow:scroll; height:150px; color:#392C36; overflow-y: scroll;  overflow-x: hidden;">
-                                        @foreach (var color in ViewBag.ColorList)
+                        </div>
+                        <hr />
+                        <div>
+                            <h4 data-toggle="collapse" data-target="#group-3">Color</h4>
+                            <div id="group-3" class="list-group collapse in">
+                                <div class="form-group" style="overflow:scroll; height:150px; color:#392C36; overflow-y: scroll;  overflow-x: hidden;">
+                                    @foreach (var color in ViewBag.ColorList)
+                                    {
+                                        if (colors.Count() != 0)
                                         {
-                                            if (colors.Count() != 0)
+                                            @if (colors.Contains(color))
                                             {
-                                                @if (colors.Contains(color))
-                                                {
-                                                    <input class="BrandCheck" type="checkbox" id="@color" name="ColorBox" value="@color" checked /><label for="@color" style="color:#392C36"> @color</label><br>
-                                                }
-                                                else
-                                                {
-                                                    <input class="BrandCheck" type="checkbox" id="@color" name="ColorBox" value="@color" /><label for="@color" style="color:#392C36"> @color</label><br>
-                                                }
-
-
+                                                <input class="BrandCheck" type="checkbox" id="@color" name="ColorBox" value="@color" checked /><label for="@color" style="color:#392C36"> @color</label><br>
                                             }
-                                            else if (colors.Count() == 0)
+                                            else
                                             {
                                                 <input class="BrandCheck" type="checkbox" id="@color" name="ColorBox" value="@color" /><label for="@color" style="color:#392C36"> @color</label><br>
                                             }
+
+
                                         }
-                                    </div>
+                                        else if (colors.Count() == 0)
+                                        {
+                                            <input class="BrandCheck" type="checkbox" id="@color" name="ColorBox" value="@color" /><label for="@color" style="color:#392C36"> @color</label><br>
+                                        }
+                                    }
                                 </div>
                             </div>
-                            <hr />
-                            <script>
-                                function PriceChecker() {
-                                    if (document.getElementByName('maxPrice').value <= document.getElementsById('minPrice').value) {
-                                        var difference = document.getElementsById('minPrice').value - document.getElementsById('maxPrice').value + 1;
-                                        document.getElementsById('maxPrice').value = document.getElementsById('maxPrice').value - difference;
-                                    }
-
-                                }
-                                function validate(evt) {
-                                    var theEvent = evt || window.event;
-
-                                    if (theEvent.type === 'paste') {
-                                        key = event.clipboardData.getData('text/plain');
-                                    }
-                                    else {
-                                        var key = theEvent.keyCode || theEvent.which;
-                                        key = String.fromCharCode(key);
-                                    }
-                                    var regex = /[0-9]/;
-                                    if (!regex.test(key)) {
-                                        theEvent.returnValue = false;
-                                        if (theEvent.preventDefault) theEvent.preventDefault();
-                                    }
-                                }
-                            </script>
-                            <div class="price">
-                                <h4 data-toggle="collapse" data-target="#group-4">Price</h4>
-                                <div id="group-4" class="list-group collapse in">
-                                    <div class="form-group">
-                                        <label for="price-min">Minimum:</label>
-                                        <input class="form-control" type="number" onkeypress='validate(event)' oninput="PriceChecker()" name="minPrice" id="priceMinSlider" placeholder="8" min="0" max="1500" value="@ViewBag.miniPrice" required />
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="priceMaxSlider">Maximum:</label>
-                                        <input class="form-control" type="number" onkeypress='validate(event)' oninput="PriceChecker()" name="maxPrice" id="priceMaxSlider" placeholder="1500" min="0" max="1500" value="@ViewBag.maxiPrice" required>
-                                    </div>
-                                </div>
-                            </div>
-                            <input type="submit" class="btn btn-default" style="background-color: #fff; border-color: #8F6B93; width:40%" value="Apply Filters" />
                         </div>
                         <hr />
-                        <br />
-
-                    </div>
-
-
-                    <div class="col-lg-9">
-
-                        @foreach (var item in Model)
-                        {
-                            @if
-                          (ie++ < 21)
-                            {
-                                <div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box" id="page_@i _@ie" style="width:33%">
-                                    <div class="thumbnail">
-                                        <a onclick="@("window.location.href=' " + Url.Action("ProductDetail", "ProductDetail", new { id = item.id}) + " ' ");"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;cursor:pointer;" /></a>
-                                        <div class="desc_box">
-                                            <p>&euro;@item.price</p>
-                                            <p class="description">@item.description</p>
-                                            @if (SignInManager.IsSignedIn(User))
-                                            {
-                                                <div class="wishlist">
-                                                    @Html.ActionLink("", "AddToWishList", "WishList", routeValues: new
-                                               {
-                                                   itm_id = item.id
-                                               },
-                                                     htmlAttributes: new { @class = "heart" })
-                                                </div>
-                                            }
-                                                <p class="desc">@item.long_description</p>
-                                                <div class="shoppingcart">
-                                                    @if (item.quantity != 0)
-                                                    {
-                                                        @Html.ActionLink("ADD ", "SaveItemInShoppingCart", "ShoppingCart", routeValues: new
-                                                   {
-                                                       item_id = item.id
-                                                   },
-                                                        htmlAttributes: new { @class = "shop" })
-                                                    }
-                                                </div>
-                                            </div>
-                                    </div>
-                                </div>
-                            }
-                            else if (ie == 22) { i++; }
-
-                            if (ie <= 21 * i && ie >= 22)
-                            {
-                                <div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box" id="page_@i _@ie" style="display:none;width:33%">
-                                    <div class="thumbnail">
-                                        <a onclick="@("window.location.href=' " + Url.Action("ProductDetail", "ProductDetail", new { id = item.id}) + " ' ");"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;cursor:pointer;" /></a>
-                                        <div class="desc_box">
-                                            <p>&euro;@item.price</p>
-                                            <p class="description">@item.description</p>
-                                            @if (SignInManager.IsSignedIn(User))
-                                            {
-                                                <div class="wishlist">
-                                                    @Html.ActionLink("", "AddToWishList", "WishList", routeValues: new
-                                               {
-                                                   itm_id = item.id
-                                               },
-                                                     htmlAttributes: new { @class = "heart" })
-                                                </div>
-                                            }
-                                                <p class="desc">@item.long_description</p>
-                                                <div class="shoppingcart">
-                                                    @if (item.quantity != 0)
-                                                    {
-                                                        @Html.ActionLink("ADD ", "SaveItemInShoppingCart", "ShoppingCart", routeValues: new
-                                                   {
-                                                       item_id = item.id
-                                                   },
-                                                        htmlAttributes: new { @class = "shop" })
-                                                    }
-                                                </div>
-                                            </div>
-                                    </div>
-                                </div>
-                                if (ie == 21 * i) { i++; }
-                            }
-                        }
-
                         <script>
-                            var pagecurr = 2;
-                            function LoadMore() {
-                                document.getElementById('loadmore').innerHTML = "Loading...";
-                                for (l = (21 * (pagecurr - 1)) + 1; l < (21 * pagecurr) + 1; l++) {
-                                    var iddef = "page_" + pagecurr + " _" + l;
-                                    var page = document.getElementById(iddef);
-                                    if (page != null) { page.style.display = "block"; }
+                            function PriceChecker() {
+                                if (document.getElementByName('maxPrice').value <= document.getElementsById('minPrice').value) {
+                                    var difference = document.getElementsById('minPrice').value - document.getElementsById('maxPrice').value + 1;
+                                    document.getElementsById('maxPrice').value = document.getElementsById('maxPrice').value - difference;
                                 }
-                                document.getElementById('loadmore').innerHTML = "Load more products..";
-                                pagecurr = pagecurr + 1;
+
+                            }
+                            function validate(evt) {
+                                var theEvent = evt || window.event;
+
+                                if (theEvent.type === 'paste') {
+                                    key = event.clipboardData.getData('text/plain');
+                                }
+                                else {
+                                    var key = theEvent.keyCode || theEvent.which;
+                                    key = String.fromCharCode(key);
+                                }
+                                var regex = /[0-9]/;
+                                if (!regex.test(key)) {
+                                    theEvent.returnValue = false;
+                                    if (theEvent.preventDefault) theEvent.preventDefault();
+                                }
                             }
                         </script>
-                        <button id="loadmore" type="button" class="btn" onclick="LoadMore()" style="margin-left:0%; width:100%" value="1">Load more products..</button>
-                    </div>
+                        <div class="price">
+                            <h4 data-toggle="collapse" data-target="#group-4">Price</h4>
+                            <div id="group-4" class="list-group collapse in">
+                                <div class="form-group">
+                                    <label for="price-min">Minimum:</label>
+                                    <input class="form-control" type="number" onkeypress='validate(event)' oninput="PriceChecker()" name="minPrice" id="priceMinSlider" placeholder="8" min="0" max="1500" value="@ViewBag.miniPrice" required />
+                                </div>
 
+                                <div class="form-group">
+                                    <label for="priceMaxSlider">Maximum:</label>
+                                    <input class="form-control" type="number" onkeypress='validate(event)' oninput="PriceChecker()" name="maxPrice" id="priceMaxSlider" placeholder="1500" min="0" max="1500" value="@ViewBag.maxiPrice" required>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="submit" class="btn btn-default" style="background-color: #fff; border-color: #8F6B93; width:40%" value="Apply Filters" />
+                    </div>
+                    <hr />
+                    <br />
 
                 </div>
-            </form>
-        </div>
 
-        }
-        else
-        {
-        <h2 class="row text-center">There was nothing to be found here..</h2>
-        }
+
+                <div class="col-lg-9">
+
+                    @foreach (var item in Model)
+                    {
+                        @if(ie++ < 21)
+                        {
+                            <div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box" id="page_@i _@ie" style="width:33%">
+                                <div class="thumbnail">
+                                    <a onclick="@("window.location.href=' " + Url.Action("ProductDetail", "ProductDetail", new { id = item.id}) + " ' ");"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;cursor:pointer;" /></a>
+                                    <div class="desc_box">
+                                        <p>&euro;@item.price</p>
+                                        <p class="description">@item.description</p>
+                                        <p class="desc">@item.long_description</p>
+                                        @if (SignInManager.IsSignedIn(User))
+                                        {
+                                            <a onclick="AddToWishList(@item.id)" id="swap" class="btn btn-default">
+                                                <span style="color:#8F6B93;" class="glyphicon glyphicon-heart-empty"></span>
+                                            </a>
+                                            <!--Favorites list modal-->
+                                            <div class="modal fade" id="modelWindowWish" role="dialog">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                            <h4 style="text-align:center;" class="modal-title">Added to favorites list!</h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p style="text-align:center;">The product is added to your list!</p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <a class="btn btn-default pull-left" href="/Wishlist" role="button">Go to your favorites list</a>
+                                                            <button type="button" data-dismiss="modal" class="btn btn-default " style="background-color:#8F6B93;color:white;border:none;">Continue shopping</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                        <a onclick="AddToCart(@item.id)" class="btn btn-default">
+                                            <span style="color:#8F6B93;" class="glyphicon glyphicon-shopping-cart"></span>
+                                        </a>
+                                        <!--Shopping cart modal-->
+                                        <div class="modal fade" id="modelWindowShop" role="dialog">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                        <h4 style="text-align:center;" class="modal-title">Added to the shopping cart!</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p style="text-align:center;">The product is added to your shopping cart!</p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <a class="btn btn-default pull-left" href="/Shoppingcart" role="button">Go to your cart</a>
+                                                        <button type="button" data-dismiss="modal" class="btn btn-default " style="background-color:#8F6B93;color:white;border:none;">Continue shopping</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else if (ie == 22) { i++; }
+
+                        if (ie <= 21 * i && ie >= 22)
+                        {
+                            <div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box" id="page_@i _@ie" style="display:none;width:33%">
+                                <div class="thumbnail">
+                                    <a onclick="@("window.location.href=' " + Url.Action("ProductDetail", "ProductDetail", new { id = item.id}) + " ' ");"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;cursor:pointer;" /></a>
+                                    <div class="desc_box">
+                                        <p>&euro;@item.price</p>
+                                        <p class="description">@item.description</p>
+                                        <p class="desc">@item.long_description</p>
+                                        @if (SignInManager.IsSignedIn(User))
+                                        {
+                                            <a onclick="AddToWishList(@item.id)" id="swap" class="btn btn-default">
+                                                <span style="color:#8F6B93;" class="glyphicon glyphicon-heart-empty"></span>
+                                            </a>
+                                            <!--Favorites list modal-->
+                                            <div class="modal fade" id="modelWindowWish" role="dialog">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                            <h4 style="text-align:center;" class="modal-title">Added to favorites list!</h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p style="text-align:center;">The product is added to your list!</p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <a class="btn btn-default pull-left" href="/Wishlist" role="button">Go to your favorites list</a>
+                                                            <button type="button" data-dismiss="modal" class="btn btn-default " style="background-color:#8F6B93;color:white;border:none;">Continue shopping</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                        <a onclick="AddToCart(@item.id)" class="btn btn-default">
+                                            <span style="color:#8F6B93;" class="glyphicon glyphicon-shopping-cart"></span>
+                                        </a>
+                                        <!--Shopping cart modal-->
+                                        <div class="modal fade" id="modelWindowShop" role="dialog">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                        <h4 style="text-align:center;" class="modal-title">Added to the shopping cart!</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p style="text-align:center;">The product is added to your shopping cart!</p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <a class="btn btn-default pull-left" href="/Shoppingcart" role="button">Go to your cart</a>
+                                                        <button type="button" data-dismiss="modal" class="btn btn-default " style="background-color:#8F6B93;color:white;border:none;">Continue shopping</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            if (ie == 21 * i) { i++; }
+                        }
+                    }
+
+                    <script>
+                        var pagecurr = 2;
+                        function LoadMore() {
+                            document.getElementById('loadmore').innerHTML = "Loading...";
+                            for (l = (21 * (pagecurr - 1)) + 1; l < (21 * pagecurr) + 1; l++) {
+                                var iddef = "page_" + pagecurr + " _" + l;
+                                var page = document.getElementById(iddef);
+                                if (page != null) { page.style.display = "block"; }
+                            }
+                            document.getElementById('loadmore').innerHTML = "Load more products..";
+                            pagecurr = pagecurr + 1;
+                        }
+                    </script>
+                    <button id="loadmore" type="button" class="btn" onclick="LoadMore()" style="margin-left:0%; width:100%" value="1">Load more products..</button>
+                </div>
+
+
+            </div>
+        </form>
+    </div>
+
+}
+else
+{
+    <h2 class="row text-center">There was nothing to be found here..</h2>
+}
