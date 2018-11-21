@@ -176,6 +176,40 @@ namespace bytme.Controllers
             _context.SaveChanges();
         }
 
+        public ActionResult Confirmation(OrderMain m)
+        {
+            IQueryable<ShoppingCartModel> model = null;
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var result = _context.UserModels.Where(o => o.Id == userId).FirstOrDefault();
+            int order_id = CheckIfOrderExists();
+            if (order_id != 0)
+            {
+                model = from orderlines in _context.OrderLines
+                        join items in _context.Items on orderlines.item_id equals items.id
+                        join ordermains in _context.OrderMains on orderlines.order_id equals ordermains.id
+                        where orderlines.order_id == order_id
+                        orderby orderlines.id
+                        select new ShoppingCartModel
+                        {
+                            description = items.description,
+                            price = items.price,
+                            qty = orderlines.qty,
+                            orderline_id = orderlines.id,
+                            photo_url = items.photo_url,
+                            stock = items.quantity,
+                            size = items.size,
+                            long_description = items.long_description,
+                            item_id = items.id,
+                            order_id = order_id
+                        };
+
+                return View(model.ToList());
+            }
+            ViewBag.model_view = model;
+
+            return View();
+        }
+
         [HttpGet]
         public IActionResult Index()
         {
@@ -228,6 +262,7 @@ namespace bytme.Controllers
                 int count = CountItemsInShoppingCart(order_id);
                 ViewBag.count = count;
                 ViewBag.model_view = model;
+
 
                 return View(model.ToList());
             }

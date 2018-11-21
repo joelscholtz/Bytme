@@ -1,0 +1,13 @@
+﻿@model List<bytme.Models.ShoppingCartModel>
+@{
+    ViewData["Title"] = "Confirmation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Thanks for shopping at Sayos!</h2>
+
+<h3>Overview Order</h3>
+@foreach (var item in Model)
+{
+    <img src="@item.photo_url" style="width:200px;"></img>
+}
