@@ -189,7 +189,7 @@
                     <div class="navbar-right">
                         <ul class="nav navbar-nav" style="margin-left: -700px;">
                             <li><a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><span style="color:black;" class="glyphicon glyphicon-user"></span></a></li>
-                            <li><a asp-controller="Wishlist" asp-action="Index"><span style="color:black;" class="glyphicon glyphicon-heart-empty"></span></a></li>
+                            <li><a asp-controller="Wishlist" asp-action="Index"><span style="color:black;" class="glyphicon glyphicon-heart-empty"></span>@await Component.InvokeAsync("Wishlist")</a></li>
                             <li><a asp-area="" asp-controller="ShoppingCart" asp-action="Index"><span style="color:black;" class="glyphicon glyphicon-shopping-cart"></span></a></li>
                         </ul>
                     </div>
