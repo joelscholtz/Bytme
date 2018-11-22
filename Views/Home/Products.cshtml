@@ -1,13 +1,5 @@
 ﻿@model IEnumerable<bytme.Models.Item>
-<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/css/bootstrap-select.min.css">
 
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/js/bootstrap-select.min.js"></script>
-
-<!-- (Optional) Latest compiled and minified JavaScript translation files -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/js/i18n/defaults-*.min.js"></script>
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<UserModel> SignInManager
 @inject UserManager<UserModel> UserManager
@@ -16,7 +8,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     int i = 1;
     int ie = 0;
-    int pageCurrent = 2;
 
     List<string> colors = ViewBag.Colorschecked;
     List<string> brands = ViewBag.Brandschecked;
@@ -210,6 +201,7 @@
             TextBoxIntData: $('#number').val(),
             CheckboxData: $('#checkbox').is(':checked')
         };
+    }
 </script>
 <script>
         function AddToWishList(item_id) {
