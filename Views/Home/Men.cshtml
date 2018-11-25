@@ -470,27 +470,11 @@
                             <p class="desc">@item.long_description</p>
                             @if (SignInManager.IsSignedIn(User))
                             {
-                                <a onclick="AddToWishList(@item.id)" id="wish" class="btn btn-default">
+                                <a onclick="AddToWishList(@item.id)" class="btn btn-default swap swapHeart">
                                     <span style="color:#8F6B93;" class="glyphicon glyphicon-heart-empty"></span>
                                 </a>
-                                <!--Favorites list modal-->
-                                <div class="modal fade" id="modelWindowWish" role="dialog">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                <h4 style="text-align:center;" class="modal-title">Added to favorites list!</h4>
-                                            </div>
-                                            <div class="modal-body">
-                                                <p style="text-align:center;">The product is added to your list!</p>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <a class="btn btn-default pull-left" href="/Wishlist" role="button">Go to your favorites list</a>
-                                                <button type="button" data-dismiss="modal" class="btn btn-default " style="background-color:#8F6B93;color:white;border:none;">Continue shopping</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <!--Wishlist snackbar, and yes, this is really called a snackbar-->
+                                <div id="snackbar">Added to favorites list!</div>
                             }
                             <a onclick="AddToCart(@item.id)" class="btn btn-default">
                                 <span style="color:#8F6B93;" class="glyphicon glyphicon-shopping-cart"></span>
