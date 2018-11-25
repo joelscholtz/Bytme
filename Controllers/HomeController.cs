@@ -496,6 +496,11 @@ namespace bytme.Controllers
             }
 
             int PageCount = products.Count() / 21;
+            if (products.Count() % 21 > 0) { PageCount++; }
+            IList<int> Pager = new List<int>();
+            for (int q = 1; q <= PageCount; q++)
+            { Pager.Add(q); }
+            ViewBag.Pager = Pager;
             ViewBag.PageCount = PageCount;
             ViewBag.BrandCount = products.Select(o => o.description).Distinct().Count();
 
