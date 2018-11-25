@@ -18,7 +18,9 @@
     //Pushable
 
 }
-
+<head>
+    <link href="~/css/site.css" rel="stylesheet" />
+</head>
 <style>
     .box {
         width: auto;
@@ -178,17 +180,31 @@
             box-shadow: inset 0 1px 1px rgba(0,0,0,.100), 0 0 8px rgba(143, 107, 147, .6);
         }
 </style>
+<script src="~/lib/jquery/dist/jquery.min.js">
+</script>
 <script>
-        function AddToWishList(item_id) {
-            
+    jQuery(function ($) {
+        $('.swapHeart').on('click', function () {
+            var $el = $(this),
+                textNode = this.lastChild;
+            $el.find('span').toggleClass('glyphicon-heart glyphicon-heart-empty');
+            $el.toggleClass('swap');
+        });
+    });
+</script>
+<script>
+    function AddToWishList(item_id) {
         $.ajax({
             type: "POST",
             data: {
                 itm_id: item_id
             },
             url: "/WishList/AddToWishList",
-            success: function (data) {
-                $('#modelWindowWish').modal('show');
+            success: function (e) {
+                var x = document.getElementById("snackbar");
+                x.className = "show";
+                setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+
             },
             error: function () {
                 return "error";
@@ -197,22 +213,22 @@
     }
 </script>
 <script>
-        function AddToCart(itm_id) {
+    function AddToCart(itm_id) {
 
-            $.ajax({
-                type: "POST",
-                data: {
-                    item_id: itm_id
-                },
-                url: "/ShoppingCart/SaveItemInShoppingCart",
-                success: function (data) {
-                    $('#modelWindowShop').modal('show');
-                },
-                error: function () {
-                    return "error";
-                }
-            });
-        }
+        $.ajax({
+            type: "POST",
+            data: {
+                item_id: itm_id
+            },
+            url: "/ShoppingCart/SaveItemInShoppingCart",
+            success: function (data) {
+                $('#modelWindowShop').modal('show');
+            },
+            error: function () {
+                return "error";
+            }
+        });
+    }
 </script>
 
 <form asp-action="Women" id="Women" name="Women" method="post">
@@ -387,61 +403,45 @@
             @if (item.gender == "female")
             {
 
-    <div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box" id="page_@i _@ie" style="width:33%">
-        <div class="thumbnail">
-            <a onclick="@("window.location.href=' " + Url.Action("ProductDetail", "ProductDetail", new { id = item.id}) + " ' ");"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;cursor:pointer;" /></a>
-            <div class="desc_box">
-                <p>&euro;@item.price</p>
-                <p class="description">@item.description</p>
-                <p class="desc">@item.long_description</p>
-                @if (SignInManager.IsSignedIn(User))
-                {
-                    <a onclick="AddToWishList(@item.id)" id="swap" class="btn btn-default">
-                        <span style="color:#8F6B93;" class="glyphicon glyphicon-heart-empty"></span>
-                    </a>
-                    <!--Favorites list modal-->
-                    <div class="modal fade" id="modelWindowWish" role="dialog">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    <h4 style="text-align:center;" class="modal-title">Added to favorites list!</h4>
+                <div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box" id="page_@i _@ie" style="width:33%">
+                    <div class="thumbnail">
+                        <a onclick="@("window.location.href=' " + Url.Action("ProductDetail", "ProductDetail", new { id = item.id}) + " ' ");"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;cursor:pointer;" /></a>
+                        <div class="desc_box">
+                            <p>&euro;@item.price</p>
+                            <p class="description">@item.description</p>
+                            <p class="desc">@item.long_description</p>
+                            @if (SignInManager.IsSignedIn(User))
+                            {
+                                <a onclick="AddToWishList(@item.id)" class="btn btn-default swap swapHeart">
+                                    <span style="color:#8F6B93;" class="glyphicon glyphicon-heart-empty"></span>
+                                </a>
+                                <!--Wishlist snackbar, and yes, this is really called a snackbar-->
+                                <div id="snackbar">Added to favorites list!</div>
+                            }
+                            <a onclick="AddToCart(@item.id)" class="btn btn-default">
+                                <span style="color:#8F6B93;" class="glyphicon glyphicon-shopping-cart"></span>
+                            </a>
+                            <!--Shopping cart modal-->
+                            <div class="modal fade" id="modelWindowShop" role="dialog">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <h4 style="text-align:center;" class="modal-title">Added to the shopping cart!</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p style="text-align:center;">The product is added to your shopping cart!</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a class="btn btn-default pull-left" href="/Shoppingcart" role="button">Go to your cart</a>
+                                            <button type="button" data-dismiss="modal" class="btn btn-default " style="background-color:#8F6B93;color:white;border:none;">Continue shopping</button>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="modal-body">
-                                    <p style="text-align:center;">The product is added to your list!</p>
-                                </div>
-                                <div class="modal-footer">
-                                    <a class="btn btn-default pull-left" href="/Wishlist" role="button">Go to your favorites list</a>
-                                    <button type="button" data-dismiss="modal" class="btn btn-default " style="background-color:#8F6B93;color:white;border:none;">Continue shopping</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
-                <a onclick="AddToCart(@item.id)" class="btn btn-default">
-                    <span style="color:#8F6B93;" class="glyphicon glyphicon-shopping-cart"></span>
-                </a>
-                <!--Shopping cart modal-->
-                <div class="modal fade" id="modelWindowShop" role="dialog">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                <h4 style="text-align:center;" class="modal-title">Added to the shopping cart!</h4>
-                            </div>
-                            <div class="modal-body">
-                                <p style="text-align:center;">The product is added to your shopping cart!</p>
-                            </div>
-                            <div class="modal-footer">
-                                <a class="btn btn-default pull-left" href="/Shoppingcart" role="button">Go to your cart</a>
-                                <button type="button" data-dismiss="modal" class="btn btn-default " style="background-color:#8F6B93;color:white;border:none;">Continue shopping</button>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
             }
         }
         else if (ie == 22) { i++; }
@@ -450,61 +450,61 @@
         {
             @if (item.gender == "female")
             {
-    <div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box" id="page_@i _@ie" style="display:none;width:33%">
-        <div class="thumbnail">
-            <a onclick="@("window.location.href=' " + Url.Action("ProductDetail", "ProductDetail", new { id = item.id}) + " ' ");"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;cursor:pointer;" /></a>
-            <div class="desc_box">
-                <p>&euro;@item.price</p>
-                <p class="description">@item.description</p>
-                <p class="desc">@item.long_description</p>
-                @if (SignInManager.IsSignedIn(User))
-                {
-                    <a onclick="AddToWishList(@item.id)" id="swap" class="btn btn-default">
-                        <span style="color:#8F6B93;" class="glyphicon glyphicon-heart-empty"></span>
-                    </a>
-                    <!--Favorites list modal-->
-                    <div class="modal fade" id="modelWindowWish" role="dialog">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    <h4 style="text-align:center;" class="modal-title">Added to favorites list!</h4>
+                <div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box" id="page_@i _@ie" style="display:none;width:33%">
+                    <div class="thumbnail">
+                        <a onclick="@("window.location.href=' " + Url.Action("ProductDetail", "ProductDetail", new { id = item.id}) + " ' ");"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;cursor:pointer;" /></a>
+                        <div class="desc_box">
+                            <p>&euro;@item.price</p>
+                            <p class="description">@item.description</p>
+                            <p class="desc">@item.long_description</p>
+                            @if (SignInManager.IsSignedIn(User))
+                            {
+                                <a onclick="AddToWishList(@item.id)" id="swapHeart" class="btn btn-default">
+                                    <span style="color:#8F6B93;" class="glyphicon glyphicon-heart-empty"></span>
+                                </a>
+                                <!--Favorites list modal-->
+                                <div class="modal fade" id="modelWindowWish" role="dialog">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                <h4 style="text-align:center;" class="modal-title">Added to favorites list!</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p style="text-align:center;">The product is added to your list!</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <a class="btn btn-default pull-left" href="/Wishlist" role="button">Go to your favorites list</a>
+                                                <button type="button" data-dismiss="modal" class="btn btn-default " style="background-color:#8F6B93;color:white;border:none;">Continue shopping</button>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="modal-body">
-                                    <p style="text-align:center;">The product is added to your list!</p>
+                            }
+                            <a onclick="AddToCart(@item.id)" class="btn btn-default">
+                                <span style="color:#8F6B93;" class="glyphicon glyphicon-shopping-cart"></span>
+                            </a>
+                            <!--Shopping cart modal-->
+                            <div class="modal fade" id="modelWindowShop" role="dialog">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <h4 style="text-align:center;" class="modal-title">Added to the shopping cart!</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p style="text-align:center;">The product is added to your shopping cart!</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a class="btn btn-default pull-left" href="/Shoppingcart" role="button">Go to your cart</a>
+                                            <button type="button" data-dismiss="modal" class="btn btn-default " style="background-color:#8F6B93;color:white;border:none;">Continue shopping</button>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="modal-footer">
-                                    <a class="btn btn-default pull-left" href="/Wishlist" role="button">Go to your favorites list</a>
-                                    <button type="button" data-dismiss="modal" class="btn btn-default " style="background-color:#8F6B93;color:white;border:none;">Continue shopping</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
-                <a onclick="AddToCart(@item.id)" class="btn btn-default">
-                    <span style="color:#8F6B93;" class="glyphicon glyphicon-shopping-cart"></span>
-                </a>
-                <!--Shopping cart modal-->
-                <div class="modal fade" id="modelWindowShop" role="dialog">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                <h4 style="text-align:center;" class="modal-title">Added to the shopping cart!</h4>
-                            </div>
-                            <div class="modal-body">
-                                <p style="text-align:center;">The product is added to your shopping cart!</p>
-                            </div>
-                            <div class="modal-footer">
-                                <a class="btn btn-default pull-left" href="/Shoppingcart" role="button">Go to your cart</a>
-                                <button type="button" data-dismiss="modal" class="btn btn-default " style="background-color:#8F6B93;color:white;border:none;">Continue shopping</button>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
             }
             if (ie == 21 * i) { i++; }
         }
