@@ -255,8 +255,8 @@ namespace bytme.Controllers
                 " <td style='border: 1px solid #dddddd;text-align: center; padding:8px;'><img style='width:200px; height:250px' src='" + item.Item.photo_url + "'/></td>" +
                 " <td style='border: 1px solid #dddddd;text-align: center; padding:8px;'>" + item.OrderHistory.item_description + "</td>" +
                 " <td style='border: 1px solid #dddddd;text-align: center; padding:8px;'>" + item.OrderHistory.qty_bought + "</td>" +
-                " <td style='border: 1px solid #dddddd;text-align: center; padding:8px;'>" + item.OrderHistory.price_payed + " eruo</td>" +
-                " <td style='border: 1px solid #dddddd;text-align: center; padding:8px;'>" + item.OrderHistory.price_payed * item.OrderHistory.qty_bought + " eruo</td>" +
+                " <td style='border: 1px solid #dddddd;text-align: center; padding:8px;'>" + item.OrderHistory.price_payed + " euro</td>" +
+                " <td style='border: 1px solid #dddddd;text-align: center; padding:8px;'>" + item.OrderHistory.price_payed * item.OrderHistory.qty_bought + " euro</td>" +
                 "</tr>";
             }
             mailMessage.Body += "</table>";
@@ -396,8 +396,7 @@ namespace bytme.Controllers
             ViewBag.zipcode = result.zipcode;
             ViewBag.name = result.name;
             ViewBag.surname = result.surname;
-            ViewBag.totalPrice = ViewBag.totalPrice;
-
+            
             int order_id = CheckIfOrderExists();
             int count = CountItemsInShoppingCart(order_id);
             ViewBag.count = count;

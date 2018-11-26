@@ -35,8 +35,9 @@
                     <center><h4><input checked="checked" name="payment" type="radio" value="true" /> Paypal</h4></center>
                 </form>
                 <script>
-                                var totalPrice = parseFloat("@ViewBag.totalPrice".replace(",", "."));
+                                var totalPrice = parseFloat("@ViewBag.TotalPrice".replace(",", "."));
                 </script>
+                <div id="paypal-button-container"></div>
                 <script src="https://www.paypalobjects.com/api/checkout.js"></script>
                 <script>
                     // Render the PayPal button
@@ -86,7 +87,7 @@
                                                 currency: 'EUR'
                                             }
                                         }
-                                    ],
+                                    ]
                                 }
                             });
                         },

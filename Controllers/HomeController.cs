@@ -489,10 +489,26 @@ namespace bytme.Controllers
             ViewData["SearchString"] = searchString;
 
             if (!String.IsNullOrEmpty(searchString))
+            //als String niet leeg is dan wordt alles hieronder uitgevoerd
             {
                 products = products.Where(s => s.description.ToUpper().Contains(searchString.ToUpper()) || s.long_description.ToLower().Contains(searchString.ToLower()));
+                // vul searchstring in
                 ViewBag.Message = searchString;
+                //spreekt voorzich
                 ViewBag.Count = products.Where(s => s.description.ToUpper().Contains(searchString.ToUpper()) || s.long_description.ToLower().Contains(searchString.ToLower())).Count();
+                //spreekt voorzich
+                var zero = products.Where(s => s.description.ToUpper().Contains(searchString.ToUpper()) || s.long_description.ToLower().Contains(searchString.ToLower())).Count() == 0;
+                // zero is waar alleen als er 0 producten resulteren uit de searchstring query
+                if (zero)
+                {
+                    ViewBag.Message = null;
+                    var itemeru = from p in _context.Items select p;
+                    return View(await itemeru.ToListAsync());
+                }
+                else
+                {
+                    return View(await products.ToListAsync());
+                }
             }
 
             int PageCount = products.Count() / 21;
