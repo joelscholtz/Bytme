@@ -9,6 +9,8 @@ namespace bytme.Models
     {
         public int id { get; set; }
         public string user_id { get; set; }
+        public int ordstatus_id { get; set; }
+        public DateTime dt_created { get; set; }
     }
     public class OrderLines
     {
