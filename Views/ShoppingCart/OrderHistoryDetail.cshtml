@@ -1,0 +1,46 @@
+﻿@model List<bytme.Models.OrderHistory>
+
+<a style="color:#B388B8" asp-controller="ShoppingCart" asp-action="OrderHistory">Go back</a>
+
+<h2>Your order details</h2>
+<table class="table">
+    <thead>
+        <tr>
+
+            <th>
+                Product
+            </th>
+            <th>
+                Price
+            </th>
+            <th>
+                Quantity bought
+            </th>
+            <th>
+                Subtotal
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (var i = 0; i < Model.Count; i++)
+        {
+
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => Model[i].item_description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Model[i].price_payed)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Model[i].qty_bought)
+                </td>
+                <td>
+                    @{var countitem = (@Model[i].price_payed * Model[i].qty_bought);} @countitem
+                </td>
+
+
+            </tr>
+        }
+    </tbody>
+</table>

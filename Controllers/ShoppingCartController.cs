@@ -246,7 +246,8 @@ namespace bytme.Controllers
                 " <th style='border: 1px solid #dddddd;text-align: left; padding:8px;font-size: 10pt;'>Price:</th>" +
                 " <th style='border: 1px solid #dddddd;text-align: left; padding:8px;font-size: 10pt;'>Subtotal:</th>" +
                 " </tr>";
-            
+
+            float totalPrice = 0;
             foreach (var item in Listpurchitems)
             {
                 mailMessage.Body +=
@@ -258,7 +259,15 @@ namespace bytme.Controllers
                 " <td style='border: 1px solid #dddddd;text-align: center; padding:8px;'>" + item.OrderHistory.price_payed + " euro</td>" +
                 " <td style='border: 1px solid #dddddd;text-align: center; padding:8px;'>" + item.OrderHistory.price_payed * item.OrderHistory.qty_bought + " euro</td>" +
                 "</tr>";
+                totalPrice += (item.OrderHistory.price_payed * item.OrderHistory.qty_bought);
             }
+            mailMessage.Body += " <tr> " +
+                                " <th style='border: 1px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                " <th style='border: 1px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                " <th style='border: 1px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                " <th style='border: 1px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                " <th style='border: 1px solid #dddddd;text-align: left; padding:8px;'>Total: " + totalPrice + "</th>" +
+                                " </tr>";
             mailMessage.Body += "</table>";
             mailMessage.Body += "<br><h3>If you have any questions you can mail us via the contact page on our webshop</h3>" +
                                 "<br><h3>Have a nice day</h3>" +
@@ -402,5 +411,44 @@ namespace bytme.Controllers
             ViewBag.count = count;
             return View();
         }
+
+        public ActionResult OrderHistory()
+        {
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var result = (from ordermain in _context.OrderMains
+                          where ordermain.user_id == userId && ordermain.ordstatus_id == 2
+
+                          select new OrderMain
+                          {
+                              id = ordermain.id,
+                              ordstatus_id = ordermain.ordstatus_id,
+                              dt_created = ordermain.dt_created
+                          }
+                          );
+
+            return View(result.ToList());
+        }
+
+        public ActionResult OrderHistoryDetail(int order_id)
+        {
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var result = (from history in _context.OrderHistories
+                          where history.user_id == userId && history.ord_id == order_id
+                          orderby history.ord_id descending
+                          select new OrderHistory
+                          {
+                              ord_id = history.ord_id,
+                              price_payed = history.price_payed,
+                              qty_bought = history.qty_bought,
+                              item_description = history.item_description,
+                              dt_created = history.dt_created
+                          }
+                              );
+
+            return View(result.ToList());
+        }
+
     }
 }
