@@ -26,7 +26,7 @@ namespace bytme.Controllers
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            OrderMain orderMain = _context.OrderMains.Where(o => o.user_id == userId).FirstOrDefault();
+            OrderMain orderMain = _context.OrderMains.Where(o => o.user_id == userId && o.ordstatus_id == 1).FirstOrDefault();
             if (orderMain != null)
             {
                 return orderMain.id;
@@ -43,6 +43,8 @@ namespace bytme.Controllers
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             OrderMain orderMain = new OrderMain();
             orderMain.user_id = userId;
+            orderMain.ordstatus_id = 1;
+            orderMain.dt_created = DateTime.Now;
             _context.Add(orderMain);
             _context.SaveChanges();
 
@@ -108,7 +110,7 @@ namespace bytme.Controllers
         public IActionResult UpdateQuantityInShoppingCart(int orderline_id, int qty)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var orders = _context.OrderMains.Where(o => o.user_id == userId).FirstOrDefault();
+            var orders = _context.OrderMains.Where(o => o.user_id == userId && o.ordstatus_id == 1).FirstOrDefault();
 
             var listOfItems = _context.OrderLines.Where(o => o.order_id == orders.id && o.id == orderline_id).FirstOrDefault();
 
@@ -170,6 +172,11 @@ namespace bytme.Controllers
                         where i.id == item_id
                         select i).FirstOrDefault();
 
+            var orderline = (from o in _context.OrderLines
+                             from m in _context.OrderMains
+                             where o.order_id == m.id && o.item_id == item_id
+                             select o).FirstOrDefault();
+
             item.quantity = item.quantity - qty;
 
             _context.Items.Update(item);
@@ -180,7 +187,8 @@ namespace bytme.Controllers
         {
             Boolean decreased = false;
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var orders = _context.OrderMains.Where(o => o.user_id == userId).FirstOrDefault();
+            var result = _context.UserModels.Where(u => u.Id == userId).FirstOrDefault();
+            var orders = _context.OrderMains.Where(o => o.user_id == userId && o.ordstatus_id == 1).FirstOrDefault();
             var ListOfItems = _context.OrderLines.Where(o => o.order_id == orders.id);
 
             if (decreased == false)
@@ -195,6 +203,7 @@ namespace bytme.Controllers
             decreased = true;
             if (decreased == true)
             {
+                orders.ordstatus_id = 2;
                 _context.Update(orders);
                 _context.SaveChanges();
                 CreateOrderHistory(orders);
@@ -211,6 +220,52 @@ namespace bytme.Controllers
                                   }).ToList();
 
             //send email |
+            SmtpClient client = new SmtpClient();
+            client.Host = "smtp.gmail.com";
+            client.Port = 587;
+            client.UseDefaultCredentials = false;
+            client.EnableSsl = true;
+            client.Credentials = new NetworkCredential("sayoswebshop@gmail.com", "PonyParkSlagHaren1234");
+            
+            MailMessage mailMessage = new MailMessage();
+            mailMessage.IsBodyHtml = true;
+            mailMessage.From = new MailAddress("sayoswebshop@gmail.com");
+            mailMessage.To.Add(result.Email);
+            mailMessage.Subject = "Order " + orders.id;
+            string fullname = result.name + " " + result.surname;
+
+            mailMessage.Body = " <div style='width:95%;'> ";
+            mailMessage.Body += "<br><br><h3>Dear " + fullname + " thanks for your order.</h3>";
+            mailMessage.Body +=
+                "<h3>Here is an overview of the things you ordered:</h3> <br><br> " +
+                " <table style='font-family: arial,sans-serif;border-collapse: collapse;width:95%; '>" +
+                " <tr> " +
+                " <th style='border: 1px solid #dddddd;text-align: left; padding:8px;font-size: 10pt;'>Picture:</th>" +
+                " <th style='border: 1px solid #dddddd;text-align: left; padding:8px;font-size: 10pt;'>Description:</th>" +
+                " <th style='border: 1px solid #dddddd;text-align: left; padding:8px;font-size: 10pt;'>Amount:</th>" +
+                " <th style='border: 1px solid #dddddd;text-align: left; padding:8px;font-size: 10pt;'>Price:</th>" +
+                " <th style='border: 1px solid #dddddd;text-align: left; padding:8px;font-size: 10pt;'>Subtotal:</th>" +
+                " </tr>";
+            
+            foreach (var item in Listpurchitems)
+            {
+                mailMessage.Body +=
+                //mailMessage.Body += "<td><img style='width:300px;' src='" + photo_url + item.Itms.photo_url + "'/></td>";
+                " <tr>" +
+                " <td style='border: 1px solid #dddddd;text-align: center; padding:8px;'><img style='width:200px; height:250px' src='" + item.Item.photo_url + "'/></td>" +
+                " <td style='border: 1px solid #dddddd;text-align: center; padding:8px;'>" + item.OrderHistory.item_description + "</td>" +
+                " <td style='border: 1px solid #dddddd;text-align: center; padding:8px;'>" + item.OrderHistory.qty_bought + "</td>" +
+                " <td style='border: 1px solid #dddddd;text-align: center; padding:8px;'>" + item.OrderHistory.price_payed + " eruo</td>" +
+                " <td style='border: 1px solid #dddddd;text-align: center; padding:8px;'>" + item.OrderHistory.price_payed * item.OrderHistory.qty_bought + " eruo</td>" +
+                "</tr>";
+            }
+            mailMessage.Body += "</table>";
+            mailMessage.Body += "<br><h3>If you have any questions you can mail us via the contact page on our webshop</h3>" +
+                                "<br><h3>Have a nice day</h3>" +
+                                "</div>";
+
+            client.Send(mailMessage);
+
 
             return RedirectToAction("index", "Home");
         }
@@ -341,6 +396,7 @@ namespace bytme.Controllers
             ViewBag.zipcode = result.zipcode;
             ViewBag.name = result.name;
             ViewBag.surname = result.surname;
+            ViewBag.totalPrice = ViewBag.totalPrice;
 
             int order_id = CheckIfOrderExists();
             int count = CountItemsInShoppingCart(order_id);

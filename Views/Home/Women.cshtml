@@ -400,7 +400,7 @@
     {
         @if (ie++ < 21)
         {
-            @if (item.gender == "female")
+            @if (item.gender == "female" && item.quantity != 0)
             {
 
                 <div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box" id="page_@i _@ie" style="width:33%">
@@ -448,7 +448,7 @@
 
         if (ie <= 21 * i && ie >= 22)
         {
-            @if (item.gender == "female")
+            @if (item.gender == "female" && item.quantity != 0)
             {
                 <div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box" id="page_@i _@ie" style="display:none;width:33%">
                     <div class="thumbnail">

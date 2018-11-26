@@ -408,7 +408,7 @@
 <div class="col-lg-9">
     @foreach (var item in Model)
     {
-        @if (item.gender == "male")
+        @if (item.gender == "male" && item.quantity != 0)
         {
             @if (ie++ < 21)
             {
@@ -457,7 +457,7 @@
         }
 
 
-        if (item.gender == "male")
+        if (item.gender == "male" && item.quantity != 0)
         {
             @if (ie <= 21 * i && ie >= 22)
             {

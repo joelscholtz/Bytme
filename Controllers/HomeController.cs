@@ -883,6 +883,9 @@ namespace bytme.Controllers
             }
             switch (sortBy)
             {
+                default:
+                    products = products.OrderBy(s => s.id);
+                    break;
                 case "Price Low - High":
                     ViewBag.currentSort = "Price Low - High";
                     products = products.OrderBy(s => s.price);
@@ -975,7 +978,8 @@ namespace bytme.Controllers
             bool SortByRemember = String.IsNullOrEmpty(sortBy);
             if (String.IsNullOrEmpty(sortBy)) { sortBy = "Recommended"; }
             // Retrieve the products from the database.
-            var products = from p in _context.Items select p;
+            var products = from p in _context.Items
+                           select p;
             products = products.Where(o => o.gender == "female");
 
             ViewBag.currentBrands = products.Select(o => o.description).Distinct().ToList();
@@ -1277,6 +1281,9 @@ namespace bytme.Controllers
             }
             switch (sortBy)
             {
+                default:
+                    products = products.OrderBy(s => s.id);
+                    break;
                 case "Price Low - High":
                     ViewBag.currentSort = "Price Low - High";
                     products = products.OrderBy(s => s.price);
@@ -1304,8 +1311,7 @@ namespace bytme.Controllers
             ViewBag.PageCount = PageCount;
 
             ViewBag.BrandCount = products.Select(o => o.description).Distinct().Count();
-
-
+            
             return View(await products.ToListAsync());
         }
 

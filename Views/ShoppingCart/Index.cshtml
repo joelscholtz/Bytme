@@ -69,18 +69,18 @@
                             </td>
 
                             <script>
-                            function checkGreaterStock(qty, which) {
-                                if (qty > @Model[i].stock) {
-                                    document.getElementById("_data_qty_" + which).value = @Model[i].stock;
+                                function checkGreaterStock(qty, which, stock) {
+                                    if (qty > stock) {
+                                        document.getElementById("_data_qty_" + which).value = stock;
+                                    }
+                                    else if (qty < 1) {
+                                        document.getElementById("_data_qty_" + which).value = 1;
+                                    }
                                 }
-                                else if (qty < 1) {
-                                    document.getElementById("_data_qty_" + which).value = 1;
-                                }
-                            }
                             </script>
 
                             <td data-th="Quantity">
-                                <input asp-for="@Model[i].qty" type="number" min="1" max="@Model[i].stock" id="_data_qty_@Model[i].orderline_id" onkeydown="testForEnter();" onchange="UpdateQtyOrder(@Model[i].orderline_id , this.value)" class="form-control" value="@Model[i].qty" oninput="checkGreaterStock(this.value, @Model[i].orderline_id)" required>
+                                <input asp-for="@Model[i].qty" type="number" min="1" max="@Model[i].stock" id="_data_qty_@Model[i].orderline_id" onkeydown="testForEnter();" onchange="UpdateQtyOrder(@Model[i].orderline_id , this.value)" class="form-control" value="@Model[i].qty" oninput="checkGreaterStock(this.value, @Model[i].orderline_id, @Model[i].stock)" required>
 
                             <td data-th="Price">&euro; @{ var price = (Model[i].price); } @{ @price.ToString("N")}</td>
 
@@ -120,111 +120,6 @@
                 </tr>
             </tfoot>
         </table>
-
-        <div id="normalModal" class="modal fade">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title">Check out</h4>
-                    </div>
-                    <div class="modal-body">
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            <div style="text-align:center">
-                            <h3><b>Data</b></h3>
-                            <h4>@user.name @user.surname</h4>
-                            <h4>@user.street @user.streetnumber</h4>
-                            <h4>@user.zipcode, @user.city</h4>
-                            <h4><a asp-area="Identity" asp-page="/Account/Manage/Index" text-decoration:none;">Change Name</a></h4>
-                            <h4><a asp-area="Identity" asp-page="/Account/Manage/Address" text-decoration:none;">Change Address</a></h4>
-                                </div>
-                        }
-                        <div id="paypal-button-container" style="text-align:center;"></div>
-                        @if (ViewBag.model_view != null)
-                        {
-                            <script>
-                                var totalPrice = parseFloat("@ViewBag.totalPrice".replace(",", "."));
-                            </script>
-                            <script src="https://www.paypalobjects.com/api/checkout.js"></script>
-                            <script>
-                                // Render the PayPal button
-                                paypal.Button.render({
-                                    // Set your environment
-                                    env: 'sandbox', // sandbox | production
-
-                                    // Specify the style of the button
-                                    style: {
-                                        layout: 'horizontal',  // horizontal | vertical
-                                        size: 'large',    // medium | large | responsive
-                                        shape: 'pill',      // pill | rect
-                                        color: 'black'       // gold | blue | silver | white | black
-                                    },
-
-                                    // Specify allowed and disallowed funding sources
-                                    //
-                                    // Options:
-                                    // - paypal.FUNDING.CARD
-                                    // - paypal.FUNDING.CREDIT
-                                    // - paypal.FUNDING.ELV
-                                    funding: {
-                                        allowed: [
-                                            paypal.FUNDING.CARD,
-                                            paypal.FUNDING.CREDIT
-                                        ],
-                                        disallowed: []
-                                    },
-
-                                    // Enable Pay Now checkout flow (optional)
-                                    commit: true,
-
-                                    // PayPal Client IDs - replace with your own
-                                    // Create a PayPal app: https://developer.paypal.com/developer/applications/create
-                                    client: {
-                                        sandbox: 'AcXXg_AJtE3WmNiQiU81S5w2oIzdLTFfhWGLVuq6u4Q3oUu_xXTV6Zeqip_xRufDkFWCrumyLeEFO0Ag',
-                                        production: '<insert production client id>'
-                                    },
-
-                                    payment: function (data, actions) {
-                                        return actions.payment.create({
-                                            payment: {
-                                                transactions: [
-                                                    {
-                                                        amount: {
-                                                            total: totalPrice,
-                                                            currency: 'EUR'
-                                                        }
-                                                    }
-                                                ],
-                                            }
-                                        });
-                                    },
-
-                                    onAuthorize: function (data, actions) {
-                                        return actions.payment.execute()
-                                            .then(function () {
-                                                $.ajax({
-                                                    type: "POST",
-                                                    data: {
-                                                    },
-
-                                                    url: "/ShoppingCart/ConfirmOrder",
-                                                    success: function (response) {
-                                                        document.body.innerHTML = response;
-                                                    },
-                                                    error: function () {
-                                                        return "error";
-                                                    }
-                                                });
-                                            });
-                                    }
-                                }, '#paypal-button-container');
-                            </script>
-                        }
-                    </div>
-                </div>
-            </div>
-        </div>
 </div>
 
 @if (ViewBag.count == 0)
