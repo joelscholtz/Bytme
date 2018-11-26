@@ -80,7 +80,7 @@
                             </script>
 
                             <td data-th="Quantity">
-                                <input asp-for="@Model[i].qty" type="number" min="1" max="@Html.DisplayFor(model => model[i].stock)" id="_data_qty_@Model[i].orderline_id" onkeydown="testForEnter();" onchange="UpdateQtyOrder(@Model[i].orderline_id , this.value)" class="form-control" value="@Model[i].qty" oninput="checkGreaterStock(this.value, @Model[i].orderline_id)" required>
+                                <input asp-for="@Model[i].qty" type="number" min="1" max="@Model[i].stock" id="_data_qty_@Model[i].orderline_id" onkeydown="testForEnter();" onchange="UpdateQtyOrder(@Model[i].orderline_id , this.value)" class="form-control" value="@Model[i].qty" oninput="checkGreaterStock(this.value, @Model[i].orderline_id)" required>
 
                             <td data-th="Price">&euro; @{ var price = (Model[i].price); } @{ @price.ToString("N")}</td>
 
@@ -203,7 +203,19 @@
                                     onAuthorize: function (data, actions) {
                                         return actions.payment.execute()
                                             .then(function () {
-                                                window.location.href = "/ShoppingCart/Confirmation";
+                                                $.ajax({
+                                                    type: "POST",
+                                                    data: {
+                                                    },
+
+                                                    url: "/ShoppingCart/ConfirmOrder",
+                                                    success: function (response) {
+                                                        document.body.innerHTML = response;
+                                                    },
+                                                    error: function () {
+                                                        return "error";
+                                                    }
+                                                });
                                             });
                                     }
                                 }, '#paypal-button-container');

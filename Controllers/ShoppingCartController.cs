@@ -172,8 +172,47 @@ namespace bytme.Controllers
 
             item.quantity = item.quantity - qty;
 
-            var result = _context.Items.Update(item);
+            _context.Items.Update(item);
             _context.SaveChanges();
+        }
+
+        public IActionResult ConfirmOrder()
+        {
+            Boolean decreased = false;
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var orders = _context.OrderMains.Where(o => o.user_id == userId).FirstOrDefault();
+            var ListOfItems = _context.OrderLines.Where(o => o.order_id == orders.id);
+
+            if (decreased == false)
+            {
+                foreach (var l in ListOfItems)
+                {
+                    DecreaseStock(l.item_id, l.qty);
+
+                }
+
+            }
+            decreased = true;
+            if (decreased == true)
+            {
+                _context.Update(orders);
+                _context.SaveChanges();
+                CreateOrderHistory(orders);
+            }
+            var Listpurchitems = (from os in _context.OrderHistories
+                                  join ordline in _context.OrderLines on os.oderline_id equals ordline.id
+                                  join itm in _context.Items on ordline.item_id equals itm.id
+                                  where os.ord_id == orders.id && os.user_id == userId
+                                  select new
+                                  {
+                                      Item = itm,
+                                      OrderLines = ordline,
+                                      OrderHistory = os
+                                  }).ToList();
+
+            //send email |
+
+            return RedirectToAction("index", "Home");
         }
 
         public ActionResult Confirmation(OrderMain m)
@@ -260,6 +299,7 @@ namespace bytme.Controllers
                     }
                 }
                 int count = CountItemsInShoppingCart(order_id);
+                ViewBag.order_id = order_id;
                 ViewBag.count = count;
                 ViewBag.model_view = model;
 
