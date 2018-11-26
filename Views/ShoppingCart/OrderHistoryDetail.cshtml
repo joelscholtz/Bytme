@@ -21,6 +21,7 @@
             </th>
         </tr>
     </thead>
+    @{ float totalitem = 0; }
     <tbody>
         @for (var i = 0; i < Model.Count; i++)
         {
@@ -38,9 +39,16 @@
                 <td>
                     @{var countitem = (@Model[i].price_payed * Model[i].qty_bought);} @countitem
                 </td>
-
+                @{totalitem += countitem; }
 
             </tr>
         }
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><strong>Total: </strong>@totalitem</td>
+
+        </tr>
     </tbody>
 </table>
