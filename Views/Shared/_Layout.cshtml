@@ -137,6 +137,28 @@
             margin-right: 48%;
         }
     </style>
+    <script src="~/lib/jquery/dist/jquery.min.js">
+    </script>
+    <script>
+        $.get('/WishList/TotalCount', function (data) {
+            $('#countWish').html(data);
+        });
+    </script>
+    <script>
+        setInterval(function () {
+            $('#countWish').load('/WishList/TotalCount');
+        }, 2000)
+    </script>
+    <script>
+        $.get('/ShoppingCart/TotalCount', function (data) {
+            $('#countCart').html(data);
+        });
+    </script>
+    <script>
+        setInterval(function () {
+            $('#countCart').load('/ShoppingCart/TotalCount');
+        }, 2000)
+    </script>
 
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -189,8 +211,8 @@
                     <div class="navbar-right">
                         <ul class="nav navbar-nav" style="margin-left: -700px;">
                             <li><a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><span style="color:black;" class="glyphicon glyphicon-user"></span></a></li>
-                            <li><a asp-controller="Wishlist" asp-action="Index"><span style="color:black;" class="glyphicon glyphicon-heart-empty"></span>@await Component.InvokeAsync("Wishlist")</a></li>
-                            <li><a asp-area="" asp-controller="ShoppingCart" asp-action="Index"><span style="color:black;" class="glyphicon glyphicon-shopping-cart"></span>@await Component.InvokeAsync("Cart")</a></li>
+                            <li><a asp-controller="Wishlist" asp-action="Index"><span style="color:black;" class="glyphicon glyphicon-heart-empty"></span><span class="badge" id="countWish"></span></a></li>
+                            <li><a asp-area="" asp-controller="ShoppingCart" asp-action="Index"><span style="color:black;" class="glyphicon glyphicon-shopping-cart"></span><span class="badge" id="countCart"></span></a></li>
                         </ul>
                     </div>
                 }
@@ -198,7 +220,7 @@
                 {
                     <div class="navbar-right" id="ex4">
                         <ul class="nav navbar-nav" style="margin-left: -700px;">
-                                <li><a asp-area="" asp-controller="ShoppingCart" asp-action="Index"><span style="color:black;" class="glyphicon glyphicon-shopping-cart"></span>@await Component.InvokeAsync("Cart")</a></li>
+                                <li><a asp-area="" asp-controller="ShoppingCart" asp-action="Index"><span style="color:black;" class="glyphicon glyphicon-shopping-cart"></span><span class="badge" id="countCart"></span></a></li>
                         </ul>
                     </div>
                 }
