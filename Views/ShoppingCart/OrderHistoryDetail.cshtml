@@ -2,22 +2,33 @@
 
 <a style="color:#B388B8" asp-controller="ShoppingCart" asp-action="OrderHistory">Go back</a>
 
+<style type="text/css">
+        tr.hide_all{
+            border-style: hidden;
+        }
+</style>
+
 <h2>Your order details</h2>
 <table class="table">
     <thead>
         <tr>
-
             <th>
                 Product
             </th>
             <th>
-                Price
-            </th>
-            <th>
+                <center>
                 Quantity bought
+                </center>
             </th>
             <th>
-                Subtotal
+                <center>
+                    Price
+                </center>
+            </th>
+            <th>
+                <center>
+                    Subtotal
+                </center>
             </th>
         </tr>
     </thead>
@@ -31,24 +42,47 @@
                     @Html.DisplayFor(modelItem => Model[i].item_description)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => Model[i].price_payed)
-                </td>
-                <td>
+                    <center>
                     @Html.DisplayFor(modelItem => Model[i].qty_bought)
+                    </center>
                 </td>
                 <td>
-                    @{var countitem = (@Model[i].price_payed * Model[i].qty_bought);} @countitem
+                    <center>
+                        &euro;@Html.DisplayFor(modelItem => Model[i].price_payed)
+                    </center>
                 </td>
+                <td>
+                    <center>
+                        @{var countitem = (@Model[i].price_payed * Model[i].qty_bought);} &euro;@countitem
+                    </center>
+                    </td>
                 @{totalitem += countitem; }
 
             </tr>
         }
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td><strong>Total: </strong>@totalitem</td>
+            <tr>
+                @if (totalitem < 100)
+                {
+                    totalitem += 2.95f;
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><center><strong>shipping costs: </strong> &euro;2,95</center></td>
+                    <tr class="hide_all">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><center><strong>Total: </strong>&euro;@totalitem</center></td>
+                    </tr>
+                }
+                else
+                {
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><center><strong>Total: </strong>&euro;@totalitem</center></td>
+                }
 
-        </tr>
+            </tr>
     </tbody>
 </table>

@@ -240,34 +240,57 @@ namespace bytme.Controllers
                 "<h3>Here is an overview of the things you ordered:</h3> <br><br> " +
                 " <table style='font-family: arial,sans-serif;border-collapse: collapse;width:95%; '>" +
                 " <tr> " +
-                " <th style='border: 1px solid #dddddd;text-align: left; padding:8px;font-size: 10pt;'>Picture:</th>" +
-                " <th style='border: 1px solid #dddddd;text-align: left; padding:8px;font-size: 10pt;'>Description:</th>" +
-                " <th style='border: 1px solid #dddddd;text-align: left; padding:8px;font-size: 10pt;'>Amount:</th>" +
-                " <th style='border: 1px solid #dddddd;text-align: left; padding:8px;font-size: 10pt;'>Price:</th>" +
-                " <th style='border: 1px solid #dddddd;text-align: left; padding:8px;font-size: 10pt;'>Subtotal:</th>" +
+                " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;font-size: 10pt;'>Picture:</th>" +
+                " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;font-size: 10pt;'>Description:</th>" +
+                " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;font-size: 10pt;'>Amount:</th>" +
+                " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;font-size: 10pt;'>Price:</th>" +
+                " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;font-size: 10pt;'>Subtotal:</th>" +
                 " </tr>";
 
-            float totalPrice = 0;
+            float totalPrice = 0f;
+            float sendcost = 2.95f;
             foreach (var item in Listpurchitems)
             {
                 mailMessage.Body +=
                 //mailMessage.Body += "<td><img style='width:300px;' src='" + photo_url + item.Itms.photo_url + "'/></td>";
                 " <tr>" +
-                " <td style='border: 1px solid #dddddd;text-align: center; padding:8px;'><img style='width:200px; height:250px' src='" + item.Item.photo_url + "'/></td>" +
-                " <td style='border: 1px solid #dddddd;text-align: center; padding:8px;'>" + item.OrderHistory.item_description + "</td>" +
-                " <td style='border: 1px solid #dddddd;text-align: center; padding:8px;'>" + item.OrderHistory.qty_bought + "</td>" +
-                " <td style='border: 1px solid #dddddd;text-align: center; padding:8px;'>" + item.OrderHistory.price_payed + " euro</td>" +
-                " <td style='border: 1px solid #dddddd;text-align: center; padding:8px;'>" + item.OrderHistory.price_payed * item.OrderHistory.qty_bought + " euro</td>" +
+                " <td style='border: 0px solid #dddddd;text-align: center; padding:8px;'><img style='width:200px; height:250px' src='" + item.Item.photo_url + "'/></td>" +
+                " <td style='border: 0px solid #dddddd;text-align: center; padding:8px;'>" + item.OrderHistory.item_description + "</td>" +
+                " <td style='border: 0px solid #dddddd;text-align: center; padding:8px;'>" + item.OrderHistory.qty_bought + "</td>" +
+                " <td style='border: 0px solid #dddddd;text-align: center; padding:8px;'>" + item.OrderHistory.price_payed + " euro</td>" +
+                " <td style='border: 0px solid #dddddd;text-align: center; padding:8px;'>" + item.OrderHistory.price_payed * item.OrderHistory.qty_bought + " euro</td>" +
                 "</tr>";
                 totalPrice += (item.OrderHistory.price_payed * item.OrderHistory.qty_bought);
             }
-            mailMessage.Body += " <tr> " +
-                                " <th style='border: 1px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                " <th style='border: 1px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                " <th style='border: 1px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                " <th style='border: 1px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                " <th style='border: 1px solid #dddddd;text-align: left; padding:8px;'>Total: " + totalPrice + "</th>" +
-                                " </tr>";
+            if (totalPrice < 100)
+            {
+                totalPrice += sendcost;
+                mailMessage.Body += " <tr> " +
+                                   " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                   " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                   " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                   " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                   " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>Shipping costs: " + sendcost + " euro</th>" +
+                                   " </tr>";
+
+                mailMessage.Body += " <tr> " +
+                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                    " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>Total: " + totalPrice + " euro</th>" +
+                                    " </tr>";
+            }
+            else
+            {
+                mailMessage.Body += " <tr> " +
+                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                    " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>Total: " + totalPrice + " euro</th>" +
+                                    " </tr>";
+            }
             mailMessage.Body += "</table>";
             mailMessage.Body += "<br><h3>If you have any questions you can mail us via the contact page on our webshop</h3>" +
                                 "<br><h3>Have a nice day</h3>" +
@@ -327,7 +350,7 @@ namespace bytme.Controllers
                 model = from orderlines in _context.OrderLines
                         join items in _context.Items on orderlines.item_id equals items.id
                         join ordermains in _context.OrderMains on orderlines.order_id equals ordermains.id
-                        where orderlines.order_id == order_id
+                        where orderlines.order_id == order_id && orderlines.qty != 0
                         orderby orderlines.id
                         select new ShoppingCartModel
                         {
@@ -418,7 +441,7 @@ namespace bytme.Controllers
 
             var result = (from ordermain in _context.OrderMains
                           where ordermain.user_id == userId && ordermain.ordstatus_id == 2
-
+                          orderby ordermain.id descending
                           select new OrderMain
                           {
                               id = ordermain.id,

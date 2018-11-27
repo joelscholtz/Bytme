@@ -112,7 +112,7 @@
                 </tr>
                 <tr>
                     <td colspan="5" class="hidden-xs"></td>
-                    @if (ViewBag.count > 0)
+                    @if (ViewBag.count > 0 && ViewBag.totalPrice > 2.95)
                     {
                         <!--<td style="margin-left:50%"><button type="submit" class="btn btn-success btn-block">Check out</button></td>-->
                         <td data-toggle="modal" href="#normalModal" class="btn btn-success btn-block">Check out</td>
