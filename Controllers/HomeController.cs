@@ -73,9 +73,15 @@ namespace bytme.Controllers
             ViewBag.currentSort = "Recommended";
             bool SortByRemember = String.IsNullOrEmpty(sortBy);
             if (String.IsNullOrEmpty(sortBy)) { sortBy = "Recommended"; }
+
             ViewBag.CurrentCategoryWomen = categoryWomen;
             ViewBag.CurrentCategoryMen = categoryMen;
-            ViewBag.currentBrands = products.Select(o => o.description).Distinct().ToList();
+            if (!String.IsNullOrEmpty(searchString))
+            //als String niet leeg is dan wordt alles hieronder uitgevoerd
+            {
+                ViewBag.currentBrands = products.Where(s => s.description.ToUpper().Contains(searchString.ToUpper()) || s.long_description.ToLower().Contains(searchString.ToLower())).Select(o => o.description).Distinct().ToList();
+            }
+
             ViewBag.maxiPrice = "1500";
             ViewBag.miniPrice = "0";
             if (HttpContext.Request.Method == "POST")
@@ -1318,7 +1324,7 @@ namespace bytme.Controllers
             }
             int PageCount = 1;
             PageCount = products.Count() / 21;
-
+            
             
             ViewBag.Colorschecked = ColorBox.ToList();
             ViewBag.Brandschecked = BrandBox.ToList();
