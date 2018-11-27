@@ -67,6 +67,28 @@ namespace bytme.Controllers
 
         }
 
+        public int CountWishList(int id)
+        {
+            var userId = Request.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var result = (from wishLines in _context.WishLines
+                          join items in _context.Items on wishLines.itm_id equals items.id
+                          join wishMains in _context.WishMains on wishLines.Wishmain_id equals wishMains.id
+                          where wishLines.Wishmain_id == id
+                          select wishLines).Count();
+
+            return result;
+        }
+
+        public int TotalCount()
+        {
+            int id = Check();
+            int count = CountWishList(id);
+            ViewBag.countWish = count;
+
+            return ViewBag.countWish;
+        }
+
         public async Task<ActionResult> AddToWishList(int itm_id, int recordId)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);

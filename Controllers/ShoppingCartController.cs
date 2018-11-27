@@ -134,6 +134,15 @@ namespace bytme.Controllers
             return result;
         }
 
+        public int TotalCount()
+        {
+            int order_id = CheckIfOrderExists();
+            int count = CountItemsInShoppingCart(order_id);
+            ViewBag.count = count;
+
+            return ViewBag.count;
+        }
+
         public void CreateOrderHistory(OrderMain m)
         {
             string UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
