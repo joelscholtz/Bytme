@@ -1,52 +1,79 @@
 ﻿@model List<bytme.Models.OrderMain>
 
-<a style="color:#B388B8"; asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Go back</a>
+<style>
+    li > a {
+        color: black;
+    }
 
-<h2>Your orders</h2>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Order ID
-            </th>
-
-
-            <th>Status</th>
-            <th>
-                Date created
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @for (var i = 0; i < Model.Count; i++)
-        {
-        <tr>
-
-            <td>
-                @Html.DisplayFor(modelItem => Model[i].id)
-            </td>
-            @if (Model[i].dt_created >= DateTime.Now.AddDays(-1))
-            {
-                <td><span style="color:red;">Will be delivered on @Model[i].dt_created.AddDays(1).ToShortDateString()</span></td>
-            }
-            else
-            {
-                <td><span style="color:green">Was delivered on @Model[i].dt_created.AddDays(1).ToShortDateString()</span></td>
-            }
-            <td>
-                @Html.DisplayFor(modelItem => Model[i].dt_created)
-            </td>
-            <td>
-                @Html.ActionLink("Details", "OrderHistoryDetail", "ShoppingCart",
-               routeValues: new
-               {
-                   order_id = Model[i].id
-                },
-                htmlAttributes: new { @class = "btn btn-success btn-large" })
-            </td>
-
-        </tr>
+        li > a:hover {
+            color: black;
         }
-    </tbody>
-</table>
+</style>
+<div>
+    <h3>Your order history</h3>
+    <hr />
+    <div class="row">
+        <div class="col-md-3">
+            <ul class="nav nav-pills nav-stacked">
+                <li><a asp-area="Identity" asp-page="/Account/Manage/Index">Profile</a></li>
+                <li><a asp-area="Identity" asp-page="/Account/Manage/Address">Address</a></li>
+                <li><a asp-area="Identity" asp-page="/Account/Manage/ChangePassword">Password</a></li>
+                <li><a asp-controller="ShoppingCart" asp-action="OrderHistory">Order history</a></li>
+                <li><a asp-area="Identity" asp-page="/Account/Manage/Index">Personal data</a></li>
+            </ul>
+        </div>
+        <div class="col-md-9">
+            <div class="row">
+                <h4>@ViewData["Title"]</h4>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                Order ID
+                            </th>
+
+
+                            <th>Status</th>
+                            <th>
+                                Date created
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (var i = 0; i < Model.Count; i++)
+                        {
+                            <tr>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => Model[i].id)
+                                </td>
+                                @if (Model[i].dt_created >= DateTime.Now.AddDays(-1))
+                                {
+                                    <td><span style="color:red;">Will be delivered on @Model[i].dt_created.AddDays(1).ToShortDateString()</span></td>
+                                }
+                                else
+                                {
+                                    <td><span style="color:green">Was delivered on @Model[i].dt_created.AddDays(1).ToShortDateString()</span></td>
+                                }
+                                <td>
+                                    @Html.DisplayFor(modelItem => Model[i].dt_created)
+                                </td>
+                                <td>
+                                    @Html.ActionLink("Details", "OrderHistoryDetail", "ShoppingCart",
+                                   routeValues: new
+                                   {
+                                       order_id = Model[i].id
+                                    },
+                                    htmlAttributes: new { @class = "btn btn-success btn-large" })
+                                </td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
 
