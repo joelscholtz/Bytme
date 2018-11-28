@@ -15,6 +15,8 @@
     List<string> brands = ViewBag.Brandschecked;
     string iei = i + "_" + ie;
 
+    List<int> Pager = ViewBag.Pager;
+
 }
 <head>
     <link href="~/css/site.css" rel="stylesheet" />
@@ -176,6 +178,35 @@
             -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,.100), 0 0 8px rgba(143, 107, 147, .6);
             box-shadow: inset 0 1px 1px rgba(0,0,0,.100), 0 0 8px rgba(143, 107, 147, .6);
         }
+    .btn-group button {
+        background-color: #fff; /* grey background */
+        border: 1px solid #fff; /* grey border */
+        color: #000000; /* White text */
+        border-radius: 100%;
+        font-size: medium;
+        cursor: pointer; /* Pointer/hand icon */
+        float: left; /* Float the buttons side by side */
+        text-align: center;
+        width: 43.8px;
+        height: 43.8px;
+    }
+
+        .btn-group button:not(:last-child) {
+            border-right: none; /* Prevent double borders */
+        }
+
+    /* Clear floats (clearfix hack) */
+    .btn-group:after {
+        content: "";
+        clear: both;
+        display: table;
+    }
+
+    /* Add a background color on hover */
+    .btn-group button:hover {
+        background-color: #ddd;
+        border: 1px solid #ddd;
+    }
 </style>
 <script src="~/lib/jquery/dist/jquery.min.js">
 </script>
@@ -507,27 +538,156 @@
     }
 
     <script>
-            var pagecurr = 2;
-            function LoadMore() {
-                for (l = (21 * (pagecurr - 1)) + 1; l < (21 * pagecurr) + 1; l++) {
-                    var iddef = "page_" + pagecurr + " _" + l;
-                    var page = document.getElementById(iddef);
-                    if (page != null) { page.style.display = "block"; }
-                }
 
-                if (pagecurr > @ViewBag.PageCount) { document.getElementById("loadmore").style.display = "none"; document.getElementById("notinMore").style.display = "block"; }
-                pagecurr = pagecurr + 1;
+                                    var pagecurr = 0;
+                                    var initial = 1;
+                                    var middle = 5;
+                                    var pagecount = @ViewBag.PageCount;
 
-            }
+                                    var oldpressed = 1;
+                                    var oldidentifier = "";
+                                    var newidentifier = "";
+
+
+
+                                        function LoadMore(pressed) {
+
+                                            if ((pressed == "<" && oldpressed == @Pager.Min()) || (pressed == ">" && oldpressed == pagecount)) { return; }
+                                            if (pressed == ">") { pressed = parseInt(oldpressed) + 1; }
+                                            if (pressed == "<") { pressed = parseInt(oldpressed) - 1; }
+                                        if (oldpressed == 0) { document.getElementById(1).style.backgroundColor == ""; }
+                                        if (oldpressed != 0) { document.getElementById(oldpressed + oldidentifier).style.backgroundColor = ""; }
+                                        for (l = (21 * pagecurr) + 1; l < (21 * (pagecurr + 1)) + 1; l++) {
+                                            var idder = "page_" + (pagecurr + 1) + " _" + l;
+                                            var prevPage = document.getElementById(idder);
+                                            if (prevPage != null) { prevPage.style.display = "none"; }
+                                        }
+                                        pagecurr = pressed - 1
+
+                                        for (l = (21 * pagecurr) + 1; l < (21 * (pagecurr + 1)) + 1; l++) {
+                                            var idder = "page_" + (pagecurr + 1) + " _" + l;
+                                            var prevPage = document.getElementById(idder);
+                                            if (prevPage != null) { prevPage.style.display = "block"; }
+                                        }
+
+                                        if (pagecount > 10) {
+
+                                            if (pressed >= 6 && !(pressed > pagecount - 4)) {
+                                                middle = pressed;
+                                                var min = middle - 4;
+                                                var max = middle - -4;
+                                                var counter = initial;
+
+                                                newidentifier = newidentifier + "#";
+                                                for (l = min; l <= (max); l++) {
+                                                    if (l <= max) {
+                                                        document.getElementById(counter + oldidentifier).value = l;
+
+                                                        document.getElementById(counter + oldidentifier).innerHTML = l;
+                                                        document.getElementById(counter + oldidentifier).id = l + newidentifier;
+                                                        counter++;
+
+                                                    }
+                                                }
+                                                document.getElementById(pressed + newidentifier).style.backgroundColor = "#8F6B93";
+                                                oldidentifier = newidentifier;
+                                                initial = min;
+                                                oldpressed = pressed;
+                                            }
+                                            else if (pressed < 6) {
+                                                middle = 5;
+                                                var min = middle - 4;
+                                                var max = middle - -4;
+                                                var counter = initial;
+
+                                                newidentifier = newidentifier + "#";
+                                                for (l = min; l <= (max); l++) {
+                                                    if (l <= max) {
+                                                        document.getElementById(counter + oldidentifier).value = l;
+
+                                                        document.getElementById(counter + oldidentifier).innerHTML = l;
+                                                        document.getElementById(counter + oldidentifier).id = l + newidentifier;
+                                                        counter++;
+
+                                                    }
+                                                }
+                                                document.getElementById(pressed + newidentifier).style.backgroundColor = "#8F6B93";
+                                                oldidentifier = newidentifier;
+                                                initial = min;
+                                                oldpressed = pressed;
+                                            }
+                                            else if (pressed >= pagecount - 4) {
+
+                                                middle = pagecount - 4;
+                                                var min = middle - 4;
+                                                var max = middle - -4;
+                                                var counter = initial;
+
+                                                newidentifier = newidentifier + "#";
+                                                for (l = min; l <= (max); l++) {
+                                                    if (l <= max) {
+                                                        document.getElementById(counter + oldidentifier).value = l;
+
+                                                        document.getElementById(counter + oldidentifier).innerHTML = l;
+                                                        document.getElementById(counter + oldidentifier).id = l + newidentifier;
+                                                        counter++;
+
+                                                    }
+                                                }
+                                                document.getElementById(pressed + newidentifier).style.backgroundColor = "#8F6B93";
+                                                oldidentifier = newidentifier;
+                                                initial = min;
+                                                oldpressed = pressed;
+                                            }
+                                        }
+                                        else if (pagecount <= 10) {
+                                            document.getElementById(pressed + oldidentifier).style.backgroundColor = "#8F6B93";
+                                            oldpressed = pressed;
+
+                                        }
+
+                                    }
+
     </script>
-    <button id="loadmore" type="button" class="btn" onclick="LoadMore()" style="margin-left:0%; width:100%" value="1">Load more products..</button>
-
-
+    @*<button id="loadmore" type="button" class="btn" onclick="LoadMore()" style="margin-left:0%; width:100%" value="1">Load more products..</button>*@
 </div>
-<br />
+<div class="col-lg-3">
+</div>
+
+<div class="col-lg-9 box btn-group" align="center" style="align-self:center;margin-left:15%">
+    <div style="float:left; height:100%;">
+        <button id="<" type="button" class="Selector btn" onclick="LoadMore(this.value)" style="margin-left:0%; background-color:initial; outline: 0;" value="<"><</button>
+    </div>
+
+    @foreach (var pagenr in Pager)
+    {
+
+        if (pagenr <= 9 && pagenr <= Pager.Max())
+        {
+            if (pagenr == 1)
+            {
+                <div style="float:left; height:100%; border-radius: 0px;">
+                    <button id="@pagenr" type="button" class="Selector btn Select_ @pagenr" onclick="LoadMore(this.value)" style="margin-left:0%; outline: 0; height: " value="@pagenr">@pagenr</button>
+                </div>
+                <script type="text/javascript">
+                    document.getElementById(1).style.backgroundColor = "#8F6B93";
+                </script>
+            }
+            else
+            {
+                <div style="float: left; height:100%; border-radius: 0px;">
+                    <button id="@pagenr" type="button" class="Selector btn Select_ @pagenr" onclick="LoadMore(this.value)" style="margin-left:0%; outline: 0;" value="@pagenr">@pagenr</button>
+                </div>
+            }
+
+        }
 
 
-<h4 id="notinMore" style="display:none; margin-left:0%; width:100%; text-align:center"> there are no more products of this type..</h4>
+    }
+    <div style="float: left; height: 100%;">
+        <button id=">" type="button" class="Selector btn previous" onclick="LoadMore(this.value)" style="margin-left:0%; outline: 0; background-color:initial;" value=">">></button>
+    </div>
+</div>
 
 
 

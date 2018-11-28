@@ -928,7 +928,11 @@ namespace bytme.Controllers
 
 
             int PageCount = products.Count() / 21;
-
+            if (products.Count() % 21 > 0) {PageCount++;}
+            IList<int> Pager = new List<int>();
+            for (int q = 1; q <= PageCount; q++)
+            { Pager.Add(q); }
+            ViewBag.Pager = Pager;
             ViewBag.Colorschecked = ColorBox.ToList();
             ViewBag.Brandschecked = BrandBox.ToList();
             
@@ -1322,10 +1326,13 @@ namespace bytme.Controllers
                     products = products.OrderByDescending(s => s.description);
                     break;
             }
-            int PageCount = 1;
-            PageCount = products.Count() / 21;
-            
-            
+            int PageCount = products.Count() / 21;
+            if (products.Count() % 21 > 0) { PageCount++; }
+            IList<int> Pager = new List<int>();
+            for (int q = 1; q <= PageCount; q++)
+            { Pager.Add(q); }
+            ViewBag.Pager = Pager;
+
             ViewBag.Colorschecked = ColorBox.ToList();
             ViewBag.Brandschecked = BrandBox.ToList();
 
