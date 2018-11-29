@@ -359,7 +359,7 @@ namespace bytme.Controllers
                 model = from orderlines in _context.OrderLines
                         join items in _context.Items on orderlines.item_id equals items.id
                         join ordermains in _context.OrderMains on orderlines.order_id equals ordermains.id
-                        where orderlines.order_id == order_id && orderlines.qty != 0
+                        where orderlines.order_id == order_id 
                         orderby orderlines.id
                         select new ShoppingCartModel
                         {
