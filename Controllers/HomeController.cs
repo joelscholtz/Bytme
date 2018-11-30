@@ -41,6 +41,10 @@ namespace bytme.Controllers
 
         public async Task<IActionResult> Products(string searchString, string gender, string sortOrder, string categoryMen, string categoryWomen, string currentColor, string currentBrands, IEnumerable<string> BrandBox, string maxPrice, string minPrice, IEnumerable<string> ColorBox, string category, string currentCategory, string sortBy, string currentSort)
         {
+            //Wishlist things
+            ViewBag.WishList = _context.WishLines.Select(o => o.itm_id).ToList();
+            ViewBag.OrderLine = _context.WishLines.Select(o => o.id).FirstOrDefault();
+
             var products = from p in _context.Items select p;
             ViewData["SortOrder"] = sortOrder;
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
@@ -549,6 +553,10 @@ namespace bytme.Controllers
 
         public async Task<IActionResult> Men(string category, string maxPrice, string minPrice, string currentCategory, string currentBrands, IEnumerable<string> BrandBox, IEnumerable<string> ColorBox, string sortBy, string currentSort)
         {
+            //Wishlist things
+            ViewBag.WishList = _context.WishLines.Select(o => o.itm_id).ToList();
+            ViewBag.OrderLine = _context.WishLines.Select(o => o.id).FirstOrDefault();
+
             // Incoming information from the form.
             ViewData["BrandBox"] = BrandBox;
             ViewData["maxPrice"] = maxPrice;
@@ -947,6 +955,10 @@ namespace bytme.Controllers
         
         public async Task<IActionResult> Women(string category, string maxPrice, string minPrice, string currentCategory, string currentBrands, IEnumerable<string> BrandBox, IEnumerable<string> ColorBox, string sortBy, string currentSort)
         {
+            //Wishlist things
+            ViewBag.WishList = _context.WishLines.Select(o => o.itm_id).ToList();
+            ViewBag.OrderLine = _context.WishLines.Select(o => o.id).FirstOrDefault();
+
             // Incoming information from the form.
             ViewData["BrandBox"] = BrandBox;
             ViewData["maxPrice"] = maxPrice;

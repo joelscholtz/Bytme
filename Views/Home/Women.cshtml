@@ -1,8 +1,9 @@
 ﻿@model IEnumerable<bytme.Models.Item>
 
 @using bytme.Models;
-@using System;
 @using Microsoft.AspNetCore.Identity
+@using System.Security.Claims;
+@using bytme.Data;
 @inject SignInManager<UserModel> SignInManager
 @inject UserManager<UserModel> UserManager
 @{
@@ -17,7 +18,6 @@
     List<string> brands = ViewBag.Brandschecked;
     //Pushable
     List<int> Pager = ViewBag.pager;
-
 }
 <head>
     <link href="~/css/site.css" rel="stylesheet" />
@@ -215,11 +215,9 @@
 </script>
 <script>
     jQuery(function ($) {
-        $('.swapHeart').on('click', function () {
-            var $el = $(this),
-                textNode = this.lastChild;
-            $el.find('span').toggleClass('glyphicon-heart glyphicon-heart-empty');
-            $el.toggleClass('swap');
+        $("a.swapHeart").on("click", function (e) {
+            $(this).toggle();
+            $(this).siblings("a.swapHeart").toggle();
         });
     });
 </script>
@@ -231,11 +229,11 @@
                 itm_id: item_id
             },
             url: "/WishList/AddToWishList",
-            success: function (e) {
+            success: function (data) {
+                $("#snackbar").text('Added to favorites!');
                 var x = document.getElementById("snackbar");
                 x.className = "show";
-                setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
-
+                setTimeout(function () { x.className = x.className.replace("show", " "); }, 3000);
             },
             error: function () {
                 return "error";
@@ -243,6 +241,27 @@
         });
     }
 </script>
+<script>
+    function RemoveFromWishList(orderline_id) {
+        $.ajax({
+            type: "POST",
+            data: {
+                ordline_id: orderline_id
+            },
+            url: "/WishList/RemoveFromWishList",
+            success: function (data) {
+                $("#snackbar").text('Removed from favorites!');
+                var x = document.getElementById("snackbar");
+                x.className = "show";
+                setTimeout(function () { x.className = x.className.replace("show", " "); }, 3000);
+            },
+            error: function () {
+                return "error";
+            }
+        });
+    }
+</script>
+
 <script>
     function AddToCart(itm_id) {
 
@@ -436,18 +455,32 @@
 
                 <div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box" id="page_@i _@ie" style="width:33%">
                     <div class="thumbnail">
-                        <a onclick="@("window.location.href=' " + Url.Action("ProductDetail", "ProductDetail", new { id = item.id}) + " ' ");"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;cursor:pointer;" /></a>
+                        <a onclick="@("window.location.href=' " + Url.Action("ProductDetail", "ProductDetail", new { id = item.id }) + " ' ");"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;cursor:pointer;" /></a>
                         <div class="desc_box">
                             <p>&euro;@item.price</p>
                             <p class="description">@item.description</p>
                             <p class="desc">@item.long_description</p>
+                            @{
+                                if (SignInManager.IsSignedIn(User))
+                                {
+                                    bool wishlist = ViewBag.Wishlist.Contains(item.id);
+
+                                    <!-- Client side only but use server-side definitions inside to initialize -->
+                                    <a onclick="RemoveFromWishList(@ViewBag.OrderLine)" class="btn btn-default swapHeart"
+                                       style="@(wishlist ? "" : "display:none")">
+                                        <span style="color:#8F6B93;" class="glyphicon glyphicon-heart"></span>
+                                    </a>
+                                    <a onclick="AddToWishList(@item.id)" class="btn btn-default swapHeart"
+                                       style="@(wishlist ? "display:none" : "")">
+                                        <span style="color:#8F6B93;" class="glyphicon glyphicon-heart-empty"></span>
+                                    </a>
+                                }
+                            }
                             @if (SignInManager.IsSignedIn(User))
                             {
-                                <a onclick="AddToWishList(@item.id)" class="btn btn-default swap swapHeart">
-                                    <span style="color:#8F6B93;" class="glyphicon glyphicon-heart-empty"></span>
-                                </a>
                                 <!--Wishlist snackbar, and yes, this is really called a snackbar-->
-                                <div id="snackbar">Added to favorites list!</div>
+                                <div id="snackbar"></div>
+
 
                                 <a onclick="AddToCart(@item.id)" class="btn btn-default">
                                     <span style="color:#8F6B93;" class="glyphicon glyphicon-shopping-cart"></span>
@@ -456,11 +489,11 @@
                             else
                             {
                                 @Html.ActionLink("", "SaveItemsSession", "ShoppingCart",
-                                                                routeValues: new
-                                                                {
-                                                                    item_id = item.id
-                                                                },
-                                                                htmlAttributes: new { @class = "shoppingart glyphicon glyphicon-shopping-cart"})
+                                   routeValues: new
+                                    {
+                                       item_id = item.id
+                                    },
+                               htmlAttributes: new { @class = "shoppingcart glyphicon glyphicon-shopping-cart"})
                             }
                             <!--Shopping cart modal-->
                             <div class="modal fade" id="modelWindowShop" role="dialog">
@@ -498,13 +531,26 @@
                             <p>&euro;@item.price</p>
                             <p class="description">@item.description</p>
                             <p class="desc">@item.long_description</p>
+                            @{
+                                if (SignInManager.IsSignedIn(User))
+                                {
+                                    bool wishlist = ViewBag.Wishlist.Contains(item.id);
+
+                                    <!-- Client side only but use server-side definitions inside to initialize -->
+                                    <a onclick="RemoveFromWishList(@ViewBag.OrderLine)" class="btn btn-default swapHeart"
+                                       style="@(wishlist ? "" : "display:none")">
+                                        <span style="color:#8F6B93;" class="glyphicon glyphicon-heart"></span>
+                                    </a>
+                                    <a onclick="AddToWishList(@item.id)" class="btn btn-default swapHeart"
+                                       style="@(wishlist ? "display:none" : "")">
+                                        <span style="color:#8F6B93;" class="glyphicon glyphicon-heart-empty"></span>
+                                    </a>
+                                }
+                            }
                             @if (SignInManager.IsSignedIn(User))
                             {
-                                <a onclick="AddToWishList(@item.id)" class="btn btn-default swap swapHeart">
-                                    <span style="color:#8F6B93;" class="glyphicon glyphicon-heart-empty"></span>
-                                </a>
                                 <!--Wishlist snackbar, and yes, this is really called a snackbar-->
-                                <div id="snackbar">Added to favorites list!</div>
+                                <div id="snackbar"></div>
 
                                 <a onclick="AddToCart(@item.id)" class="btn btn-default">
                                     <span style="color:#8F6B93;" class="glyphicon glyphicon-shopping-cart"></span>
@@ -513,11 +559,11 @@
                             else
                             {
                                 @Html.ActionLink("", "SaveItemsSession", "ShoppingCart",
-                                                                routeValues: new
-                                                                {
-                                                                    item_id = item.id
-                                                                },
-                                                                htmlAttributes: new { @class = "shoppingart glyphicon glyphicon-shopping-cart"})
+                                   routeValues: new
+                                    {
+                                       item_id = item.id
+                                    },
+                               htmlAttributes: new { @class = "shoppingcart glyphicon glyphicon-shopping-cart"})
                             }
                             <!--Shopping cart modal-->
                             <div class="modal fade" id="modelWindowShop" role="dialog">
@@ -662,41 +708,42 @@
 </div>
 <div class="col-lg-3">
 </div>
-@if (Pager.Count > 0){
-<div class="col-lg-9 box btn-group" align="center" style="align-self:center;margin-left:15%">
-    <div style="float:left; height:100%;">
-        <button id="<" type="button" class="Selector btn" onclick="LoadMore(this.value)" style="margin-left:0%; background-color:initial; outline: 0;" value="<"><</button>
-    </div>
+@if (Pager.Count > 0)
+{
+    <div class="col-lg-9 box btn-group" align="center" style="align-self:center;margin-left:15%">
+        <div style="float:left; height:100%;">
+            <button id="<" type="button" class="Selector btn" onclick="LoadMore(this.value)" style="margin-left:0%; background-color:initial; outline: 0;" value="<"><</button>
+        </div>
 
-    @foreach (var pagenr in Pager)
-    {
-
-        if (pagenr <= 9 && pagenr <= Pager.Max())
+        @foreach (var pagenr in Pager)
         {
-            if (pagenr == 1)
+
+            if (pagenr <= 9 && pagenr <= Pager.Max())
             {
-                <div style="float:left; height:100%; border-radius: 0px;">
-                    <button id="@pagenr" type="button" class="Selector btn Select_ @pagenr" onclick="LoadMore(this.value)" style="margin-left:0%; outline: 0; height: " value="@pagenr">@pagenr</button>
-                </div>
-                <script type="text/javascript">
-                    document.getElementById(1).style.backgroundColor = "#8F6B93";
-                </script>
+                if (pagenr == 1)
+                {
+                    <div style="float:left; height:100%; border-radius: 0px;">
+                        <button id="@pagenr" type="button" class="Selector btn Select_ @pagenr" onclick="LoadMore(this.value)" style="margin-left:0%; outline: 0; height: " value="@pagenr">@pagenr</button>
+                    </div>
+                    <script type="text/javascript">
+                        document.getElementById(1).style.backgroundColor = "#8F6B93";
+                    </script>
+                }
+                else
+                {
+                    <div style="float: left; height:100%; border-radius: 0px;">
+                        <button id="@pagenr" type="button" class="Selector btn Select_ @pagenr" onclick="LoadMore(this.value)" style="margin-left:0%; outline: 0;" value="@pagenr">@pagenr</button>
+                    </div>
+                }
+
             }
-            else
-            {
-                <div style="float: left; height:100%; border-radius: 0px;">
-                    <button id="@pagenr" type="button" class="Selector btn Select_ @pagenr" onclick="LoadMore(this.value)" style="margin-left:0%; outline: 0;" value="@pagenr">@pagenr</button>
-                </div>
-            }
+
 
         }
-
-
-    }
-    <div style="float: left; height: 100%;">
-        <button id=">" type="button" class="Selector btn previous" onclick="LoadMore(this.value)" style="margin-left:0%; outline: 0; background-color:initial;" value=">">></button>
+        <div style="float: left; height: 100%;">
+            <button id=">" type="button" class="Selector btn previous" onclick="LoadMore(this.value)" style="margin-left:0%; outline: 0; background-color:initial;" value=">">></button>
+        </div>
     </div>
-</div>
 }
 else
 {
@@ -704,8 +751,4 @@ else
         <h3 style="text-align:center;">There was nothing to be found here..</h3>
     </div>
 }
-
-
-
-
 

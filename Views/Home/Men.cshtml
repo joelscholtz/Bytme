@@ -208,6 +208,7 @@
         background-color: #ddd;
         border: 1px solid #ddd;
     }
+
     .shoppingCart {
         color: #8F6B93;
     }
@@ -216,10 +217,9 @@
 </script>
 <script>
     jQuery(function ($) {
-        $('.swapHeart').on('click', function () {
-            var $el = $(this),
-                textNode = this.lastChild;
-            $el.find('span').toggleClass('glyphicon-heart glyphicon-heart-empty');
+        $("a.swapHeart").on("click", function (e) {
+            $(this).toggle();
+            $(this).siblings("a.swapHeart").toggle();
         });
     });
 </script>
@@ -231,11 +231,31 @@
                 itm_id: item_id
             },
             url: "/WishList/AddToWishList",
-            success: function (e) {
+            success: function (data) {
+                $("#snackbar").text('Added to favorites!');
                 var x = document.getElementById("snackbar");
                 x.className = "show";
-                setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
-
+                setTimeout(function () { x.className = x.className.replace("show", " "); }, 3000);
+            },
+            error: function () {
+                return "error";
+            }
+        });
+    }
+</script>
+<script>
+    function RemoveFromWishList(orderline_id) {
+        $.ajax({
+            type: "POST",
+            data: {
+                ordline_id: orderline_id
+            },
+            url: "/WishList/RemoveFromWishList",
+            success: function (data) {
+                $("#snackbar").text('Removed from favorites!');
+                var x = document.getElementById("snackbar");
+                x.className = "show";
+                setTimeout(function () { x.className = x.className.replace("show", " "); }, 3000);
             },
             error: function () {
                 return "error";
@@ -455,13 +475,27 @@
                             <p>&euro;@item.price</p>
                             <p class="description">@item.description</p>
                             <p class="desc">@item.long_description</p>
+                            @{
+                                if (SignInManager.IsSignedIn(User))
+                                {
+                                    bool wishlist = ViewBag.Wishlist.Contains(item.id);
+
+                                    <!-- Client side only but use server-side definitions inside to initialize -->
+                                    <a onclick="RemoveFromWishList(@ViewBag.OrderLine)" class="btn btn-default swapHeart"
+                                       style="@(wishlist ? "" : "display:none")">
+                                        <span style="color:#8F6B93;" class="glyphicon glyphicon-heart"></span>
+                                    </a>
+                                    <a onclick="AddToWishList(@item.id)" class="btn btn-default swapHeart"
+                                       style="@(wishlist ? "display:none" : "")">
+                                        <span style="color:#8F6B93;" class="glyphicon glyphicon-heart-empty"></span>
+                                    </a>
+                                }
+                            }
                             @if (SignInManager.IsSignedIn(User))
                             {
-                                <a onclick="AddToWishList(@item.id)" class="btn btn-default swap swapHeart">
-                                    <span style="color:#8F6B93;" class="glyphicon glyphicon-heart-empty"></span>
-                                </a>
                                 <!--Wishlist snackbar, and yes, this is really called a snackbar-->
-                                <div id="snackbar">Added to favorites list!</div>
+                                <div id="snackbar"></div>
+
 
                                 <a onclick="AddToCart(@item.id)" class="btn btn-default">
                                     <span style="color:#8F6B93;" class="glyphicon glyphicon-shopping-cart"></span>
@@ -470,11 +504,11 @@
                             else
                             {
                                 @Html.ActionLink("", "SaveItemsSession", "ShoppingCart",
-                                                                routeValues: new
-                                                                {
-                                                                    item_id = item.id
-                                                                },
-                                                                htmlAttributes: new { @class = "shoppingart glyphicon glyphicon-shopping-cart"})
+                                   routeValues: new
+                                    {
+                                       item_id = item.id
+                                    },
+                               htmlAttributes: new { @class = "shoppingcart glyphicon glyphicon-shopping-cart"})
                             }
                             <!--Shopping cart modal-->
                             <div class="modal fade" id="modelWindowShop" role="dialog">
@@ -513,13 +547,27 @@
                             <p>&euro;@item.price</p>
                             <p class="description">@item.description</p>
                             <p class="desc">@item.long_description</p>
+                            @{
+                                if (SignInManager.IsSignedIn(User))
+                                {
+                                    bool wishlist = ViewBag.Wishlist.Contains(item.id);
+
+                                    <!-- Client side only but use server-side definitions inside to initialize -->
+                                    <a onclick="RemoveFromWishList(@ViewBag.OrderLine)" class="btn btn-default swapHeart"
+                                       style="@(wishlist ? "" : "display:none")">
+                                        <span style="color:#8F6B93;" class="glyphicon glyphicon-heart"></span>
+                                    </a>
+                                    <a onclick="AddToWishList(@item.id)" class="btn btn-default swapHeart"
+                                       style="@(wishlist ? "display:none" : "")">
+                                        <span style="color:#8F6B93;" class="glyphicon glyphicon-heart-empty"></span>
+                                    </a>
+                                }
+                            }
                             @if (SignInManager.IsSignedIn(User))
                             {
-                                <a onclick="AddToWishList(@item.id)" class="btn btn-default swap swapHeart">
-                                    <span style="color:#8F6B93;" class="glyphicon glyphicon-heart-empty"></span>
-                                </a>
                                 <!--Wishlist snackbar, and yes, this is really called a snackbar-->
-                                <div id="snackbar">Added to favorites list!</div>
+                                <div id="snackbar"></div>
+
 
                                 <a onclick="AddToCart(@item.id)" class="btn btn-default">
                                     <span style="color:#8F6B93;" class="glyphicon glyphicon-shopping-cart"></span>
@@ -528,11 +576,11 @@
                             else
                             {
                                 @Html.ActionLink("", "SaveItemsSession", "ShoppingCart",
-                                                                routeValues: new
-                                                                {
-                                                                    item_id = item.id
-                                                                },
-                                                                htmlAttributes: new { @class = "shoppingart glyphicon glyphicon-shopping-cart"})
+                                   routeValues: new
+                                    {
+                                       item_id = item.id
+                                    },
+                               htmlAttributes: new { @class = "shoppingcart glyphicon glyphicon-shopping-cart"})
                             }
                             <!--Shopping cart modal-->
                             <div class="modal fade" id="modelWindowShop" role="dialog">
