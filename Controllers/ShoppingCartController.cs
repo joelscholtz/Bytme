@@ -404,8 +404,11 @@ namespace bytme.Controllers
             mailMessage.Subject = "Order " + orders.id;
             string fullname = result.name + " " + result.surname;
 
-            mailMessage.Body = " <div style='width:95%;'> ";
-            mailMessage.Body += "<br><br><h3>Dear " + fullname + " thanks for your order.</h3>";
+            mailMessage.Body = " <div style='width:95%;'> " +
+                                "<h3><center>Address:</center></h3>" +
+                                "<h3><center>" + result.street + " " + result.streetnumber + "," + "</center></h3>" +
+                                "<h3><center>" + result.zipcode + ", " + result.city + "</center></h3>";
+            mailMessage.Body += "<br><br><h3>Dear " + fullname + " thanks for your order!</h3>";
             mailMessage.Body +=
                 "<h3>Here is an overview of the things you ordered:</h3> <br><br> " +
                 " <table style='font-family: arial,sans-serif;border-collapse: collapse;width:95%; '>" +
@@ -462,8 +465,8 @@ namespace bytme.Controllers
                                     " </tr>";
             }
             mailMessage.Body += "</table>";
-            mailMessage.Body += "<br><h3>If you have any questions you can mail us via the contact page on our webshop</h3>" +
-                                "<br><h3>Have a nice day</h3>" +
+            mailMessage.Body += "<br><h3>If you have any questions you can mail us via the contact page on our webshop.</h3>" +
+                                "<br><h3>Have a nice day!</h3>" +
                                 "</div>";
 
             client.Send(mailMessage);
@@ -575,40 +578,14 @@ namespace bytme.Controllers
             return View();
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Index(List<ShoppingCartModel> shoppingCartModels)
-        {
-            List<OrderLines> orderLines = new List<OrderLines>();
-
-            foreach (var s in shoppingCartModels)
-            {
-                orderLines.Add(new OrderLines { id = s.orderline_id, qty = s.qty, order_id = s.orderline_id, item_id = s.item_id });
-            }
-
-            foreach (var o in orderLines)
-            {
-                _context.OrderLines.Update(o);
-                _context.SaveChanges();
-            }
-            return View(nameof(Checkout));
-        }
-
         public IActionResult Checkout()
         {
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var result = _context.UserModels.Where(u => u.Id == userId).FirstOrDefault();
-            
-            ViewBag.street = result.street;
-            ViewBag.streetnumber = result.streetnumber;
-            ViewBag.city = result.city;
-            ViewBag.zipcode = result.zipcode;
-            ViewBag.name = result.name;
-            ViewBag.surname = result.surname;
-            
-            int order_id = CheckIfOrderExists();
-            int count = CountItemsInShoppingCart(order_id);
-            ViewBag.count = count;
+            var cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
+            ViewBag.cart = cart;
+            if (ViewBag.cart != null)
+            {
+                ViewBag.total = cart.Sum(item => item.price * item.quantity);
+            }
             return View();
         }
 
@@ -643,6 +620,10 @@ namespace bytme.Controllers
                               price_payed = history.price_payed,
                               qty_bought = history.qty_bought,
                               item_description = history.item_description,
+                              street = history.street,
+                              streetnumber = history.streetnumber,
+                              zipcode = history.zipcode,
+                              city = history.city,
                               dt_created = history.dt_created
                           }
                               );

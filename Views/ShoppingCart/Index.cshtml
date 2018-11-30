@@ -40,7 +40,7 @@
 <center><h3>
     @if (SignInManager.IsSignedIn(User))
     {
-        if (ViewBag.total != 0)
+        if (ViewBag.total > 2.95)
         {
             @Html.ActionLink("Move products to account", "SessionToAccount", "ShoppingCart")
         }
@@ -185,11 +185,10 @@
                         }
                     </tr>
                     <tr>
-                        <td colspan="5" class="hidden-xs"></td>
+                        <td colspan="4" class="hidden-xs"></td>
                         @if (ViewBag.cart != null && ViewBag.total > 2.95)
                         {
-                            <!--<td style="margin-left:50%"><button type="submit" class="btn btn-success btn-block">Check out</button></td>-->
-                            <td data-toggle="modal" href="#notnormalModal" class="btn btn-success btn-block">Check out</td>
+                            <td><a class="btn btn-success btn-block" asp-area="" asp-controller="ShoppingCart" asp-action="Checkout">Check Out</a></td>
                         }
                     </tr>
                 </tfoot>
@@ -209,7 +208,7 @@
                         <div class="modal-body">
                             @if (User.Identity.IsAuthenticated)
                             {
-                                <div style="text-align:center">
+                                <div style="text-align:center"> 
                                     <h3><b>Data</b></h3>
                                     <h4>@user.name @user.surname</h4>
                                     <h4>@user.street @user.streetnumber</h4>
@@ -306,110 +305,7 @@
             </div>
         }
         else
-        {
-            <div id="notnormalModal" class="modal fade">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <h4 class="modal-title">Check out</h4>
-                        </div>
-                        <div class="modal-body">
-                            <div style="text-align:center">
-                                <h3>
-                                    <a asp-area="Identity" asp-page="/Account/Register" style="color:#B388B8;text-decoration:none;">Register</a>
-                                    or
-                                    <a asp-area="Identity" asp-page="/Account/Login" style="color:#B388B8;text-decoration:none;">Login</a>
-                                </h3>
-                                <h3><b>Data</b></h3>
-                            </div>
-                            <div id="paypal-button-container" style="text-align:center;"></div>
-                            @if (ViewBag.cart != null)
-                            {
-                                <script>
-                                var total = parseFloat("@ViewBag.total".replace(",", "."));
-                                </script>
-                                <script src="https://www.paypalobjects.com/api/checkout.js"></script>
-                                <script>
-                                    // Render the PayPal button
-                                    paypal.Button.render({
-                                        // Set your environment
-                                        env: 'sandbox', // sandbox | production
-
-                                        // Specify the style of the button
-                                        style: {
-                                            layout: 'horizontal',  // horizontal | vertical
-                                            size: 'large',    // medium | large | responsive
-                                            shape: 'pill',      // pill | rect
-                                            color: 'black'       // gold | blue | silver | white | black
-                                        },
-
-                                        // Specify allowed and disallowed funding sources
-                                        //
-                                        // Options:
-                                        // - paypal.FUNDING.CARD
-                                        // - paypal.FUNDING.CREDIT
-                                        // - paypal.FUNDING.ELV
-                                        funding: {
-                                            allowed: [
-                                                paypal.FUNDING.CARD,
-                                                paypal.FUNDING.CREDIT
-                                            ],
-                                            disallowed: []
-                                        },
-
-                                        // Enable Pay Now checkout flow (optional)
-                                        commit: true,
-
-                                        // PayPal Client IDs - replace with your own
-                                        // Create a PayPal app: https://developer.paypal.com/developer/applications/create
-                                        client: {
-                                            sandbox: 'AcXXg_AJtE3WmNiQiU81S5w2oIzdLTFfhWGLVuq6u4Q3oUu_xXTV6Zeqip_xRufDkFWCrumyLeEFO0Ag',
-                                            production: '<insert production client id>'
-                                        },
-
-                                        payment: function (data, actions) {
-                                            return actions.payment.create({
-                                                payment: {
-                                                    transactions: [
-                                                        {
-                                                            amount: {
-                                                                total: total,
-                                                                currency: 'EUR'
-                                                            }
-                                                        }
-                                                    ],
-                                                }
-                                            });
-                                        },
-
-                                        onAuthorize: function (data, actions) {
-                                            return actions.payment.execute()
-                                                .then(function () {
-                                                    $.ajax({
-                                                        type: "POST",
-                                                        data: {
-                                                        },
-
-                                                        url: "/ShoppingCart/ConfirmOrderSession",
-                                                        success: function (response) {
-                                                            document.body.innerHTML = response;
-                                                        },
-                                                        error: function () {
-                                                            return "error";
-                                                        }
-                                                    });
-                                                    window.alert('Payment Complete! Email has been sent!')
-                                                });
-                                        }
-                                    }, '#paypal-button-container');
-                                </script>
-                            }
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }
+        {}
 </div>
 
 @if (ViewBag.count == 0 && ViewBag.cart == null)

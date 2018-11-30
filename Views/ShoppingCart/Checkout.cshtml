@@ -1,4 +1,4 @@
-﻿@model List<bytme.Models.ShoppingCartModel>
+﻿@model bytme.Models.ViewModels.OrderHistoryViewModel
 
 @inject UserManager<UserModel> userManager
 
@@ -13,29 +13,69 @@
 }
 
 <h2>Checkout</h2>
-
-@if (ViewBag.count != 0)
+<h3>
+    <a asp-area="Identity" asp-page="/Account/Register" style="color:#B388B8;text-decoration:none;">Register</a>
+    or
+    <a asp-area="Identity" asp-page="/Account/Login" style="color:#B388B8;text-decoration:none;">Login</a>
+</h3>
+@if (ViewBag.total > 2.95)
 {
-    @if (User.Identity.IsAuthenticated)
+    @if (!User.Identity.IsAuthenticated)
     {
         <br />
         <br />
         <div style="width: 100%">
             <div style="float:left; width: 60%">
                 <h3><b>Data</b></h3>
-                <h4>@user.name @user.surname</h4>
-                <h4>@user.street @user.streetnumber</h4>
-                <h4>@user.zipcode, @user.city</h4>
-                <h4><a asp-area="Identity" asp-page="/Account/Manage/Index" text-decoration:none;">Change Name</a></h4>
-                <h4><a asp-area="Identity" asp-page="/Account/Manage/Address" text-decoration:none;">Change Address</a></h4>
+                <br />
+                <form id="payment" method="post">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="name"></label>
+                        <input asp-for="name" class="form-control" />
+                        <span asp-validation-for="name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="surname"></label>
+                        <input asp-for="surname" class="form-control" />
+                        <span asp-validation-for="surname" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Email"></label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="street"></label>
+                        <input asp-for="street" class="form-control" />
+                        <span asp-validation-for="street" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="streetnumber"></label>
+                        <input asp-for="streetnumber" class="form-control" />
+                        <span asp-validation-for="streetnumber" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="zipcode"></label>
+                        <input asp-for="zipcode" class="form-control" />
+                        <span asp-validation-for="zipcode" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="city"></label>
+                        <input asp-for="city" class="form-control" />
+                        <span asp-validation-for="city" class="text-danger"></span>
+                    </div>
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </form>
             </div>
             <div style="float: right">
                 <h3><b>Payment option</b></h3>
                 <form>
                     <center><h4><input checked="checked" name="payment" type="radio" value="true" /> Paypal</h4></center>
                 </form>
+
                 <script>
-                                var totalPrice = parseFloat("@ViewBag.TotalPrice".replace(",", "."));
+                      var totalPrice = parseFloat("@ViewBag.total".replace(",", "."));
                 </script>
                 <div id="paypal-button-container"></div>
                 <script src="https://www.paypalobjects.com/api/checkout.js"></script>
@@ -100,7 +140,7 @@
                                         data: {
                                         },
 
-                                        url: "/ShoppingCart/ConfirmOrder",
+                                        url: "/ShoppingCart/ConfirmOrderSession",
                                         success: function (response) {
                                             document.body.innerHTML = response;
                                         },
@@ -118,7 +158,7 @@
     }
     else
     {
-        <h1><b><center>This feature is not yet built in. Please register. Our sincere apologies.</center></b></h1>
+        <h1><b><center>This page is only meant for unregisterd users!</center></b></h1>
     }
 }
 else
