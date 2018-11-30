@@ -448,10 +448,20 @@
                                 </a>
                                 <!--Wishlist snackbar, and yes, this is really called a snackbar-->
                                 <div id="snackbar">Added to favorites list!</div>
+
+                                <a onclick="AddToCart(@item.id)" class="btn btn-default">
+                                    <span style="color:#8F6B93;" class="glyphicon glyphicon-shopping-cart"></span>
+                                </a>
                             }
-                            <a onclick="AddToCart(@item.id)" class="btn btn-default">
-                                <span style="color:#8F6B93;" class="glyphicon glyphicon-shopping-cart"></span>
-                            </a>
+                            else
+                            {
+                                @Html.ActionLink("", "SaveItemsSession", "ShoppingCart",
+                                                                routeValues: new
+                                                                {
+                                                                    item_id = item.id
+                                                                },
+                                                                htmlAttributes: new { @class = "shoppingart glyphicon glyphicon-shopping-cart"})
+                            }
                             <!--Shopping cart modal-->
                             <div class="modal fade" id="modelWindowShop" role="dialog">
                                 <div class="modal-dialog">
@@ -495,10 +505,20 @@
                                 </a>
                                 <!--Wishlist snackbar, and yes, this is really called a snackbar-->
                                 <div id="snackbar">Added to favorites list!</div>
+
+                                <a onclick="AddToCart(@item.id)" class="btn btn-default">
+                                    <span style="color:#8F6B93;" class="glyphicon glyphicon-shopping-cart"></span>
+                                </a>
                             }
-                            <a onclick="AddToCart(@item.id)" class="btn btn-default">
-                                <span style="color:#8F6B93;" class="glyphicon glyphicon-shopping-cart"></span>
-                            </a>
+                            else
+                            {
+                                @Html.ActionLink("", "SaveItemsSession", "ShoppingCart",
+                                                                routeValues: new
+                                                                {
+                                                                    item_id = item.id
+                                                                },
+                                                                htmlAttributes: new { @class = "shoppingart glyphicon glyphicon-shopping-cart"})
+                            }
                             <!--Shopping cart modal-->
                             <div class="modal fade" id="modelWindowShop" role="dialog">
                                 <div class="modal-dialog">

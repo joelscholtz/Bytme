@@ -1,8 +1,8 @@
 ﻿@model List<bytme.Models.ShoppingCartModel>
 
-@inject UserManager<UserModel> userManager
-
 @using Microsoft.AspNetCore.Identity
+@inject SignInManager<UserModel> SignInManager
+@inject UserManager<UserModel> userManager
 @{
     ViewData["Title"] = "Shopping Cart";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -37,8 +37,17 @@
         }
     }
 </script>
+<center><h3>
+    @if (SignInManager.IsSignedIn(User))
+    {
+        if (ViewBag.total != 0)
+        {
+            @Html.ActionLink("Move products to account", "SessionToAccount", "ShoppingCart")
+        }
+    }
+    </h3>
+</center>
 <h2>Your Shoppingcart</h2>
-
 <div class="container">
     <form method="post" id="form-ShoppingCart">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -52,183 +61,358 @@
                     <th style="width:10%"></th>
                 </tr>
             </thead>
-            <tbody>
-                @if (ViewBag.model_view != null)
-                {
-                    @for (int i = 0; i < Model.Count(); i++)
-                    {
-                        <tr>
-                            <td data-th="Products">
-                                <div class="row" style="margin-left:0px">
-                                    <a onclick="@("window.location.href=' " + Url.Action("ProductDetail", "ProductDetail", new { id = Model[i].item_id}) + " ' ");"><img src="@Html.DisplayFor(model => model[i].photo_url)" style="width:245px;height:332px;text-align:center;cursor:pointer;" /></a>
-                                    <div class="col-sm-10">
-                                        <h4 class="nomargin">@Html.DisplayFor(model => model[i].description)</h4>
-                                        <p>@Html.DisplayFor(model => model[i].long_description)</p>
-                                    </div>
-                                </div>
-                            </td>
-
-                            <script>
-                                function checkGreaterStock(qty, which, stock) {
-                                    if (qty > stock) {
-                                        document.getElementById("_data_qty_" + which).value = stock;
-                                    }
-                                    else if (qty < 1) {
-                                        document.getElementById("_data_qty_" + which).value = 1;
-                                    }
-                                }
-                            </script>
-
-                            <td data-th="Quantity">
-                                <input asp-for="@Model[i].qty" type="number" min="1" max="@Model[i].stock" id="_data_qty_@Model[i].orderline_id" onkeydown="testForEnter();" onchange="UpdateQtyOrder(@Model[i].orderline_id , this.value)" class="form-control" value="@Model[i].qty" oninput="checkGreaterStock(this.value, @Model[i].orderline_id, @Model[i].stock)" required>
-
-                            <td data-th="Price">&euro; @{ var price = (Model[i].price); } @{ @price.ToString("N")}</td>
-
-                            <td data-th="Subtotal" class="text-center"><span id="_data_subtotal_@Model[i].orderline_id"> &euro;  @{var total = (@Model[i].price * @Model[i].qty); } @{ @total.ToString("N") } </span></td>
-                            <td class="actions" data-th="">
-                            <td>
-                                <a href='@Url.Action("DeleteItemFromShoppingCart", "ShoppingCart", new { orderline_id = Model[i].orderline_id })' class="btn btn-danger btn-block">Remove product</a>
-                            </td>
-
-                        </tr>
-                    }
-                }
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="2" class="hidden-xs"></td>
+            @if (SignInManager.IsSignedIn(User))
+            {
+                <tbody>
                     @if (ViewBag.model_view != null)
                     {
-                        @if (ViewBag.totalPrice < 100)
+                        @for (int i = 0; i < Model.Count(); i++)
                         {
-                            <td class="hidden-xs text-center"><h5>if you buy €100,- or more your shipping costs will be free </h5></td>
-                            <td colspan="2" class="hidden-xs text-center"><h5>shipping costs = €2.95</h5> <h4><strong>Total = &euro;@ViewBag.totalPrice.ToString("0.00")</strong></h4></td>
-                        }
-                        @if (ViewBag.totalPrice >= 100)
-                        {
-                            <td colspan="5" class="hidden-xs text-center"><h4><strong><span id="result_sub_total">Total &euro;@ViewBag.totalPrice.ToString("N")</span></strong></h4></td>
-                        }
-                    }
-                </tr>
-                <tr>
-                    <td colspan="5" class="hidden-xs"></td>
-                    @if (ViewBag.count > 0 && ViewBag.totalPrice > 2.95)
-                    {
-                        <!--<td style="margin-left:50%"><button type="submit" class="btn btn-success btn-block">Check out</button></td>-->
-                        <td data-toggle="modal" href="#normalModal" class="btn btn-success btn-block">Check out</td>
-                    }
-                </tr>
-            </tfoot>
-        </table>
+                            <tr>
+                                <td data-th="Products">
+                                    <div class="row" style="margin-left:0px">
+                                        <a onclick="@("window.location.href=' " + Url.Action("ProductDetail", "ProductDetail", new { id = Model[i].item_id }) + " ' ");"><img src="@Html.DisplayFor(model => model[i].photo_url)" style="width:245px;height:332px;text-align:center;cursor:pointer;" /></a>
+                                        <div class="col-sm-10">
+                                            <h4 class="nomargin">@Html.DisplayFor(model => model[i].description)</h4>
+                                            <p>@Html.DisplayFor(model => model[i].long_description)</p>
+                                        </div>
+                                    </div>
+                                </td>
 
-        <div id="normalModal" class="modal fade">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title">Check out</h4>
-                    </div>
-                    <div class="modal-body">
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            <div style="text-align:center">
-                                <h3><b>Data</b></h3>
-                                <h4>@user.name @user.surname</h4>
-                                <h4>@user.street @user.streetnumber</h4>
-                                <h4>@user.zipcode, @user.city</h4>
-                                <h4><a asp-area="Identity" asp-page="/Account/Manage/Index" text-decoration:none;">Change Name</a></h4>
-                                <h4><a asp-area="Identity" asp-page="/Account/Manage/Address" text-decoration:none;">Change Address</a></h4>
-                            </div>
+                                <script>
+                                    function checkGreaterStock(qty, which, stock) {
+                                        if (qty > stock) {
+                                            document.getElementById("_data_qty_" + which).value = stock;
+                                        }
+                                        else if (qty < 1) {
+                                            document.getElementById("_data_qty_" + which).value = 1;
+                                        }
+                                    }
+                                </script>
+
+                                <td data-th="Quantity">
+                                    <input asp-for="@Model[i].qty" type="number" min="1" max="@Model[i].stock" id="_data_qty_@Model[i].orderline_id" onkeydown="testForEnter();" onchange="UpdateQtyOrder(@Model[i].orderline_id , this.value)" class="form-control" value="@Model[i].qty" oninput="checkGreaterStock(this.value, @Model[i].orderline_id, @Model[i].stock)" required>
+
+                                <td data-th="Price">&euro; @{ var price = (Model[i].price); } @{ @price.ToString("N")}</td>
+
+                                <td data-th="Subtotal" class="text-center"><span id="_data_subtotal_@Model[i].orderline_id"> &euro;  @{var total = (@Model[i].price * @Model[i].qty); } @{ @total.ToString("N") } </span></td>
+                                <td class="actions" data-th="">
+                                <td>
+                                    <a href='@Url.Action("DeleteItemFromShoppingCart", "ShoppingCart", new { orderline_id = Model[i].orderline_id })' class="btn btn-danger btn-block">Remove product</a>
+                                </td>
+
+                            </tr>
                         }
-                        <div id="paypal-button-container" style="text-align:center;"></div>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="2" class="hidden-xs"></td>
                         @if (ViewBag.model_view != null)
                         {
-                            <script>
-                                var totalPrice = parseFloat("@ViewBag.totalPrice".replace(",", "."));
-                            </script>
-                            <script src="https://www.paypalobjects.com/api/checkout.js"></script>
-                            <script>
-                                // Render the PayPal button
-                                paypal.Button.render({
-                                    // Set your environment
-                                    env: 'sandbox', // sandbox | production
-
-                                    // Specify the style of the button
-                                    style: {
-                                        layout: 'horizontal',  // horizontal | vertical
-                                        size: 'large',    // medium | large | responsive
-                                        shape: 'pill',      // pill | rect
-                                        color: 'black'       // gold | blue | silver | white | black
-                                    },
-
-                                    // Specify allowed and disallowed funding sources
-                                    //
-                                    // Options:
-                                    // - paypal.FUNDING.CARD
-                                    // - paypal.FUNDING.CREDIT
-                                    // - paypal.FUNDING.ELV
-                                    funding: {
-                                        allowed: [
-                                            paypal.FUNDING.CARD,
-                                            paypal.FUNDING.CREDIT
-                                        ],
-                                        disallowed: []
-                                    },
-
-                                    // Enable Pay Now checkout flow (optional)
-                                    commit: true,
-
-                                    // PayPal Client IDs - replace with your own
-                                    // Create a PayPal app: https://developer.paypal.com/developer/applications/create
-                                    client: {
-                                        sandbox: 'AcXXg_AJtE3WmNiQiU81S5w2oIzdLTFfhWGLVuq6u4Q3oUu_xXTV6Zeqip_xRufDkFWCrumyLeEFO0Ag',
-                                        production: '<insert production client id>'
-                                    },
-
-                                    payment: function (data, actions) {
-                                        return actions.payment.create({
-                                            payment: {
-                                                transactions: [
-                                                    {
-                                                        amount: {
-                                                            total: totalPrice,
-                                                            currency: 'EUR'
-                                                        }
-                                                    }
-                                                ],
-                                            }
-                                        });
-                                    },
-
-                                    onAuthorize: function (data, actions) {
-                                        return actions.payment.execute()
-                                            .then(function () {
-                                                $.ajax({
-                                                    type: "POST",
-                                                    data: {
-                                                    },
-
-                                                    url: "/ShoppingCart/ConfirmOrder",
-                                                    success: function (response) {
-                                                        document.body.innerHTML = response;
-                                                    },
-                                                    error: function () {
-                                                        return "error";
-                                                    }
-                                                });
-                                                window.alert('Payment Complete! Email has been sent!')
-                                            });
-                                    }
-                                }, '#paypal-button-container');
-                            </script>
+                            @if (ViewBag.totalPrice < 100)
+                            {
+                                <td class="hidden-xs text-center"><h5>if you buy €100,- or more your shipping costs will be free </h5></td>
+                                <td colspan="2" class="hidden-xs text-center"><h5>shipping costs = €2.95</h5> <h4><strong>Total = &euro;@ViewBag.totalPrice.ToString("0.00")</strong></h4></td>
+                            }
+                            if (ViewBag.totalPrice > 100)
+                            {
+                                <td colspan="5" class="hidden-xs text-center"><h4><strong><span id="result_sub_total">Total &euro;@ViewBag.totalPrice.ToString("N")</span></strong></h4></td>
+                            }
                         }
+                    </tr>
+                    <tr>
+                        <td colspan="5" class="hidden-xs"></td>
+                        @if (ViewBag.count > 0 && ViewBag.totalPrice > 2.95)
+                        {
+                            <!--<td style="margin-left:50%"><button type="submit" class="btn btn-success btn-block">Check out</button></td>-->
+                            <td data-toggle="modal" href="#normalModal" class="btn btn-success btn-block">Check out</td>
+                        }
+                    </tr>
+                </tfoot>
+            }
+            else
+            {
+                @if (ViewBag.cart != null)
+                {
+                    @foreach (var item in ViewBag.cart)
+                    {
+                        <tbody>
+                            <tr>
+                                <td data-th="Products">
+                                    <div class="row" style="margin-left: 0px">
+                                        <a onclick="@("window.location.href=' " + Url.Action("ProductDetail", "ProductDetail", new { id = item.id}) + " ' ");"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;cursor:pointer;" /></a>
+                                        <div class="col-sm-10">
+                                            <h4 class="nomargin">@item.description</h4>
+                                            <p>@item.long_description</p>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td data-th="Quantity">
+                                    <p>@item.quantity</p>
+                                <td data-th="Price">&euro; @{ var price = (item.price); } @{ @price.ToString("N")}</td>
+
+                                <td data-th="Subtotal" class="text-center"><span id="_data_subtotal_@item.id"> &euro;  @{var total = (item.price * item.quantity); } @{ @total.ToString("N") } </span></td>
+
+                                <td>
+                                    @Html.ActionLink("Remove product", "Remove", "ShoppingCart",
+                                                            routeValues: new
+                                                            {
+                                                                item_id = item.id
+                                                            },
+                                                            htmlAttributes: new { @class = "btn btn-danger btn-block" })
+                                </td>
+                            </tr>
+                        </tbody>
+                    }
+                }
+                <tfoot>
+                    <tr>
+                        <td colspan="2" class="hidden-xs"></td>
+                        @if (ViewBag.cart != null)
+                        {
+                            @if (ViewBag.total < 100 && ViewBag.total > 2.95)
+                            {
+                                <td class="hidden-xs text-center"><h5>if you buy €100,- or more your shipping costs will be free </h5></td>
+                                <td colspan="2" class="hidden-xs text-center"><h5>shipping costs = €2.95</h5> <h4><strong>Total = &euro;@ViewBag.total.ToString("0.00")</strong></h4></td>
+
+                            }
+                            if (ViewBag.total > 100)
+                            {
+                                <td colspan="5" class="hidden-xs text-center"><h4><strong><span id="result_sub_total">Total &euro;@ViewBag.total.ToString("N")</span></strong></h4></td>
+                            }
+                        }
+                    </tr>
+                    <tr>
+                        <td colspan="5" class="hidden-xs"></td>
+                        @if (ViewBag.cart != null && ViewBag.total > 2.95)
+                        {
+                            <!--<td style="margin-left:50%"><button type="submit" class="btn btn-success btn-block">Check out</button></td>-->
+                            <td data-toggle="modal" href="#notnormalModal" class="btn btn-success btn-block">Check out</td>
+                        }
+                    </tr>
+                </tfoot>
+            }
+        </table>
+
+        @if (SignInManager.IsSignedIn(User))
+        {
+
+            <div id="normalModal" class="modal fade">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title">Check out</h4>
+                        </div>
+                        <div class="modal-body">
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <div style="text-align:center">
+                                    <h3><b>Data</b></h3>
+                                    <h4>@user.name @user.surname</h4>
+                                    <h4>@user.street @user.streetnumber</h4>
+                                    <h4>@user.zipcode, @user.city</h4>
+                                    <h4><a asp-area="Identity" asp-page="/Account/Manage/Index" text-decoration:none;">Change Name</a></h4>
+                                    <h4><a asp-area="Identity" asp-page="/Account/Manage/Address" text-decoration:none;">Change Address</a></h4>
+                                </div>
+                            }
+                            <div id="paypal-button-container" style="text-align:center;"></div>
+                            @if (ViewBag.model_view != null)
+                            {
+                                <script>
+                                var totalPrice = parseFloat("@ViewBag.totalPrice".replace(",", "."));
+                                </script>
+                                <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+                                <script>
+                                    // Render the PayPal button
+                                    paypal.Button.render({
+                                        // Set your environment
+                                        env: 'sandbox', // sandbox | production
+
+                                        // Specify the style of the button
+                                        style: {
+                                            layout: 'horizontal',  // horizontal | vertical
+                                            size: 'large',    // medium | large | responsive
+                                            shape: 'pill',      // pill | rect
+                                            color: 'black'       // gold | blue | silver | white | black
+                                        },
+
+                                        // Specify allowed and disallowed funding sources
+                                        //
+                                        // Options:
+                                        // - paypal.FUNDING.CARD
+                                        // - paypal.FUNDING.CREDIT
+                                        // - paypal.FUNDING.ELV
+                                        funding: {
+                                            allowed: [
+                                                paypal.FUNDING.CARD,
+                                                paypal.FUNDING.CREDIT
+                                            ],
+                                            disallowed: []
+                                        },
+
+                                        // Enable Pay Now checkout flow (optional)
+                                        commit: true,
+
+                                        // PayPal Client IDs - replace with your own
+                                        // Create a PayPal app: https://developer.paypal.com/developer/applications/create
+                                        client: {
+                                            sandbox: 'AcXXg_AJtE3WmNiQiU81S5w2oIzdLTFfhWGLVuq6u4Q3oUu_xXTV6Zeqip_xRufDkFWCrumyLeEFO0Ag',
+                                            production: '<insert production client id>'
+                                        },
+
+                                        payment: function (data, actions) {
+                                            return actions.payment.create({
+                                                payment: {
+                                                    transactions: [
+                                                        {
+                                                            amount: {
+                                                                total: totalPrice,
+                                                                currency: 'EUR'
+                                                            }
+                                                        }
+                                                    ],
+                                                }
+                                            });
+                                        },
+
+                                        onAuthorize: function (data, actions) {
+                                            return actions.payment.execute()
+                                                .then(function () {
+                                                    $.ajax({
+                                                        type: "POST",
+                                                        data: {
+                                                        },
+
+                                                        url: "/ShoppingCart/ConfirmOrder",
+                                                        success: function (response) {
+                                                            document.body.innerHTML = response;
+                                                        },
+                                                        error: function () {
+                                                            return "error";
+                                                        }
+                                                    });
+                                                    window.alert('Payment Complete! Email has been sent!')
+                                                });
+                                        }
+                                    }, '#paypal-button-container');
+                                </script>
+                            }
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        }
+        else
+        {
+            <div id="notnormalModal" class="modal fade">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title">Check out</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div style="text-align:center">
+                                <h3>
+                                    <a asp-area="Identity" asp-page="/Account/Register" style="color:#B388B8;text-decoration:none;">Register</a>
+                                    or
+                                    <a asp-area="Identity" asp-page="/Account/Login" style="color:#B388B8;text-decoration:none;">Login</a>
+                                </h3>
+                                <h3><b>Data</b></h3>
+                            </div>
+                            <div id="paypal-button-container" style="text-align:center;"></div>
+                            @if (ViewBag.cart != null)
+                            {
+                                <script>
+                                var total = parseFloat("@ViewBag.total".replace(",", "."));
+                                </script>
+                                <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+                                <script>
+                                    // Render the PayPal button
+                                    paypal.Button.render({
+                                        // Set your environment
+                                        env: 'sandbox', // sandbox | production
+
+                                        // Specify the style of the button
+                                        style: {
+                                            layout: 'horizontal',  // horizontal | vertical
+                                            size: 'large',    // medium | large | responsive
+                                            shape: 'pill',      // pill | rect
+                                            color: 'black'       // gold | blue | silver | white | black
+                                        },
+
+                                        // Specify allowed and disallowed funding sources
+                                        //
+                                        // Options:
+                                        // - paypal.FUNDING.CARD
+                                        // - paypal.FUNDING.CREDIT
+                                        // - paypal.FUNDING.ELV
+                                        funding: {
+                                            allowed: [
+                                                paypal.FUNDING.CARD,
+                                                paypal.FUNDING.CREDIT
+                                            ],
+                                            disallowed: []
+                                        },
+
+                                        // Enable Pay Now checkout flow (optional)
+                                        commit: true,
+
+                                        // PayPal Client IDs - replace with your own
+                                        // Create a PayPal app: https://developer.paypal.com/developer/applications/create
+                                        client: {
+                                            sandbox: 'AcXXg_AJtE3WmNiQiU81S5w2oIzdLTFfhWGLVuq6u4Q3oUu_xXTV6Zeqip_xRufDkFWCrumyLeEFO0Ag',
+                                            production: '<insert production client id>'
+                                        },
+
+                                        payment: function (data, actions) {
+                                            return actions.payment.create({
+                                                payment: {
+                                                    transactions: [
+                                                        {
+                                                            amount: {
+                                                                total: total,
+                                                                currency: 'EUR'
+                                                            }
+                                                        }
+                                                    ],
+                                                }
+                                            });
+                                        },
+
+                                        onAuthorize: function (data, actions) {
+                                            return actions.payment.execute()
+                                                .then(function () {
+                                                    $.ajax({
+                                                        type: "POST",
+                                                        data: {
+                                                        },
+
+                                                        url: "/ShoppingCart/ConfirmOrderSession",
+                                                        success: function (response) {
+                                                            document.body.innerHTML = response;
+                                                        },
+                                                        error: function () {
+                                                            return "error";
+                                                        }
+                                                    });
+                                                    window.alert('Payment Complete! Email has been sent!')
+                                                });
+                                        }
+                                    }, '#paypal-button-container');
+                                </script>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
 </div>
 
-@if (ViewBag.count == 0)
+@if (ViewBag.count == 0 && ViewBag.cart == null)
 {
     <center>
         <h1>
@@ -237,4 +421,4 @@
     </center>
 }
     </form>
-</div>
+    </div>

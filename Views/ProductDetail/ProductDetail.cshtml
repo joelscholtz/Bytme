@@ -1,4 +1,9 @@
 ﻿@model bytme.Models.Item
+
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<UserModel> SignInManager
+@inject UserManager<UserModel> UserManager
+
 @{
     ViewData["Title"] = "ProductDetail";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -131,12 +136,12 @@
     .wishlist > a {
         font-size: 25px;
         color: #8F6B93;
-    }  
-
-    .wishlist > a:hover {
-        color: rgba(143, 107, 147, .6);
-        text-decoration: none;
     }
+
+        .wishlist > a:hover {
+            color: rgba(143, 107, 147, .6);
+            text-decoration: none;
+        }
 
     .wishlist {
         text-align: end;
@@ -150,9 +155,49 @@
     }
 
     .container {
-
     }
 </style>
+
+<script>
+    function AddToCart(itm_id) {
+
+        $.ajax({
+            type: "POST",
+            data: {
+                item_id: itm_id
+            },
+            url: "/ShoppingCart/SaveItemInShoppingCart",
+            success: function (data) {
+                $('#modelWindowShop').modal('show');
+            },
+            error: function () {
+                return "error";
+            }
+        });
+    }
+</script>
+
+<script>
+    function AddToWishList(item_id) {
+        $.ajax({
+            type: "POST",
+            data: {
+                itm_id: item_id
+            },
+            url: "/WishList/AddToWishList",
+            success: function (e) {
+                var x = document.getElementById("snackbar");
+                x.className = "show";
+                setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+
+            },
+            error: function () {
+                return "error";
+            }
+        });
+    }
+</script>
+
 <html>
 <head>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,800" type="text/css">
@@ -187,18 +232,44 @@
 
                 <p>
                     <span class="quantity">Stock: @Html.DisplayFor(o => o.quantity)</span>
-                    <button onclick="@("window.location.href=' " + Url.Action("SaveItemInShoppingCart", "ShoppingCart", new { item_id = Model.id}) + " ' ");">Add to cart</button>
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <div align="right" class="wishlist">
+                            <a onclick="AddToWishList(@Model.id)" class="btn btn-default swap swapHeart">
+                                <span style="color:#8F6B93;" class="glyphicon glyphicon-heart-empty"></span>
+                            </a>
+                            <a onclick="AddToCart(@Model.id)" class="btn btn-default">
+                                <span style="color:#8F6B93;" class="glyphicon glyphicon-shopping-cart"></span>
+                            </a>
+                        </div>
+                    }
+                    else
+                    {
+                        @Html.ActionLink("", "SaveItemsSession", "ShoppingCart",
+                                                        routeValues: new
+                                                        {
+                                                            item_id = Model.id
+                                                        },
+                                                        htmlAttributes: new { @class = "shoppingart glyphicon glyphicon-shopping-cart"})
+                    }
                 </p>
-
-                <p>
-                    <div class="wishlist">
-                        @Html.ActionLink("", "AddToWishList", "WishList", routeValues: new
-                        {
-                            itm_id = Model.id
-                        },
-                        htmlAttributes: new { @class = "heart" })
+                <div class="modal fade" id="modelWindowShop" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 style="text-align:center;" class="modal-title">Added to the shopping cart!</h4>
+                            </div>
+                            <div class="modal-body">
+                                <p style="text-align:center;">The product is added to your shopping cart!</p>
+                            </div>
+                            <div class="modal-footer">
+                                <a class="btn btn-default pull-left" href="/Shoppingcart" role="button">Go to your cart</a>
+                                <button type="button" data-dismiss="modal" class="btn btn-default" style="background-color:#8F6B93;color:white;border:none;">Continue shopping</button>
+                            </div>
+                        </div>
                     </div>
-                </p>
+                </div>
             </div>
 
         </div>
@@ -206,5 +277,4 @@
     </div>
 
 </body>
-</html>
 </html>

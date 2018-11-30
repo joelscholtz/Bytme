@@ -208,6 +208,9 @@
         background-color: #ddd;
         border: 1px solid #ddd;
     }
+    .shoppingCart {
+        color: #8F6B93;
+    }
 </style>
 <script src="~/lib/jquery/dist/jquery.min.js">
 </script>
@@ -445,7 +448,7 @@
             @if (ie++ < 21)
             {
 
-                <div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box" id="page_page_@i _@ie" style="width:33%">
+                <div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box" id="page_@i _@ie" style="width:33%">
                     <div class="thumbnail">
                         <a onclick="@("window.location.href=' " + Url.Action("ProductDetail", "ProductDetail", new { id = item.id}) + " ' ");"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;cursor:pointer;" /></a>
                         <div class="desc_box">
@@ -459,10 +462,20 @@
                                 </a>
                                 <!--Wishlist snackbar, and yes, this is really called a snackbar-->
                                 <div id="snackbar">Added to favorites list!</div>
+
+                                <a onclick="AddToCart(@item.id)" class="btn btn-default">
+                                    <span style="color:#8F6B93;" class="glyphicon glyphicon-shopping-cart"></span>
+                                </a>
                             }
-                            <a onclick="AddToCart(@item.id)" class="btn btn-default">
-                                <span style="color:#8F6B93;" class="glyphicon glyphicon-shopping-cart"></span>
-                            </a>
+                            else
+                            {
+                                @Html.ActionLink("", "SaveItemsSession", "ShoppingCart",
+                                                                routeValues: new
+                                                                {
+                                                                    item_id = item.id
+                                                                },
+                                                                htmlAttributes: new { @class = "shoppingart glyphicon glyphicon-shopping-cart"})
+                            }
                             <!--Shopping cart modal-->
                             <div class="modal fade" id="modelWindowShop" role="dialog">
                                 <div class="modal-dialog">
@@ -507,10 +520,20 @@
                                 </a>
                                 <!--Wishlist snackbar, and yes, this is really called a snackbar-->
                                 <div id="snackbar">Added to favorites list!</div>
+
+                                <a onclick="AddToCart(@item.id)" class="btn btn-default">
+                                    <span style="color:#8F6B93;" class="glyphicon glyphicon-shopping-cart"></span>
+                                </a>
                             }
-                            <a onclick="AddToCart(@item.id)" class="btn btn-default">
-                                <span style="color:#8F6B93;" class="glyphicon glyphicon-shopping-cart"></span>
-                            </a>
+                            else
+                            {
+                                @Html.ActionLink("", "SaveItemsSession", "ShoppingCart",
+                                                                routeValues: new
+                                                                {
+                                                                    item_id = item.id
+                                                                },
+                                                                htmlAttributes: new { @class = "shoppingart glyphicon glyphicon-shopping-cart"})
+                            }
                             <!--Shopping cart modal-->
                             <div class="modal fade" id="modelWindowShop" role="dialog">
                                 <div class="modal-dialog">

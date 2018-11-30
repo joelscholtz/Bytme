@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using bytme.Helpers;
 using bytme.Models;
 using System.Net.Mail;
 using System.Net;
@@ -49,6 +51,86 @@ namespace bytme.Controllers
             _context.SaveChanges();
 
             return orderMain.id;
+        }
+        public IActionResult UpdateQuantityInShoppingCartSession(int item_id, int qty)
+        {
+            List<Item> cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
+
+            cart[item_id].quantity = qty;
+
+            SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        private int IsExist(int item_id)
+        {
+            List<Item> cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
+            for(int i = 0; i < cart.Count; i++)
+            {
+                if (cart[i].id.Equals(item_id))
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+        public IActionResult Remove(int item_id)
+        {
+            List<Item> cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
+            int index = IsExist(item_id);
+            cart.RemoveAt(index);
+            SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult SaveItemsSession(int item_id)
+        {
+            var CheckItem = _context.Items.Where(o => o.id == item_id).FirstOrDefault();
+
+            if (SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart") == null)
+            {
+                List<Item> cart = new List<Item>();
+                cart.Add(new Item {
+                    id = CheckItem.id,
+                    description = CheckItem.description,
+                    category_id = CheckItem.category_id,
+                    long_description = CheckItem.long_description,
+                    gender = CheckItem.gender,
+                    issales = CheckItem.issales,
+                    photo_url = CheckItem.photo_url,
+                    price = CheckItem.price,
+                    quantity = 1,
+                    size = CheckItem.size
+                });
+                SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
+            }
+            else
+            {
+                List<Item> cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
+                int index = IsExist(item_id);
+                if(index != -1)
+                {
+                    cart[index].quantity++;
+                }
+                else
+                {
+                    cart.Add(new Item {
+                        id = CheckItem.id,
+                        description = CheckItem.description,
+                        category_id = CheckItem.category_id,
+                        long_description = CheckItem.long_description,
+                        gender = CheckItem.gender,
+                        issales = CheckItem.issales,
+                        photo_url = CheckItem.photo_url,
+                        price = CheckItem.price,
+                        quantity = 1,
+                        size = CheckItem.size
+                    });
+                }
+                SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
+            }
+            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult SaveItemInShoppingCart(int item_id)
@@ -190,6 +272,85 @@ namespace bytme.Controllers
 
             _context.Items.Update(item);
             _context.SaveChanges();
+        }
+
+        public IActionResult SessionToAccount()
+        {
+            Boolean decreased = false;
+            string UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            List<Item> cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
+
+            int _order_id;
+            int order_id = CheckIfOrderExists();
+            if (order_id != 0)
+            {
+                _order_id = order_id;
+            }
+            else
+            {
+                _order_id = CreateOrder();
+            }
+
+            if (decreased == false)
+            {
+                foreach(var item in cart)
+                {
+                    var CheckItemId = _context.OrderLines.Where(o => o.item_id == item.id && o.order_id == _order_id).FirstOrDefault();
+                    var CheckItemStock = _context.Items.Where(o => o.id == item.id).FirstOrDefault();
+
+                    if (CheckItemId != null)
+                    {
+                        if (CheckItemId.qty < CheckItemStock.quantity)
+                        {
+                            CheckItemId.qty = CheckItemId.qty + 1;
+                            _context.Update(CheckItemId);
+                            _context.SaveChanges();
+                        }
+                        else { }
+                    }
+                    else
+                    {
+                        OrderLines orderLines = new OrderLines();
+                        orderLines.item_id = item.id;
+                        orderLines.order_id = _order_id;
+                        orderLines.qty = 1;
+                        _context.Add(orderLines);
+                        _context.SaveChanges();
+                    }
+                }
+            }
+            decreased = true;
+            if(decreased == true)
+            {
+                foreach(var item in cart)
+                {
+                    Remove(item.id);
+                }
+            }
+            return RedirectToAction("index", "ShoppingCart");
+        }
+
+        public IActionResult ConfirmOrderSession()
+        {
+            Boolean decreased = false;
+            List<Item> cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
+            if (decreased == false)
+            {
+                foreach(var item in cart)
+                {
+                    DecreaseStock(item.id, item.quantity);
+                }
+            }
+            decreased = true;
+            if (decreased == true)
+            {
+                foreach(var item in cart)
+                {
+                    Remove(item.id);
+                }
+            }
+
+            return RedirectToAction("index", "Home");
         }
 
         public IActionResult ConfirmOrder()
@@ -348,6 +509,13 @@ namespace bytme.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+            var cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
+            ViewBag.cart = cart;
+            if(ViewBag.cart != null)
+            {
+                ViewBag.total = cart.Sum(item => item.price * item.quantity);
+            }
+
             IQueryable<ShoppingCartModel> model = null;
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var result = _context.UserModels.Where(o => o.Id == userId).FirstOrDefault();
