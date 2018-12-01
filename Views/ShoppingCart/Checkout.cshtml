@@ -1,4 +1,4 @@
-﻿@model bytme.Models.ViewModels.OrderHistoryViewModel
+﻿@model bytme.Models.OrderHistoyModel
 
 @inject UserManager<UserModel> userManager
 
@@ -12,60 +12,62 @@
     var user = await userManager.GetUserAsync(User);
 }
 
-<h2>Checkout</h2>
+<h2><center>Checkout</center></h2>
 <h3>
+    <center>
     <a asp-area="Identity" asp-page="/Account/Register" style="color:#B388B8;text-decoration:none;">Register</a>
     or
     <a asp-area="Identity" asp-page="/Account/Login" style="color:#B388B8;text-decoration:none;">Login</a>
+    </center>
 </h3>
 @if (ViewBag.total > 2.95)
 {
     @if (!User.Identity.IsAuthenticated)
     {
-        <br />
-        <br />
         <div style="width: 100%">
             <div style="float:left; width: 60%">
                 <h3><b>Data</b></h3>
                 <br />
-                <form id="payment" method="post">
+                <form method="post">
                     <div asp-validation-summary="All" class="text-danger"></div>
                     <div class="form-group">
                         <label asp-for="name"></label>
-                        <input asp-for="name" class="form-control" />
+                        <input asp-for="name" class="form-control" required/>
                         <span asp-validation-for="name" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="surname"></label>
-                        <input asp-for="surname" class="form-control" />
+                        <input asp-for="surname" class="form-control" required/>
                         <span asp-validation-for="surname" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="Email"></label>
-                        <input asp-for="Email" class="form-control" />
+                        <input asp-for="Email" class="form-control" required/>
                         <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="street"></label>
-                        <input asp-for="street" class="form-control" />
+                        <input asp-for="street" class="form-control" required/>
                         <span asp-validation-for="street" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="streetnumber"></label>
-                        <input asp-for="streetnumber" class="form-control" />
+                        <input asp-for="streetnumber" class="form-control" required/>
                         <span asp-validation-for="streetnumber" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="zipcode"></label>
-                        <input asp-for="zipcode" class="form-control" />
+                        <input asp-for="zipcode" class="form-control" required/>
                         <span asp-validation-for="zipcode" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="city"></label>
-                        <input asp-for="city" class="form-control" />
+                        <input asp-for="city" class="form-control" required/>
                         <span asp-validation-for="city" class="text-danger"></span>
                     </div>
-                    <button type="submit" class="btn btn-default">Submit</button>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-default">Submit</button>
+                    </div>
                 </form>
             </div>
             <div style="float: right">
@@ -73,86 +75,6 @@
                 <form>
                     <center><h4><input checked="checked" name="payment" type="radio" value="true" /> Paypal</h4></center>
                 </form>
-
-                <script>
-                      var totalPrice = parseFloat("@ViewBag.total".replace(",", "."));
-                </script>
-                <div id="paypal-button-container"></div>
-                <script src="https://www.paypalobjects.com/api/checkout.js"></script>
-                <script>
-                    // Render the PayPal button
-                    paypal.Button.render({
-                        // Set your environment
-                        env: 'sandbox', // sandbox | production
-
-                        // Specify the style of the button
-                        style: {
-                            layout: 'horizontal',  // horizontal | vertical
-                            size: 'large',    // medium | large | responsive
-                            shape: 'pill',      // pill | rect
-                            color: 'black'       // gold | blue | silver | white | black
-                        },
-
-                        // Specify allowed and disallowed funding sources
-                        //
-                        // Options:
-                        // - paypal.FUNDING.CARD
-                        // - paypal.FUNDING.CREDIT
-                        // - paypal.FUNDING.ELV
-                        funding: {
-                            allowed: [
-                                paypal.FUNDING.CARD,
-                                paypal.FUNDING.CREDIT
-                            ],
-                            disallowed: []
-                        },
-
-                        // Enable Pay Now checkout flow (optional)
-                        commit: true,
-
-                        // PayPal Client IDs - replace with your own
-                        // Create a PayPal app: https://developer.paypal.com/developer/applications/create
-                        client: {
-                            sandbox: 'AcXXg_AJtE3WmNiQiU81S5w2oIzdLTFfhWGLVuq6u4Q3oUu_xXTV6Zeqip_xRufDkFWCrumyLeEFO0Ag',
-                            production: '<insert production client id>'
-                        },
-
-                        payment: function (data, actions) {
-                            return actions.payment.create({
-                                payment: {
-                                    transactions: [
-                                        {
-                                            amount: {
-                                                total: totalPrice,
-                                                currency: 'EUR'
-                                            }
-                                        }
-                                    ]
-                                }
-                            });
-                        },
-
-                        onAuthorize: function (data, actions) {
-                            return actions.payment.execute()
-                                .then(function () {
-                                    $.ajax({
-                                        type: "POST",
-                                        data: {
-                                        },
-
-                                        url: "/ShoppingCart/ConfirmOrderSession",
-                                        success: function (response) {
-                                            document.body.innerHTML = response;
-                                        },
-                                        error: function () {
-                                            return "error";
-                                        }
-                                    });
-                                    window.alert('Payment Complete! Email has been sent!')
-                                });
-                        }
-                    }, '#paypal-button-container');
-                </script>
             </div>
         </div>
     }

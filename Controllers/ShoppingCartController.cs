@@ -18,7 +18,7 @@ namespace bytme.Controllers
     public class ShoppingCartController : Controller
     {
         private readonly ApplicationDbContext _context;
-
+        
         public ShoppingCartController(ApplicationDbContext context)
         {
             _context = context;
@@ -75,6 +75,7 @@ namespace bytme.Controllers
             }
             return -1;
         }
+
         public IActionResult Remove(int item_id)
         {
             List<Item> cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
@@ -332,6 +333,7 @@ namespace bytme.Controllers
 
         public IActionResult ConfirmOrderSession()
         {
+            var user = SessionHelper.GetObjectFromJson<List<UserModel>>(HttpContext.Session, "user");
             Boolean decreased = false;
             List<Item> cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
             if (decreased == false)
@@ -350,6 +352,89 @@ namespace bytme.Controllers
                 }
             }
 
+            //send email |
+            SmtpClient client = new SmtpClient();
+            client.Host = "smtp.gmail.com";
+            client.Port = 587;
+            client.UseDefaultCredentials = false;
+            client.EnableSsl = true;
+            client.Credentials = new NetworkCredential("sayoswebshop@gmail.com", "PonyParkSlagHaren1234");
+
+            MailMessage mailMessage = new MailMessage();
+            mailMessage.IsBodyHtml = true;
+            mailMessage.From = new MailAddress("sayoswebshop@gmail.com");
+            mailMessage.To.Add(user[0].Email);
+            mailMessage.Subject = "Order Sayos Webshop";
+            string fullname = user[0].name + " " + user[0].surname;
+
+            mailMessage.Body = " <div style='width:95%;'> " +
+                                "<h3><center>Address:</center></h3>" +
+                                "<h3><center>" + user[0].street + " " + user[0].streetnumber + "," + "</center></h3>" +
+                                "<h3><center>" + user[0].zipcode + ", " + user[0].city + "</center></h3>";
+            mailMessage.Body += "<br><br><h3>Dear " + fullname + " thanks for your order!</h3>";
+            mailMessage.Body +=
+                "<h3>Here is an overview of the things you ordered:</h3> <br><br> " +
+                " <table style='font-family: arial,sans-serif;border-collapse: collapse;width:95%; '>" +
+                " <tr> " +
+                " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;font-size: 10pt;'>Picture:</th>" +
+                " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;font-size: 10pt;'>Description:</th>" +
+                " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;font-size: 10pt;'>Amount:</th>" +
+                " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;font-size: 10pt;'>Price:</th>" +
+                " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;font-size: 10pt;'>Subtotal:</th>" +
+                " </tr>";
+
+            float totalPrice = 0f;
+            float sendcost = 2.95f;
+            foreach (var item in cart)
+            {
+                mailMessage.Body +=
+                //mailMessage.Body += "<td><img style='width:300px;' src='" + photo_url + item.Itms.photo_url + "'/></td>";
+                " <tr>" +
+                " <td style='border: 0px solid #dddddd;text-align: center; padding:8px;'><img style='width:200px; height:250px' src='" + item.photo_url + "'/></td>" +
+                " <td style='border: 0px solid #dddddd;text-align: center; padding:8px;'>" + item.description + "</td>" +
+                " <td style='border: 0px solid #dddddd;text-align: center; padding:8px;'>" + item.quantity + "</td>" +
+                " <td style='border: 0px solid #dddddd;text-align: center; padding:8px;'>" + item.price + " euro</td>" +
+                " <td style='border: 0px solid #dddddd;text-align: center; padding:8px;'>" + item.price * item.quantity + " euro</td>" +
+                "</tr>";
+                totalPrice += (item.price * item.quantity);
+            }
+            if (totalPrice < 100)
+            {
+                totalPrice += sendcost;
+                mailMessage.Body += " <tr> " +
+                                   " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                   " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                   " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                   " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                   " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>Shipping costs: " + sendcost + " euro</th>" +
+                                   " </tr>";
+
+                mailMessage.Body += " <tr> " +
+                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                    " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>Total: " + totalPrice + " euro</th>" +
+                                    " </tr>";
+            }
+            else
+            {
+                mailMessage.Body += " <tr> " +
+                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                    " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>Total: " + totalPrice + " euro</th>" +
+                                    " </tr>";
+            }
+            mailMessage.Body += "</table>";
+            mailMessage.Body += "<br><h3>If you have any questions you can mail us via the contact page on our webshop.</h3>" +
+                                "<br><h3>Have a nice day!</h3>" +
+                                "</div>";
+
+            client.Send(mailMessage);
+            user.RemoveAt(0);
+            SessionHelper.SetObjectAsJson(HttpContext.Session, "user", user);
             return RedirectToAction("index", "Home");
         }
 
@@ -578,7 +663,54 @@ namespace bytme.Controllers
             return View();
         }
 
-        public IActionResult Checkout()
+        public IActionResult Checkout(OrderHistoyModel o)
+        {
+            var cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
+            ViewBag.cart = cart;
+            if (ViewBag.cart != null)
+            {
+                ViewBag.total = cart.Sum(item => item.price * item.quantity);
+            }
+            if (ModelState.IsValid)
+            {
+                if (SessionHelper.GetObjectFromJson<List<UserModel>>(HttpContext.Session, "user") == null)
+                {
+                    List<UserModel> user = new List<UserModel>();
+                    user.Add(new UserModel
+                    {
+                        Email = o.Email,
+                        name = o.name,
+                        surname = o.surname,
+                        street = o.street,
+                        streetnumber = o.streetnumber,
+                        zipcode = o.zipcode,
+                        city = o.city
+                    });
+                    SessionHelper.SetObjectAsJson(HttpContext.Session, "user", user);
+                }
+                else
+                {
+                    List<UserModel> user = SessionHelper.GetObjectFromJson<List<UserModel>>(HttpContext.Session, "user");
+                    user.RemoveAt(0);
+                    SessionHelper.SetObjectAsJson(HttpContext.Session, "user", user);
+                    user.Add(new UserModel
+                    {
+                        Email = o.Email,
+                        name = o.name,
+                        surname = o.surname,
+                        street = o.street,
+                        streetnumber = o.streetnumber,
+                        zipcode = o.zipcode,
+                        city = o.city
+                    });
+                    SessionHelper.SetObjectAsJson(HttpContext.Session, "user", user);
+                }
+                return RedirectToAction("Payment");
+            }
+            return View();
+    }
+
+        public IActionResult Payment()
         {
             var cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
             ViewBag.cart = cart;

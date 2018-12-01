@@ -1,0 +1,90 @@
+﻿@model List<bytme.Models.ShoppingCartModel>
+
+@{
+    ViewData["Title"] = "Payment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Payment</h2>
+
+<center>
+    <script>
+                      var totalPrice = parseFloat("@ViewBag.total".replace(",", "."));
+    </script>
+    <div id="paypal-button-container"></div>
+    <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+    <script>
+        // Render the PayPal button
+        paypal.Button.render({
+            // Set your environment
+            env: 'sandbox', // sandbox | production
+
+            // Specify the style of the button
+            style: {
+                layout: 'horizontal',  // horizontal | vertical
+                size: 'large',    // medium | large | responsive
+                shape: 'pill',      // pill | rect
+                color: 'black'       // gold | blue | silver | white | black
+            },
+
+            // Specify allowed and disallowed funding sources
+            //
+            // Options:
+            // - paypal.FUNDING.CARD
+            // - paypal.FUNDING.CREDIT
+            // - paypal.FUNDING.ELV
+            funding: {
+                allowed: [
+                    paypal.FUNDING.CARD,
+                    paypal.FUNDING.CREDIT
+                ],
+                disallowed: []
+            },
+
+            // Enable Pay Now checkout flow (optional)
+            commit: true,
+
+            // PayPal Client IDs - replace with your own
+            // Create a PayPal app: https://developer.paypal.com/developer/applications/create
+            client: {
+                sandbox: 'AcXXg_AJtE3WmNiQiU81S5w2oIzdLTFfhWGLVuq6u4Q3oUu_xXTV6Zeqip_xRufDkFWCrumyLeEFO0Ag',
+                production: '<insert production client id>'
+            },
+
+            payment: function (data, actions) {
+                return actions.payment.create({
+                    payment: {
+                        transactions: [
+                            {
+                                amount: {
+                                    total: totalPrice,
+                                    currency: 'EUR'
+                                }
+                            }
+                        ]
+                    }
+                });
+            },
+
+            onAuthorize: function (data, actions) {
+                return actions.payment.execute()
+                    .then(function () {
+                        $.ajax({
+                            type: "POST",
+                            data: {
+                            },
+
+                            url: "/ShoppingCart/ConfirmOrderSession",
+                            success: function (response) {
+                                document.body.innerHTML = response;
+                            },
+                            error: function () {
+                                return "error";
+                            }
+                        });
+                        window.alert('Payment Complete! Email has been sent!')
+                    });
+            }
+        }, '#paypal-button-container');
+    </script>
+</center>
