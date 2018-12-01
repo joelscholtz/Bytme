@@ -235,6 +235,25 @@ namespace bytme.Controllers
             return ViewBag.count;
         }
 
+        public int TotalCountSession()
+        {
+            if (SessionHelper.GetObjectFromJson<List<Product>>(HttpContext.Session, "cart") == null)
+            {
+                int countsession = 0;
+                ViewBag.countsession = countsession;
+
+                return ViewBag.countsession;
+            }
+            else
+            {
+                List<Product> cart = SessionHelper.GetObjectFromJson<List<Product>>(HttpContext.Session, "cart");
+                int countsession = cart.Count();
+                ViewBag.countsession = countsession;
+
+                return ViewBag.countsession;
+            }
+        }
+
         public void CreateOrderHistory(OrderMain m)
         {
             string UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
