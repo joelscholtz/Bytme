@@ -58,7 +58,7 @@ namespace bytme.Controllers
             List<Product> cart = SessionHelper.GetObjectFromJson<List<Product>>(HttpContext.Session, "cart");
             for(int i = 0; i < cart.Count; i++)
             {
-                if (cart[i].id.Equals(item_id))
+                if (cart[i].item_id.Equals(item_id))
                 {
                     return i;
                 }

@@ -305,11 +305,13 @@
                     }
                     else
                     {
-                        <a onclick="AddToCartSession(@Model.id)" class="btn btn-default">
-                            <span style="color:#8F6B93;" class="glyphicon glyphicon-shopping-cart"></span>
-                        </a>
-                    }
-                </p>
+                        <div align="right" class="wishlist">
+                            <a onclick="AddToCartSession(@Model.id)" class="btn btn-default">
+                                <span style="color:#8F6B93;" class="glyphicon glyphicon-shopping-cart"></span>
+                            </a>
+                            </div>
+                            }
+                    </p>
                 <div id="snackbar"></div>
                 <div class="modal fade" id="modelWindowShop" role="dialog">
                     <div class="modal-dialog">
