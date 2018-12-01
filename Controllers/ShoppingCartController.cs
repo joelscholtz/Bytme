@@ -52,20 +52,10 @@ namespace bytme.Controllers
 
             return orderMain.id;
         }
-        public IActionResult UpdateQuantityInShoppingCartSession(int item_id, int qty)
-        {
-            List<Item> cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
-
-            cart[item_id].quantity = qty;
-
-            SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
-
-            return RedirectToAction(nameof(Index));
-        }
 
         private int IsExist(int item_id)
         {
-            List<Item> cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
+            List<Product> cart = SessionHelper.GetObjectFromJson<List<Product>>(HttpContext.Session, "cart");
             for(int i = 0; i < cart.Count; i++)
             {
                 if (cart[i].id.Equals(item_id))
@@ -78,7 +68,7 @@ namespace bytme.Controllers
 
         public IActionResult Remove(int item_id)
         {
-            List<Item> cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
+            List<Product> cart = SessionHelper.GetObjectFromJson<List<Product>>(HttpContext.Session, "cart");
             int index = IsExist(item_id);
             cart.RemoveAt(index);
             SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
@@ -89,11 +79,12 @@ namespace bytme.Controllers
         {
             var CheckItem = _context.Items.Where(o => o.id == item_id).FirstOrDefault();
 
-            if (SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart") == null)
+            if (SessionHelper.GetObjectFromJson<List<Product>>(HttpContext.Session, "cart") == null)
             {
-                List<Item> cart = new List<Item>();
-                cart.Add(new Item {
-                    id = CheckItem.id,
+                List<Product> cart = new List<Product>();
+                cart.Add(new Product
+                {
+                    item_id = CheckItem.id,
                     description = CheckItem.description,
                     category_id = CheckItem.category_id,
                     long_description = CheckItem.long_description,
@@ -102,22 +93,28 @@ namespace bytme.Controllers
                     photo_url = CheckItem.photo_url,
                     price = CheckItem.price,
                     quantity = 1,
+                    stock = CheckItem.quantity,
                     size = CheckItem.size
                 });
                 SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
             }
             else
             {
-                List<Item> cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
+                List<Product> cart = SessionHelper.GetObjectFromJson<List<Product>>(HttpContext.Session, "cart");
                 int index = IsExist(item_id);
                 if(index != -1)
                 {
-                    cart[index].quantity++;
+                    if (cart[index].quantity < cart[index].stock)
+                    {
+                        cart[index].quantity++;
+                    }
+                    else { }
                 }
                 else
                 {
-                    cart.Add(new Item {
-                        id = CheckItem.id,
+                    cart.Add(new Product
+                    {
+                        item_id = CheckItem.id,
                         description = CheckItem.description,
                         category_id = CheckItem.category_id,
                         long_description = CheckItem.long_description,
@@ -126,6 +123,7 @@ namespace bytme.Controllers
                         photo_url = CheckItem.photo_url,
                         price = CheckItem.price,
                         quantity = 1,
+                        stock = CheckItem.quantity,
                         size = CheckItem.size
                     });
                 }
@@ -200,6 +198,17 @@ namespace bytme.Controllers
             listOfItems.qty = qty;
 
             _context.SaveChanges();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult UpdateQuantityInShoppingCartSession(int item_id, int qty)
+        {
+            List<Product> cart = SessionHelper.GetObjectFromJson<List<Product>>(HttpContext.Session, "cart");
+
+            cart[item_id].quantity = qty;
+
+            SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
 
             return RedirectToAction(nameof(Index));
         }
@@ -279,7 +288,7 @@ namespace bytme.Controllers
         {
             Boolean decreased = false;
             string UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            List<Item> cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
+            List<Product> cart = SessionHelper.GetObjectFromJson<List<Product>>(HttpContext.Session, "cart");
 
             int _order_id;
             int order_id = CheckIfOrderExists();
@@ -335,12 +344,12 @@ namespace bytme.Controllers
         {
             var user = SessionHelper.GetObjectFromJson<List<UserModel>>(HttpContext.Session, "user");
             Boolean decreased = false;
-            List<Item> cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
+            List<Product> cart = SessionHelper.GetObjectFromJson<List<Product>>(HttpContext.Session, "cart");
             if (decreased == false)
             {
                 foreach(var item in cart)
                 {
-                    DecreaseStock(item.id, item.quantity);
+                    DecreaseStock(item.item_id, item.quantity);
                 }
             }
             decreased = true;
@@ -597,7 +606,7 @@ namespace bytme.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            var cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
+            var cart = SessionHelper.GetObjectFromJson<List<Product>>(HttpContext.Session, "cart");
             ViewBag.cart = cart;
             if(ViewBag.cart != null)
             {
@@ -665,7 +674,7 @@ namespace bytme.Controllers
 
         public IActionResult Checkout(OrderHistoyModel o)
         {
-            var cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
+            var cart = SessionHelper.GetObjectFromJson<List<Product>>(HttpContext.Session, "cart");
             ViewBag.cart = cart;
             if (ViewBag.cart != null)
             {
@@ -712,7 +721,7 @@ namespace bytme.Controllers
 
         public IActionResult Payment()
         {
-            var cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
+            var cart = SessionHelper.GetObjectFromJson<List<Product>>(HttpContext.Session, "cart");
             ViewBag.cart = cart;
             if (ViewBag.cart != null)
             {

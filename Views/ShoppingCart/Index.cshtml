@@ -29,6 +29,27 @@
     }
 </script>
 
+<script>
+    function UpdateQtyOrderSession(item_id, new_qty) {
+
+        $.ajax({
+            type: "POST",
+            data: {
+                item_id: item_id,
+                qty: new_qty
+            },
+
+            url: "/ShoppingCart/UpdateQuantityInShoppingCartSession",
+            success: function (response) {
+                document.body.innerHTML = response;
+            },
+            error: function () {
+                return "error";
+            }
+        });
+    }
+</script>
+
 <script language="javascript">
     function testForEnter() {
         if (event.keyCode == 13) {
@@ -149,8 +170,20 @@
                                     </div>
                                 </td>
 
+                                <script>
+                                    function checkGreaterStock(qty, which, stock) {
+                                        if (qty > stock) {
+                                            document.getElementById("_data_qty_" + which).value = stock;
+                                        }
+                                        else if (qty < 1) {
+                                            document.getElementById("_data_qty_" + which).value = 1;
+                                        }
+                                    }
+                                </script>
+
                                 <td data-th="Quantity">
-                                    <p>@item.quantity</p>
+                                    <input type="number" min="1" max="@item.stock" id="_data_qty_@item.id" onkeydown="testForEnter();" onchange="UpdateQtyOrderSession(@item.id , this.value)" class="form-control" value="@item.quantity" oninput="checkGreaterStock(this.value, @item.id , @item.stock)" required>
+
                                 <td data-th="Price">&euro; @{ var price = (item.price); } @{ @price.ToString("N")}</td>
 
                                 <td data-th="Subtotal" class="text-center"><span id="_data_subtotal_@item.id"> &euro;  @{var total = (item.price * item.quantity); } @{ @total.ToString("N") } </span></td>
