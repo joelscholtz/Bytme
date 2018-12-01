@@ -305,8 +305,8 @@ namespace bytme.Controllers
             {
                 foreach(var item in cart)
                 {
-                    var CheckItemId = _context.OrderLines.Where(o => o.item_id == item.id && o.order_id == _order_id).FirstOrDefault();
-                    var CheckItemStock = _context.Items.Where(o => o.id == item.id).FirstOrDefault();
+                    var CheckItemId = _context.OrderLines.Where(o => o.item_id == item.item_id && o.order_id == _order_id).FirstOrDefault();
+                    var CheckItemStock = _context.Items.Where(o => o.id == item.item_id).FirstOrDefault();
 
                     if (CheckItemId != null)
                     {

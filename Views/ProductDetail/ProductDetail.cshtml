@@ -230,6 +230,25 @@
     }
 </script>
 
+<script>
+    function AddToCartSession(itm_id) {
+
+        $.ajax({
+            type: "POST",
+            data: {
+                item_id: itm_id
+            },
+            url: "/ShoppingCart/SaveItemsSession",
+            success: function (data) {
+                $('#modelWindowShop').modal('show');
+            },
+            error: function () {
+                return "error";
+            }
+        });
+    }
+</script>
+
 <html>
 <head>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,800" type="text/css">
@@ -286,12 +305,9 @@
                     }
                     else
                     {
-                        @Html.ActionLink("", "SaveItemsSession", "ShoppingCart",
-                                                        routeValues: new
-                                                        {
-                                                            item_id = Model.id
-                                                        },
-                                                        htmlAttributes: new { @class = "shoppingart glyphicon glyphicon-shopping-cart"})
+                        <a onclick="AddToCartSession(@Model.id)" class="btn btn-default">
+                            <span style="color:#8F6B93;" class="glyphicon glyphicon-shopping-cart"></span>
+                        </a>
                     }
                 </p>
                 <div id="snackbar"></div>

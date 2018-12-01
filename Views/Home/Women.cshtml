@@ -281,6 +281,25 @@
     }
 </script>
 
+<script>
+    function AddToCartSession(itm_id) {
+
+        $.ajax({
+            type: "POST",
+            data: {
+                item_id: itm_id
+            },
+            url: "/ShoppingCart/SaveItemsSession",
+            success: function (data) {
+                $('#modelWindowShop').modal('show');
+            },
+            error: function () {
+                return "error";
+            }
+        });
+    }
+</script>
+
 <form asp-action="Women" id="Women" name="Women" method="post">
     <div class="container">
         <img src="~/images/products_women.png" style="width:1180px" />
@@ -488,12 +507,9 @@
                             }
                             else
                             {
-                                @Html.ActionLink("", "SaveItemsSession", "ShoppingCart",
-                                   routeValues: new
-                                    {
-                                       item_id = item.id
-                                    },
-                               htmlAttributes: new { @class = "shoppingcart glyphicon glyphicon-shopping-cart"})
+                                <a onclick="AddToCartSession(@item.id)" class="btn btn-default">
+                                    <span style="color:#8F6B93;" class="glyphicon glyphicon-shopping-cart"></span>
+                                </a>
                             }
                             <!--Shopping cart modal-->
                             <div class="modal fade" id="modelWindowShop" role="dialog">
@@ -558,12 +574,9 @@
                             }
                             else
                             {
-                                @Html.ActionLink("", "SaveItemsSession", "ShoppingCart",
-                                   routeValues: new
-                                    {
-                                       item_id = item.id
-                                    },
-                               htmlAttributes: new { @class = "shoppingcart glyphicon glyphicon-shopping-cart"})
+                                <a onclick="AddToCartSession(@item.id)" class="btn btn-default">
+                                    <span style="color:#8F6B93;" class="glyphicon glyphicon-shopping-cart"></span>
+                                </a>
                             }
                             <!--Shopping cart modal-->
                             <div class="modal fade" id="modelWindowShop" role="dialog">
