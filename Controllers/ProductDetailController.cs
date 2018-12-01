@@ -20,6 +20,9 @@ namespace bytme.Controllers
 
         public ActionResult ProductDetail(int id)
         {
+            ViewBag.WishList = _context.WishLines.Select(o => o.itm_id).ToList();
+            ViewBag.OrderLine = _context.WishLines.Select(o => o.id).FirstOrDefault();
+
             Item item = _context.Items.Where(o => o.id == id).FirstOrDefault();
 
             var model = new Item();
