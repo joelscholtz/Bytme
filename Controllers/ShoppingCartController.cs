@@ -353,7 +353,7 @@ namespace bytme.Controllers
             {
                 foreach(var item in cart)
                 {
-                    Remove(item.id);
+                    Remove(item.item_id);
                 }
             }
             return RedirectToAction("index", "ShoppingCart");
