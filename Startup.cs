@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using bytme.Models;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using bytme.Areas.Identity.Services;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace bytme
 {
@@ -75,8 +76,28 @@ namespace bytme
 
         }
 
+        private async Task CreateUserRoles(IServiceProvider serviceProvider)
+        {
+            var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var UserManager = serviceProvider.GetRequiredService<UserManager<UserModel>>();
+
+            IdentityResult roleResult;
+            //Adding Admin Role
+            var roleCheck = await RoleManager.RoleExistsAsync("Admin");
+            if (!roleCheck)
+            {
+                //create the roles and seed them to the database
+                roleResult = await RoleManager.CreateAsync(new IdentityRole("Admin"));
+            }
+            //Assign Admin role to the main User here we have given our newly registered 
+            //login id for Admin management
+            UserModel user = await UserManager.FindByEmailAsync("RUJALIDI@AUTOWB.COM");
+            var User = new UserModel();
+            await UserManager.AddToRoleAsync(user, "Admin");
+        }
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider services)
         {
             env.EnvironmentName = EnvironmentName.Production;
 
@@ -88,6 +109,8 @@ namespace bytme
             {
                 app.UseExceptionHandler("/error");
             }
+
+            CreateUserRoles(services).Wait();
 
             app.UseStatusCodePagesWithRedirects("/Home/ErrorPage/{0}");
 
