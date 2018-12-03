@@ -24,12 +24,15 @@
 {
     @if (!User.Identity.IsAuthenticated)
     {
-        <div style="width: 100%">
-            <div style="float:left; width: 60%">
+        <center>
+                <br />
+                <h3><b>You can only pay with PayPal on our website</b></h3>
+                <br />
                 <h3><b>Data</b></h3>
                 <br />
-                <form method="post">
+                <form method="post" style="width:50%">
                     <div asp-validation-summary="All" class="text-danger"></div>
+                    <br />
                     <div class="form-group">
                         <label asp-for="name"></label>
                         <input asp-for="name" class="form-control" required/>
@@ -69,14 +72,7 @@
                         <button type="submit" class="btn btn-default">Submit</button>
                     </div>
                 </form>
-            </div>
-            <div style="float: right">
-                <h3><b>Payment option</b></h3>
-                <form>
-                    <center><h4><input checked="checked" name="payment" type="radio" value="true" /> Paypal</h4></center>
-                </form>
-            </div>
-        </div>
+            </center>
     }
     else
     {
