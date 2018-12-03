@@ -312,13 +312,11 @@
 </script>
 
 <script>
-    debugger;
     var quantity = 1;
     function setQtySession(qt) {
         quantity = qt;
     }
     function AddToCartSession(itm_id) {
-        debugger;
         $.ajax({
             type: "POST",
             data: {
