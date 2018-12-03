@@ -175,6 +175,7 @@ namespace bytme.Controllers
             var result = (from OrderLines in _context.OrderLines
                           where OrderLines.id == orderline_id
                           select OrderLines).FirstOrDefault();
+
             if(result != null)
             {
                 _context.OrderLines.Remove(result);
@@ -376,7 +377,7 @@ namespace bytme.Controllers
             {
                 foreach(var item in cart)
                 {
-                    Remove(item.id);
+                    Remove(item.item_id);
                 }
             }
 
@@ -478,10 +479,11 @@ namespace bytme.Controllers
             {
                 foreach (var l in ListOfItems)
                 {
-                    DecreaseStock(l.item_id, l.qty);
-
+                    if(l.item_id != 0)
+                    {
+                        DecreaseStock(l.item_id, l.qty);
+                    }
                 }
-
             }
             decreased = true;
             if (decreased == true)
