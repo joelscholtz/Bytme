@@ -75,7 +75,7 @@ namespace bytme.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult SaveItemsSession(int item_id)
+        public IActionResult SaveItemsSession(int item_id, int qty)
         {
             var CheckItem = _context.Items.Where(o => o.id == item_id).FirstOrDefault();
 
@@ -92,7 +92,7 @@ namespace bytme.Controllers
                     issales = CheckItem.issales,
                     photo_url = CheckItem.photo_url,
                     price = CheckItem.price,
-                    quantity = 1,
+                    quantity = qty,
                     stock = CheckItem.quantity,
                     size = CheckItem.size
                 });
@@ -122,7 +122,7 @@ namespace bytme.Controllers
                         issales = CheckItem.issales,
                         photo_url = CheckItem.photo_url,
                         price = CheckItem.price,
-                        quantity = 1,
+                        quantity = qty,
                         stock = CheckItem.quantity,
                         size = CheckItem.size
                     });
@@ -132,7 +132,7 @@ namespace bytme.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult SaveItemInShoppingCart(int item_id)
+        public IActionResult SaveItemInShoppingCart(int item_id, int qty)
         {
             int _order_id;
             int order_id = CheckIfOrderExists();
@@ -163,7 +163,7 @@ namespace bytme.Controllers
                 OrderLines orderLines = new OrderLines();
                 orderLines.item_id = item_id;
                 orderLines.order_id = _order_id;
-                orderLines.qty = 1;
+                orderLines.qty = qty;
                 _context.Add(orderLines);
                 _context.SaveChanges();
             }
