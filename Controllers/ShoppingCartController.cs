@@ -152,7 +152,11 @@ namespace bytme.Controllers
             {
                 if(CheckItemId.qty < CheckItemStock.quantity)
                 {
-                    CheckItemId.qty = CheckItemId.qty + 1;
+                    CheckItemId.qty += qty;
+                    if(CheckItemId.qty > CheckItemStock.quantity)
+                    {
+                        CheckItemId.qty = CheckItemStock.quantity;
+                    }
                     _context.Update(CheckItemId);
                     _context.SaveChanges();
                 }
@@ -332,7 +336,11 @@ namespace bytme.Controllers
                     {
                         if (CheckItemId.qty < CheckItemStock.quantity)
                         {
-                            CheckItemId.qty = CheckItemId.qty + 1;
+                            CheckItemId.qty += item.quantity;
+                            if(CheckItemId.qty > CheckItemStock.quantity)
+                            {
+                                CheckItemId.qty = CheckItemStock.quantity;
+                            }
                             _context.Update(CheckItemId);
                             _context.SaveChanges();
                         }
@@ -343,7 +351,7 @@ namespace bytme.Controllers
                         OrderLines orderLines = new OrderLines();
                         orderLines.item_id = item.item_id;
                         orderLines.order_id = _order_id;
-                        orderLines.qty = 1;
+                        orderLines.qty = item.quantity;
                         _context.Add(orderLines);
                         _context.SaveChanges();
                     }
