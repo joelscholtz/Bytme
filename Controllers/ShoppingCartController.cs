@@ -340,7 +340,7 @@ namespace bytme.Controllers
                     else
                     {
                         OrderLines orderLines = new OrderLines();
-                        orderLines.item_id = item.id;
+                        orderLines.item_id = item.item_id;
                         orderLines.order_id = _order_id;
                         orderLines.qty = 1;
                         _context.Add(orderLines);
