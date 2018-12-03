@@ -88,26 +88,8 @@ namespace bytme
             {
                 app.UseExceptionHandler("/error");
             }
-            app.UseStatusCodePages(async context =>
-            {
-                context.HttpContext.Response.ContentType = "text/HTML";
 
-                await context.HttpContext.Response.WriteAsync(
-                    "<center><strong><font size=6> This page doesn't exist" +
-                    "<p><strong>Status code: " + 
-                    context.HttpContext.Response.StatusCode);
-            });
-
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-                app.UseHsts();
-            }
+            app.UseStatusCodePagesWithRedirects("/Home/ErrorPage/{0}");
 
             app.UseSession();
 

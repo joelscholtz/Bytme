@@ -32,6 +32,13 @@ namespace bytme.Controllers
             _context = context;
         }
 
+        public ActionResult ErrorPage()
+        {
+            IEnumerable<Item> item = _context.Items.AsEnumerable();
+
+            return View(item);
+        }
+
         public ActionResult Index()
         {
             IEnumerable<Item> item = _context.Items.AsEnumerable();
