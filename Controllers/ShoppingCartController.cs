@@ -107,6 +107,10 @@ namespace bytme.Controllers
                     if (cart[index].quantity < cart[index].stock)
                     {
                         cart[index].quantity += qty;
+                        if (cart[index].quantity > cart[index].stock)
+                        {
+                            cart[index].quantity = cart[index].stock;
+                        }
                     }
                     else { }
                 }
