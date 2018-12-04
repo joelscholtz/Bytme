@@ -38,7 +38,7 @@
     .pagination {
         margin-left: 275px;
         position: page;
-    }
+    }   
 
     .shoppingcart {
         margin-top: -30px;
@@ -288,7 +288,7 @@
     }
 </script>
 
-<script>]
+<script>
     var quantity = 1;
     function setQtySession(qty) {
         quantity = qty;
@@ -536,14 +536,14 @@
                                 <!--Wishlist snackbar, and yes, this is really called a snackbar-->
                                 <div id="snackbar"></div>
 
-                                <input id="@item.id" class="form-control" style="width: 30%" type="number" oninput="stockChecker(this.id, @item.quantity)" onchange="setQty(this.value);" value="1" required />
+                                <input id="_ @item.id" class="form-control" style="width: 30%" type="number" oninput="stockChecker(this.id, @item.quantity)" onchange="setQty(this.value);" value="1" required />
                                 <a onclick="AddToCart(@item.id)" class="btn btn-default" data-target="#modelWindowShop">
                                     <span style="color:#8F6B93;" class="glyphicon glyphicon-shopping-cart"></span>
                                 </a>
                             }
                             else
                             {
-                                <input id="@item.id" class="form-control" style="width: 30%" type="number" oninput="stockChecker(this.id, @item.quantity)" onchange="setQtySession(this.value);" value="1" required />
+                                <input id="_ @item.id" class="form-control" style="width: 30%" type="number" oninput="stockChecker(this.id, @item.quantity)" onchange="setQtySession(this.value);" value="1" required />
                                 <a onclick="AddToCartSession(@item.id)" class="btn btn-default" data-target="#modelWindowShop">
                                     <span style="color:#8F6B93;" class="glyphicon glyphicon-shopping-cart"></span>
                                 </a>
@@ -589,14 +589,14 @@
                                 <!--Wishlist snackbar, and yes, this is really called a snackbar-->
                                 <div id="snackbar"></div>
 
-                                <input id="@item.id" class="form-control" style="width: 30%" type="number" oninput="stockChecker(this.id, @item.quantity)" onchange="setQty(this.value);" value="1" required />
+                                <input id="_ @item.id" class="form-control" style="width: 30%" type="number" oninput="stockChecker(this.id, @item.quantity)" onchange="setQty(this.value);" value="1" required />
                                 <a onclick="AddToCart(@item.id)" class="btn btn-default" data-target="#modelWindowShop">
                                     <span style="color:#8F6B93;" class="glyphicon glyphicon-shopping-cart"></span>
                                 </a>
                             }
                             else
                             {
-                                <input id="@item.id" class="form-control" style="width: 30%" type="number" oninput="stockChecker(this.id, @item.quantity)" onchange="setQtySession(this.value);" value="1" required />
+                                <input id="_ @item.id" class="form-control" style="width: 30%" type="number" oninput="stockChecker(this.id, @item.quantity)" onchange="setQtySession(this.value);" value="1" required />
                                 <a onclick="AddToCartSession(@item.id)" class="btn btn-default" data-target="#modelWindowShop">
                                     <span style="color:#8F6B93;" class="glyphicon glyphicon-shopping-cart"></span>
                                 </a>
