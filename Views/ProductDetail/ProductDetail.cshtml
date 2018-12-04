@@ -310,12 +310,12 @@
                     </span>
                 </p>
                 <script>
-                    function stockChecker(id, stock) {
-                        if (document.getElementById(id).value > stock) {
-                            document.getElementById(id).value = stock;
+                    function stockChecker(qty, which, stock) {
+                        if (qty > stock) {
+                            document.getElementById(which).value = stock;
                         }
-                        if (document.getElementById(id).value < 1) {
-                            document.getElementById(id).value = 1;
+                        if (qty < 1) {
+                            document.getElementById(which).value = 1;
                         }
                     }
                 </script>
@@ -335,7 +335,7 @@
                                 <span style="color:#8F6B93;" class="glyphicon glyphicon-heart-empty"></span>
                             </a>
 
-                            <input id="_ @Model.id" class="form-control" style="width: 30%" type="number" oninput="validate(event)" onchange="setQty(this.value); stockChecker(this.id, @Model.quantity);" value="1" required />
+                            <input id="_ @Model.id" class="form-control" min="1" max="@Model.quantity" style="width: 30%" type="number" oninput="validate(event); stockChecker(this.value, this.id, @Model.quantity)" onchange="setQty(this.value);" value="1" required />
                             <a onclick="AddToCart(@Model.id)" class="btn btn-default">
                                 <span style="color:#8F6B93;" class="glyphicon glyphicon-shopping-cart"></span>
                             </a>
@@ -344,7 +344,7 @@
                     else
                     {
                         <div align="right" class="wishlist">
-                            <input id="_ @Model.id" class="form-control" style="width: 30%" type="number" oninput="validate(event)" onchange="setQtySession(this.value); stockChecker(this.id, @Model.quantity);" value="1" required />
+                            <input id="_ @Model.id" class="form-control" min="1" max="@Model.quantity" style="width: 30%" type="number" oninput="validate(event); stockChecker(this.value, this.id, @Model.quantity);" onchange="setQtySession(this.value);"  value="1" required />
                             <a onclick="AddToCartSession(@Model.id)" class="btn btn-default">
                                 <span style="color:#8F6B93;" class="glyphicon glyphicon-shopping-cart"></span>
                             </a>
