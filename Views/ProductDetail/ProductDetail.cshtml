@@ -231,13 +231,11 @@
 </script>
 
 <script>
-    debugger;
     var quantity = 1;
     function setQtySession(qty) {
         quantity = qty;
     }
     function AddToCartSession(itm_id) {
-        debugger;
         $.ajax({
             type: "POST",
             data: {
@@ -261,10 +259,8 @@
     var quantity = 1;
     function setQty(qty) {
         quantity = qty;
-        debugger;
     }
     function AddToCart(itm_id) {
-        debugger;
         $.ajax({
             type: "POST",
             data: {
