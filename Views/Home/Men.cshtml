@@ -294,7 +294,6 @@
         quantity = qty;
     }
     function AddToCartSession(itm_id) {
-        debugger;
         $.ajax({
             type: "POST",
             data: {
@@ -515,43 +514,51 @@
                             <p>&euro;@item.price</p>
                             <p class="description">@item.description</p>
                             <p class="desc">@item.long_description</p>
-                            @{
-                                if (SignInManager.IsSignedIn(User))
-                                {
-                                    bool wishlist = ViewBag.Wishlist.Contains(item.id);
-
-                                    <!-- Client side only but use server-side definitions inside to initialize -->
-                                    <a onclick="RemoveFromWishList(@ViewBag.OrderLine)" class="btn btn-default swapHeart"
-                                       style="@(wishlist ? "" : "display:none")">
-                                        <span style="color:#8F6B93;" class="glyphicon glyphicon-heart"></span>
-                                    </a>
-                                    <a onclick="AddToWishList(@item.id)" class="btn btn-default swapHeart"
-                                       style="@(wishlist ? "display:none" : "")">
-                                        <span style="color:#8F6B93;" class="glyphicon glyphicon-heart-empty"></span>
-                                    </a>
-                                }
-                            }
                             @if (SignInManager.IsSignedIn(User))
                             {
+                                bool wishlist = ViewBag.Wishlist.Contains(item.id);
+                                <div style="width: 100%">
+                                    <div style="float:left; width: 30%">
+                                        <input id="_ @item.id" class="form-control" type="number" oninput="stockChecker(this.id, @item.quantity)" onchange="setQty(this.value);" value="1" required />
+                                    </div>
+
+
+
+                                    <a onclick="AddToCart(@item.id)" class="btn btn-default" data-target="#modelWindowShop">
+                                        <span style="color:#8F6B93;" class="glyphicon glyphicon-shopping-cart"></span>
+                                    </a>
+                                    <div style="float:right">
+
+                                        <!-- Client side only but use server-side definitions inside to initialize -->
+                                        <a onclick="RemoveFromWishList(@ViewBag.OrderLine)" class="btn btn-default swapHeart"
+                                           style="@(wishlist ? "" : "display:none")">
+                                            <span style="color:#8F6B93;" class="glyphicon glyphicon-heart"></span>
+                                        </a>
+                                        <a onclick="AddToWishList(@item.id)" class="btn btn-default swapHeart"
+                                           style="@(wishlist ? "display:none" : "")">
+                                            <span style="color:#8F6B93;" class="glyphicon glyphicon-heart-empty"></span>
+                                        </a>
+                                    </div>
+                                </div>
                                 <!--Wishlist snackbar, and yes, this is really called a snackbar-->
                                 <div id="snackbar"></div>
 
-                                <input id="_ @item.id" class="form-control" style="width: 30%" type="number" oninput="stockChecker(this.id, @item.quantity)" onchange="setQty(this.value);" value="1" required />
-                                <a onclick="AddToCart(@item.id)" class="btn btn-default" data-target="#modelWindowShop">
-                                    <span style="color:#8F6B93;" class="glyphicon glyphicon-shopping-cart"></span>
-                                </a>
                             }
                             else
                             {
-                                <input id="_ @item.id" class="form-control" style="width: 30%" type="number" oninput="stockChecker(this.id, @item.quantity)" onchange="setQtySession(this.value);" value="1" required />
-                                <a onclick="AddToCartSession(@item.id)" class="btn btn-default" data-target="#modelWindowShop">
-                                    <span style="color:#8F6B93;" class="glyphicon glyphicon-shopping-cart"></span>
-                                </a>
-                            }
-                            <!--Shopping cart modal-->
-                        </div>
-                    </div>
-                </div>
+                                <div style="width: 100%">
+                                    <div style="float:left; width: 30%">
+                                        <input id="_ @item.id" class="form-control" type="number" oninput="stockChecker(this.id, @item.quantity)" onchange="setQtySession(this.value);" value="1" required />
+                                    </div>
+                                        <a onclick="AddToCartSession(@item.id)" class="btn btn-default" data-target="#modelWindowShop">
+                                            <span style="color:#8F6B93;" class="glyphicon glyphicon-shopping-cart"></span>
+                                        </a>
+                                </div>
+                                        }
+                                        <!--Shopping cart modal-->
+                                    </div>
+                                </div>
+                            </div>
             }
             else if (ie == 22) { i++; }
         }
@@ -568,38 +575,46 @@
                             <p>&euro;@item.price</p>
                             <p class="description">@item.description</p>
                             <p class="desc">@item.long_description</p>
-                            @{
-                                if (SignInManager.IsSignedIn(User))
-                                {
-                                    bool wishlist = ViewBag.Wishlist.Contains(item.id);
-
-                                    <!-- Client side only but use server-side definitions inside to initialize -->
-                                    <a onclick="RemoveFromWishList(@ViewBag.OrderLine)" class="btn btn-default swapHeart"
-                                       style="@(wishlist ? "" : "display:none")">
-                                        <span style="color:#8F6B93;" class="glyphicon glyphicon-heart"></span>
-                                    </a>
-                                    <a onclick="AddToWishList(@item.id)" class="btn btn-default swapHeart"
-                                       style="@(wishlist ? "display:none" : "")">
-                                        <span style="color:#8F6B93;" class="glyphicon glyphicon-heart-empty"></span>
-                                    </a>
-                                }
-                            }
                             @if (SignInManager.IsSignedIn(User))
                             {
+                                bool wishlist = ViewBag.Wishlist.Contains(item.id);
+                                <div style="width: 100%">
+                                    <div style="float:left; width: 30%">
+                                        <input id="_ @item.id" class="form-control" type="number" oninput="stockChecker(this.id, @item.quantity)" onchange="setQty(this.value);" value="1" required />
+                                    </div>
+
+
+
+                                    <a onclick="AddToCart(@item.id)" class="btn btn-default" data-target="#modelWindowShop">
+                                        <span style="color:#8F6B93;" class="glyphicon glyphicon-shopping-cart"></span>
+                                    </a>
+                                    <div style="float:right">
+
+                                        <!-- Client side only but use server-side definitions inside to initialize -->
+                                        <a onclick="RemoveFromWishList(@ViewBag.OrderLine)" class="btn btn-default swapHeart"
+                                           style="@(wishlist ? "" : "display:none")">
+                                            <span style="color:#8F6B93;" class="glyphicon glyphicon-heart"></span>
+                                        </a>
+                                        <a onclick="AddToWishList(@item.id)" class="btn btn-default swapHeart"
+                                           style="@(wishlist ? "display:none" : "")">
+                                            <span style="color:#8F6B93;" class="glyphicon glyphicon-heart-empty"></span>
+                                        </a>
+                                    </div>
+                                </div>
                                 <!--Wishlist snackbar, and yes, this is really called a snackbar-->
                                 <div id="snackbar"></div>
 
-                                <input id="_ @item.id" class="form-control" style="width: 30%" type="number" oninput="stockChecker(this.id, @item.quantity)" onchange="setQty(this.value);" value="1" required />
-                                <a onclick="AddToCart(@item.id)" class="btn btn-default" data-target="#modelWindowShop">
-                                    <span style="color:#8F6B93;" class="glyphicon glyphicon-shopping-cart"></span>
-                                </a>
                             }
                             else
                             {
-                                <input id="_ @item.id" class="form-control" style="width: 30%" type="number" oninput="stockChecker(this.id, @item.quantity)" onchange="setQtySession(this.value);" value="1" required />
-                                <a onclick="AddToCartSession(@item.id)" class="btn btn-default" data-target="#modelWindowShop">
-                                    <span style="color:#8F6B93;" class="glyphicon glyphicon-shopping-cart"></span>
-                                </a>
+                                <div style="width: 100%">
+                                    <div style="float:left; width: 30%">
+                                        <input id="_ @item.id" class="form-control" type="number" oninput="stockChecker(this.id, @item.quantity)" onchange="setQtySession(this.value);" value="1" required />
+                                    </div>
+                                    <a onclick="AddToCartSession(@item.id)" class="btn btn-default" data-target="#modelWindowShop">
+                                        <span style="color:#8F6B93;" class="glyphicon glyphicon-shopping-cart"></span>
+                                    </a>
+                                </div>
                             }
                             <!--Shopping cart modal-->
 
