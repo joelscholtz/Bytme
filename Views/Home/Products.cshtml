@@ -12,6 +12,7 @@
     List<string> colors = ViewBag.Colorschecked;
     List<string> brands = ViewBag.Brandschecked;
     List<int> Pager = ViewBag.Pager;
+    string qtychangeid = "q0";
 }
 <head>
     <link href="~/css/site.css" rel="stylesheet" />
@@ -204,6 +205,29 @@
     .btn-group button:hover {
         background-color: #ddd;
         border: 1px solid #ddd;
+    }
+    .tooltip {
+        background-color: white !important;
+        border-radius: 3%;
+        border: 1px solid #ddd;
+    }
+
+    .tooltip-arrow {
+        color: #C7B5C9 !important;
+        border-bottom-color: #C7B5C9;
+    }
+
+    .tooltip.bottom .tooltip-arrow {
+        top: 0;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 0 5px 5px;
+        border-bottom-color: #C7B5C9;
+    }
+
+    .tooltip-inner {
+        color: black !important;
+        background-color: white !important;
     }
 </style>
 <script>
@@ -522,10 +546,33 @@
                 </div>
 
                 <script>
+                    var jqid = "#";
+                    var oldjqid = "#";
                     function stockChecker(id, stock) {
+                        //id management (set current tooltip and destroy the previous one if it existed)
+                        oldjqid = jqid;
+                        jqid = "#" + id;
+
+                        if (oldjqid != "#" && oldjqid != jqid) {
+                            $(oldjqid).tooltip('destroy');
+                        }
+
+                        //apply changes to selected qty if it exceeds stock and also notify the user of why its not possible to order this much
                         if (document.getElementById(id).value > stock) {
                             document.getElementById(id).value = stock;
+                            $(jqid).tooltip({
+                                title: "Cannot be greater than stock",
+                                placement: "bottom"
+                            });
+                            $(jqid).tooltip('show');
                         }
+                        else {
+                            if (jqid != "#") {
+                                $(jqid).tooltip('destroy');
+                            }
+                        }
+                    }
+                    function nullchecker(id) {
                         if (document.getElementById(id).value < 1) {
                             document.getElementById(id).value = 1;
                         }
@@ -536,6 +583,8 @@
 
                     @foreach (var item in Model)
                     {
+                        qtychangeid = item.id.ToString();
+                        qtychangeid = "q" + qtychangeid;
                         @if (ie++ < 21)
                         {
                             <div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box" id="page_@i _@ie" style="width:33%">
@@ -550,7 +599,7 @@
                                             bool wishlist = ViewBag.Wishlist.Contains(item.id);
                                             <div style="width: 100%">
                                                 <div style="float:left; width: 30%">
-                                                    <input id="_ @item.id" class="form-control" type="number" oninput="stockChecker(this.id, @item.quantity)" onchange="setQty(this.value);" value="1" required />
+                                                    <input id="@qtychangeid" class="form-control @qtychangeid" type="number" oninput="stockChecker(this.id, @item.quantity); validate(event);" onchange="setQty(this.value); nullchecker(this.id)" value="1" required />
                                                 </div>
 
 
@@ -579,7 +628,7 @@
                                         {
                                             <div style="width: 100%">
                                                 <div style="float:left; width: 30%">
-                                                    <input id="_ @item.id" class="form-control" type="number" oninput="stockChecker(this.id, @item.quantity)" onchange="setQtySession(this.value);" value="1" required />
+                                                    <input id="@qtychangeid" class="form-control @qtychangeid" type="number" oninput="stockChecker(this.id, @item.quantity); validate(event);" onchange="setQty(this.value); nullchecker(this.id)" value="1" required />
                                                 </div>
                                                 <a onclick="AddToCartSession(@item.id)" class="btn btn-default" data-target="#modelWindowShop">
                                                     <span style="color:#8F6B93;" class="glyphicon glyphicon-shopping-cart"></span>
@@ -608,7 +657,7 @@
                                             bool wishlist = ViewBag.Wishlist.Contains(item.id);
                                             <div style="width: 100%">
                                                 <div style="float:left; width: 30%">
-                                                    <input id="_ @item.id" class="form-control" type="number" oninput="stockChecker(this.id, @item.quantity)" onchange="setQty(this.value);" value="1" required />
+                                                    <input id="@qtychangeid" class="form-control @qtychangeid" type="number" oninput="stockChecker(this.id, @item.quantity); validate(event);" onchange="setQty(this.value); nullchecker(this.id)" value="1" required />
                                                 </div>
 
 
@@ -637,7 +686,7 @@
                                         {
                                             <div style="width: 100%">
                                                 <div style="float:left; width: 30%">
-                                                    <input id="_ @item.id" class="form-control" type="number" oninput="stockChecker(this.id, @item.quantity)" onchange="setQtySession(this.value);" value="1" required />
+                                                    <input id="@qtychangeid" class="form-control @qtychangeid" type="number" oninput="stockChecker(this.id, @item.quantity); validate(event);" onchange="setQty(this.value); nullchecker(this.id)" value="1" required />
                                                 </div>
                                                 <a onclick="AddToCartSession(@item.id)" class="btn btn-default" data-target="#modelWindowShop">
                                                     <span style="color:#8F6B93;" class="glyphicon glyphicon-shopping-cart"></span>

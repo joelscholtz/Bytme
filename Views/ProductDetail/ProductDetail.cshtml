@@ -17,7 +17,27 @@
         font-family: "Open Sans";
         font-weight: 300;
     }
-
+    /* ToolTip CSS classses */
+    .tooltip {
+        background-color: white !important;
+        border-radius: 3%;
+        border: 1px solid #ddd;
+    }
+    .tooltip-arrow {
+        color: #C7B5C9 !important;
+        border-bottom-color : #C7B5C9;
+    }
+    .tooltip.bottom .tooltip-arrow {
+        top: 0;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 0 5px 5px;
+        border-bottom-color: #C7B5C9;
+    }
+    .tooltip-inner {
+        color: black !important;
+        background-color: white !important;
+    }
     h1.product-page {
         font-weight: 800;
         margin: 0 0 20px;
@@ -313,10 +333,19 @@
                     function stockChecker(qty, which, stock) {
                         if (qty > stock) {
                             document.getElementById(which).value = stock;
+                            $(".qtyinput").tooltip({ title: "Cannot be greater than stock", placement: "bottom" });
+                            $(".qtyinput").tooltip('show');
+                            window.setTimeout(executetooltip66, 2000);
                         }
+                        
+                    }
+                    function nullchecker(qty, which) {
                         if (qty < 1) {
                             document.getElementById(which).value = 1;
                         }
+                    }
+                    function executetooltip66() {
+                        $(".qtyinput").tooltip("destroy");
                     }
                 </script>
                 <p>
@@ -331,7 +360,7 @@
                                 </a>
                             </div>
                             <div style="float:right; width: 30%">
-                                <input id="_ @Model.id" class="form-control" type="number" oninput="stockChecker(this.value, this.id, @Model.quantity)" onchange="setQtySession(this.value);" value="1" required />
+                                <input id="_ @Model.id" class="form-control qtyinput" type="number" oninput="stockChecker(this.value, this.id, @Model.quantity)" onchange="setQtySession(this.value); nullchecker(this.value, this.id)" value="1" required />
                             </div>
                         </div>
                         <br />
@@ -356,7 +385,7 @@
                             </a>
                                 </div>
                             <div style="float:right; width: 30%">
-                                <input id="_ @Model.id" class="form-control" type="number" oninput="stockChecker(this.value, this.id, @Model.quantity)" onchange="setQtySession(this.value);" value="1" required />
+                                <input id="_ @Model.id" class="form-control tooltip" type="number" oninput="stockChecker(this.value, this.id, @Model.quantity)" onchange="setQtySession(this.value);" value="1" required /><span class="tooltiptext">f</span>
                             </div>
                         </div>
                             }
