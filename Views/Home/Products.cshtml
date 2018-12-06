@@ -314,6 +314,7 @@
     var quantity = 1;
     function setQty(qt) {
         quantity = qt;
+        if (quantity <= 0) { quantity = 1}  
     }
     function AddToCart(itm_id) {
 
@@ -339,6 +340,7 @@
     var quantity = 1;
     function setQtySession(qt) {
         quantity = qt;
+        if (quantity <= 0) { quantity = 1}
     }
     function AddToCartSession(itm_id) {
         $.ajax({

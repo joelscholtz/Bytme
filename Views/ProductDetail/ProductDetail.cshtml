@@ -211,25 +211,6 @@
     }
 </script>
 <script>
-    function AddToCart(itm_id) {
-
-        $.ajax({
-            type: "POST",
-            data: {
-                item_id: itm_id
-            },
-            url: "/ShoppingCart/SaveItemInShoppingCart",
-            success: function (data) {
-                $('#modelWindowShop').modal('show');
-            },
-            error: function () {
-                return "error";
-            }
-        });
-    }
-</script>
-
-<script>
     function AddToWishList(item_id) {
         $.ajax({
             type: "POST",
@@ -254,6 +235,7 @@
     var quantity = 1;
     function setQtySession(qty) {
         quantity = qty;
+        if (quantity <= 0) { quantity = 1}
     }
     function AddToCartSession(itm_id) {
         $.ajax({
@@ -279,6 +261,7 @@
     var quantity = 1;
     function setQty(qty) {
         quantity = qty;
+        if (quantity <= 0) { quantity = 1}
     }
     function AddToCart(itm_id) {
         $.ajax({
