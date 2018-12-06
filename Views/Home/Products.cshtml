@@ -587,7 +587,7 @@
                     {
                         qtychangeid = item.id.ToString();
                         qtychangeid = "q" + qtychangeid;
-                        @if (ie++ < 21)
+                        @if (ie++ < 21 && item.quantity != 0)
                         {
                             <div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box" id="page_@i _@ie" style="width:33%">
                                 <div class="thumbnail">
