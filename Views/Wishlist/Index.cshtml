@@ -60,7 +60,7 @@
         oldjqid = jqid;
         $(jqid).tooltip({
             title: "This product is out of stock",
-            placement: "left"
+            placement: "bottom"
         });
         $(jqid).tooltip('show');
         window.setTimeout(function () { $(jqid).tooltip('destroy') }, 4000);
@@ -75,7 +75,14 @@
         {
             <div class="col-sm-4 col-md-4 col-lg-6 col-xs-6 box">
                 <div class="thumbnail" style="text-align:center;">
-                    <a onclick="@("window.location.href=' " + Url.Action("ProductDetail", "ProductDetail", new { id = item.item_id }) + " ' ");"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;cursor:pointer;" /></a>
+                    @if (item.stock != 0)
+                    {
+                        <a onclick="@("window.location.href=' " + Url.Action("ProductDetail", "ProductDetail", new { id = item.item_id }) + " ' ");"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;cursor:pointer;" /></a>
+                    }
+                    else
+                    {
+                        <a id="@item.id"  onclick="OutOfStock(this.id)"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;cursor:pointer;" /></a>
+                    }
                     <div class="desc_box">
                         <p>&euro;@item.price</p>
                         <p class="description">@item.description</p>
@@ -86,7 +93,7 @@
                         }
                         else
                         {
-                            <a id="@item.id" class="btn btn-default" onclick="OutOfStock(this.id)"><span class="glyphicon glyphicon-shopping-cart" style="opacity: 0.8;" ></span></a>
+                            <a id="@item.id" class="btn btn-default" onclick="OutOfStock(this.id)"><span class="glyphicon glyphicon-shopping-cart" style="opacity: 0.8;"></span></a>
                         }
                         <a class="btn btn-danger" href='@Url.Action("RemoveFromWishList", "WishList", new { ordline_id = item.ordline_id })'>X</a>
                         @ViewBag.ErrorMessage
