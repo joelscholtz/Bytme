@@ -22,9 +22,51 @@
         color: #C7B5C9;
         text-decoration: none;
     }
+    .tooltip {
+        background-color: white !important;
+        border-radius: 3%;
+        border: 1px solid #ddd;
+    }
+
+    .tooltip-arrow {
+        color: #C7B5C9 !important;
+        border-bottom-color: #C7B5C9;
+    }
+
+    .tooltip.bottom .tooltip-arrow {
+        top: 0;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 0 5px 5px;
+        border-bottom-color: #C7B5C9;
+    }
+
+    .tooltip-inner {
+        color: black !important;
+        background-color: white !important;
+        font-size:15px;
+    }
 </style>
 <h2 style="text-align:center;">Favorites List</h2>
 <hr />
+<script>
+    var jqid = "#";
+    var oldjqid = "#"
+    function OutOfStock(id) {
+        if (oldjqid != jqid) {
+            $(oldjqid).tooltip('destroy');
+        }
+        jqid = "#" + id;
+        oldjqid = jqid;
+        $(jqid).tooltip({
+            title: "This product is out of stock",
+            placement: "left"
+        });
+        $(jqid).tooltip('show');
+        window.setTimeout(function () { $(jqid).tooltip('destroy') }, 4000);
+    }
+
+</script>
 @if (User.Identity.IsAuthenticated)
 {
     @if (ViewBag.model_for_view != null)
@@ -38,7 +80,14 @@
                         <p>&euro;@item.price</p>
                         <p class="description">@item.description</p>
                         <p class="desc">@item.long_description</p>
-                        <a class="btn btn-default" href='@Url.Action("SaveItemInShoppingCart", "ShoppingCart", new { item_id = item.item_id })'><span class="glyphicon glyphicon-shopping-cart"></span></a>
+                        @if (item.stock != 0)
+                        {
+                            <a class="btn btn-default" href='@Url.Action("SaveItemInShoppingCart", "ShoppingCart", new { item_id = item.item_id })'><span class="glyphicon glyphicon-shopping-cart"></span></a>
+                        }
+                        else
+                        {
+                            <a id="@item.id" class="btn btn-default" onclick="OutOfStock(this.id)"><span class="glyphicon glyphicon-shopping-cart" style="opacity: 0.8;" ></span></a>
+                        }
                         <a class="btn btn-danger" href='@Url.Action("RemoveFromWishList", "WishList", new { ordline_id = item.ordline_id })'>X</a>
                         @ViewBag.ErrorMessage
                     </div>
