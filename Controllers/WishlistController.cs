@@ -37,6 +37,8 @@ namespace bytme.Controllers
                             where wishlines.Wishmain_id == wishlist_id
                             select new WishlistModel
                             {
+                                long_description = items.long_description,
+                                stock = items.quantity,
                                 description = items.description,
                                 price = items.price,
                                 ordline_id = wishlines.id,
