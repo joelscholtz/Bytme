@@ -41,7 +41,7 @@ namespace bytme.Areas.Identity.Pages.Account.Manage
             [Required]
             [DataType(DataType.Text)]
             [Display(Name = "Street")]
-            [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "A street name can only contain letters. If you want to add a house number, do it in the next field.")]
+            [RegularExpression(@"^[a-zA-Z -.]+$", ErrorMessage = "A street name can only contain letters. If you want to add a house number, do it in the next field.")]
             [StringLength(48, ErrorMessage = "The longest street name in the Netherlands has 48 characters.")]
             public string street { get; set; }
 
@@ -55,7 +55,7 @@ namespace bytme.Areas.Identity.Pages.Account.Manage
             [Required]
             [DataType(DataType.Text)]
             [Display(Name = "City")]
-            [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "A city can only contain letters.")]
+            [RegularExpression(@"^[a-zA-Z-]+$", ErrorMessage = "A city can only contain letters.")]
             [StringLength(28, ErrorMessage = "The longest place name in the Netherlands has 28 characters.")]
             public string city { get; set; }
 

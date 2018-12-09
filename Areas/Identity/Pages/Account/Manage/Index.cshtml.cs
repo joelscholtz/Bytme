@@ -45,14 +45,14 @@ namespace bytme.Areas.Identity.Pages.Account.Manage
             [Required]
             [DataType(DataType.Text)]
             [Display(Name = "Name")]
-            [RegularExpression(@"^[a-zA-Z ]+$", ErrorMessage = "A name can only contain letters.")]
+            [RegularExpression(@"^[a-zA-Z -]+$", ErrorMessage = "A name can only contain letters.")]
             [StringLength(100, ErrorMessage = "Invalid input. Maximum is 100 characters.")]
             public string name { get; set; }
 
             [Required]
             [DataType(DataType.Text)]
             [Display(Name = "Surname")]
-            [RegularExpression(@"^[a-zA-Z ]+$", ErrorMessage = "A surname can only contain letters.")]
+            [RegularExpression(@"^[a-zA-Z -]+$", ErrorMessage = "A surname can only contain letters.")]
             [StringLength(100, ErrorMessage = "Invalid input. Maximum is 100 characters.")]
             public string surname { get; set; }
         }
