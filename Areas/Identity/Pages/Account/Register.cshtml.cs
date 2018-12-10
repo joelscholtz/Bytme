@@ -113,7 +113,7 @@ namespace bytme.Areas.Identity.Pages.Account
             {
 
                 var email = await _userManager.FindByEmailAsync(Input.Email);
-                var user = new UserModel { UserName = Input.Email, Email = Input.Email, street = Input.street, streetnumber = Input.streetnumber, city = Input.city, zipcode = Input.zipcode, name = Input.name, surname = Input.surname};
+                var user = new UserModel { dt_created = DateTime.Now, UserName = Input.Email, Email = Input.Email, street = Input.street, streetnumber = Input.streetnumber, city = Input.city, zipcode = Input.zipcode, name = Input.name, surname = Input.surname};
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (email != null)

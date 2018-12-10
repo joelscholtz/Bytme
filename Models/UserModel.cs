@@ -13,6 +13,7 @@ namespace bytme.Models
         public override string Email { get; set; }
         public override string UserName { get; set; }
         public override string PasswordHash { get; set; }
+        public DateTime dt_created { get; set; }
         public string zipcode { get; set; }
         public string city { get; set; }
         public string street { get; set; }
