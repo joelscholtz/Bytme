@@ -91,16 +91,35 @@ namespace bytme
             }
             //Assign Admin role to the main User here we have given our newly registered 
             //login id for Admin management
-            UserModel user = await UserManager.FindByEmailAsync("RUJALIDI@AUTOWB.COM");
-            var User = new UserModel();
-            await UserManager.AddToRoleAsync(user, "Admin");
+            UserModel user = await UserManager.FindByEmailAsync("admin@sayos.com");
+            if (user == null)
+            {
+                var poweruser = new UserModel
+                {
+                    UserName = "admin@sayos.com",
+                    Email = "admin@sayos.com",
+                    EmailConfirmed = true,
+                    zipcode = "1234AB",
+                    city = "Admin",
+                    street = "Admin",
+                    streetnumber = "1",
+                    name = "Admin",
+                    surname = "Admin"
+                };
+                string adminPassword = "Admin1!";
+
+                var createPowerUser = await UserManager.CreateAsync(poweruser, adminPassword);
+                if (createPowerUser.Succeeded)
+                {
+                    //here we tie the new user to the role
+                    await UserManager.AddToRoleAsync(poweruser, "Admin");
+                }
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider services)
         {
-            env.EnvironmentName = EnvironmentName.Production;
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

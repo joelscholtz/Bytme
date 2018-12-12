@@ -5,13 +5,16 @@
 }
 
 <style>
-    .box {
-        width: auto;
-        margin-bottom: 0px;
+    .img_box {
+        position: relative;
+        text-align: center;
     }
 
-    .description {
-        font-size:16px;
+    .centered > p {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
     }
 
     .desc {
@@ -20,7 +23,16 @@
         white-space: nowrap; /* don't break the line */
         text-overflow: ellipsis; /* give the beautiful '...' effect */
         font-size: 12px;
-        margin-left:50px;
+        margin-left: 50px;
+    }
+
+    .description {
+        font-size: 16px;
+    }
+
+    .box {
+        width: auto;
+        margin-bottom: 0px;
     }
 
     .shop:after {
@@ -35,6 +47,7 @@
         color: #C7B5C9;
         text-decoration: none;
     }
+
     .tooltip {
         background-color: white !important;
         border-radius: 3%;
@@ -57,29 +70,22 @@
     .tooltip-inner {
         color: black !important;
         background-color: white !important;
-        font-size:15px;
+        font-size: 15px;
+    }
+
+    .text-block {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        background-color: white;
+        color: black;
+        padding-left: 20px;
+        padding-right: 20px;
+        opacity: 0.8;
     }
 </style>
 <h2 style="text-align:center;">Favorites List</h2>
 <hr />
-<script>
-    var jqid = "#";
-    var oldjqid = "#"
-    function OutOfStock(id) {
-        if (oldjqid != jqid) {
-            $(oldjqid).tooltip('destroy');
-        }
-        jqid = "#" + id;
-        oldjqid = jqid;
-        $(jqid).tooltip({
-            title: "This product is out of stock",
-            placement: "bottom"
-        });
-        $(jqid).tooltip('show');
-        window.setTimeout(function () { $(jqid).tooltip('destroy') }, 4000);
-    }
-
-</script>
 @if (User.Identity.IsAuthenticated)
 {
     @if (ViewBag.model_for_view != null)
@@ -90,27 +96,36 @@
                 <div class="thumbnail" style="text-align:center;">
                     @if (item.stock != 0)
                     {
-                        <a onclick="@("window.location.href=' " + Url.Action("ProductDetail", "ProductDetail", new { id = item.item_id }) + " ' ");"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;cursor:pointer;" /></a>
+                        <div class="img_box">
+                            <a onclick="@("window.location.href=' " + Url.Action("ProductDetail", "ProductDetail", new { id = item.item_id }) + " ' ");"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;cursor:pointer;" /></a>
+                            <div class="text-block">
+                                @if (item.stock <= 5)
+                                {
+                                    <p>Almost sold out</p>
+                                }
+                            </div>
+                        </div>
+                        <div class="desc_box">
+                            <p>&euro;@item.price</p>
+                            <p class="description">@item.description</p>
+                            <p class="desc">@item.long_description</p>
+                            <a class="btn btn-default" href='@Url.Action("SaveItemInShoppingCart", "ShoppingCart", new { item_id = item.item_id, qty = 1 })'><span class="glyphicon glyphicon-shopping-cart"></span></a>
+                            <a class="btn btn-danger" href='@Url.Action("RemoveFromWishList", "WishList", new { ordline_id = item.ordline_id })'>X</a>
+                        </div>
                     }
                     else
                     {
-                        <a id="@item.id"  onclick="OutOfStock(this.id)"><img src="@item.photo_url" style="width:245px;height:332px;text-align:center;cursor:pointer;" /></a>
+                        <div class="img_box">
+                            <img src="@item.photo_url" style="width:245px;height:332px;text-align:center;opacity:0.4;" />
+                            <div class="centered"><p style="text-decoration:solid;font-size:30px;">Out of stock!</p></div>
+                        </div>
+                        <div class="desc_box">
+                            <p>&euro;@item.price</p>
+                            <p class="description">@item.description</p>
+                            <p class="desc">@item.long_description</p>
+                            <a class="btn btn-danger" href='@Url.Action("RemoveFromWishList", "WishList", new { ordline_id = item.ordline_id })'>X</a>
+                        </div>
                     }
-                    <div class="desc_box">
-                        <p>&euro;@item.price</p>
-                        <p class="description">@item.description</p>
-                        <p class="desc">@item.long_description</p>
-                        @if (item.stock != 0)
-                        {
-                            <a class="btn btn-default" href='@Url.Action("SaveItemInShoppingCart", "ShoppingCart", new { item_id = item.item_id })'><span class="glyphicon glyphicon-shopping-cart"></span></a>
-                        }
-                        else
-                        {
-                            <a id="@item.id" class="btn btn-default" onclick="OutOfStock(this.id)"><span class="glyphicon glyphicon-shopping-cart" style="opacity: 0.8;"></span></a>
-                        }
-                        <a class="btn btn-danger" href='@Url.Action("RemoveFromWishList", "WishList", new { ordline_id = item.ordline_id })'>X</a>
-                        @ViewBag.ErrorMessage
-                    </div>
                 </div>
             </div>
         }
