@@ -1,0 +1,90 @@
+﻿
+@{
+    ViewData["Title"] = "VipProgram";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row text-center">
+        <h2>Discounts</h2>
+    </div>
+</div>
+<div class="container">
+    <div class="panel-group" id="accordion">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Is it free?</a>
+                </h4>
+            </div>
+            <div id="collapseTwo" class="panel-collapse collapse in">
+                <div class="panel-body">
+                    <p>
+                        Yes! The program is completely free!
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">How do you get points?</a>
+                </h4>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <p>You get points by ordering products.<p>
+                    <p>How much you get depends on how much you spend:</p>
+                    <ul>
+                        <li>
+                            €0 - €50 : 0 points <br />
+                            €50 - €75 : 100 points <br />
+                            €75 - €100 : 150 points <br />
+                            €100 - €150 : 200 points <br />
+                            €150 - €200 : 300 points <br />
+                            €200 - €300 : 500 points <br />
+                            €300 - €500 : 750 points <br />
+                            €500 or more : 1000 points + 2 points per extra €1 spend
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">What are the benefits?</a>
+                </h4>
+            </div>
+            <div id="collapseThree" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <p>You can use the points to get discounts on your order.</p>
+                    <p>The discounts:</p>
+                    <ul>
+                        <li>
+                            no shipping costs: 100 points <br />
+                            5% discount : 250 points <br />
+                            10% discount : 500 points <br />
+                            15% discount : 750 points <br />
+                            20% discount : 1000 points
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFour">How many discounts can you use per order?</a>
+                </h4>
+            </div>
+            <div id="collapseFour" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <p>
+                        You can use one discount per order.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

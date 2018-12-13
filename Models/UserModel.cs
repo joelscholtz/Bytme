@@ -20,5 +20,6 @@ namespace bytme.Models
         public string streetnumber { get; set; }
         public string name { get; set; }
         public string surname { get; set; }
+        public int points { get; set; }
     }
 }

@@ -32,5 +32,10 @@ namespace bytme.Controllers
         {
             return View();
         }
+        
+        public IActionResult VipProgram()
+        {
+            return View();
+        }
     }
 }

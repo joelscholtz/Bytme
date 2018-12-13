@@ -104,7 +104,8 @@ namespace bytme
                     street = "Admin",
                     streetnumber = "1",
                     name = "Admin",
-                    surname = "Admin"
+                    surname = "Admin",
+                    points = -1
                 };
                 string adminPassword = "Admin1!";
 
