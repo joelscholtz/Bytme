@@ -515,6 +515,79 @@ namespace bytme.Controllers
                                       OrderLines = ordline,
                                       OrderHistory = os
                                   }).ToList();
+            //add points
+            int points_gotten = 0;
+            if (result.points >= 0)
+            {
+                float totalprice = 0f;
+                float shippingcost = 2.95f;
+                foreach (var item in Listpurchitems)
+                {
+                    totalprice += (item.OrderHistory.price_payed * item.OrderHistory.qty_bought);
+                }
+
+                if (totalprice < 100)
+                {
+                    totalprice += shippingcost;
+                }
+                else { }
+
+                if (totalprice > 50 && totalprice < 75)
+                {
+                    points_gotten += 100;
+                    result.points += 100;
+                    _context.Update(result);
+                    _context.SaveChanges();
+                }
+                if (totalprice > 75 && totalprice < 100)
+                {
+                    points_gotten += 150;
+                    result.points += 150;
+                    _context.Update(result);
+                    _context.SaveChanges();
+                }
+                if (totalprice > 100 && totalprice < 150)
+                {
+                    points_gotten += 200;
+                    result.points += 200;
+                    _context.Update(result);
+                    _context.SaveChanges();
+                }
+                if (totalprice > 150 && totalprice < 200)
+                {
+                    points_gotten += 300;
+                    result.points += 300;
+                    _context.Update(result);
+                    _context.SaveChanges();
+                }
+                if (totalprice > 200 && totalprice < 300)
+                {
+                    points_gotten += 500;
+                    result.points += 500;
+                    _context.Update(result);
+                    _context.SaveChanges();
+                }
+                if (totalprice > 300 && totalprice < 500)
+                {
+                    points_gotten += 750;
+                    result.points += 750;
+                    _context.Update(result);
+                    _context.SaveChanges();
+                }
+                if (totalprice > 500)
+                {
+                    points_gotten += 1000;
+                    float extra_points = totalprice - 500;
+                    result.points += 1000;
+                    extra_points = extra_points / 2;
+                    int points_you_gone_get = (int)extra_points;
+                    points_gotten += points_you_gone_get;
+                    result.points += points_you_gone_get;
+                    _context.Update(result);
+                    _context.SaveChanges();
+                }
+            }
+            else { }
 
             //send email |
             SmtpClient client = new SmtpClient();
@@ -562,7 +635,7 @@ namespace bytme.Controllers
                 "</tr>";
                 totalPrice += (item.OrderHistory.price_payed * item.OrderHistory.qty_bought);
             }
-            if (totalPrice < 100)
+            if (totalPrice < 100 && result.points == -1)
             {
                 totalPrice += sendcost;
                 mailMessage.Body += " <tr> " +
@@ -581,7 +654,7 @@ namespace bytme.Controllers
                                     " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>Total: " + totalPrice + " euro</th>" +
                                     " </tr>";
             }
-            else
+            if (totalPrice >= 100 && result.points == -1)
             {
                 mailMessage.Body += " <tr> " +
                                     " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
@@ -589,6 +662,51 @@ namespace bytme.Controllers
                                     " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
                                     " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
                                     " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>Total: " + totalPrice + " euro</th>" +
+                                    " </tr>";
+            }
+            if (totalPrice < 100 && result.points >= 0)
+            {
+                totalPrice += sendcost;
+                mailMessage.Body += " <tr> " +
+                                   " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                   " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                   " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                   " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                   " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>Shipping costs: " + sendcost + " euro</th>" +
+                                   " </tr>";
+
+                mailMessage.Body += " <tr> " +
+                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                    " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>Total: " + totalPrice + " euro</th>" +
+                                    " </tr>";
+
+                mailMessage.Body += " <tr> " +
+                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                    " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>VIP points added: " + points_gotten + " points</th>" +
+                                    " </tr>";
+            }
+            if(totalPrice > 100 && result.points >= 0)
+            {
+                mailMessage.Body += " <tr> " +
+                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                    " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>Total: " + totalPrice + " euro</th>" +
+                                    " </tr>";
+
+                mailMessage.Body += " <tr> " +
+                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                    " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>VIP points added: " + points_gotten + " points</th>" +
                                     " </tr>";
             }
             mailMessage.Body += "</table>";

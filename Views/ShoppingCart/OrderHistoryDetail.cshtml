@@ -96,7 +96,76 @@
         <td></td>
         <td><center><strong>Total: </strong>&euro;@totalitem</center></td>
     }
-
             </tr>
+        <tr>
+            @if (totalitem < 100)
+            {
+                totalitem += 2.95f;
+                if (totalitem > 50 && totalitem < 75)
+                {
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><center><strong>VIP points added: </strong> 100 points </center></td>
+                }
+                if (totalitem > 75 && totalitem < 100)
+                {
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><center><strong>VIP points added: </strong> 150 points </center></td>
+                }
+                if (totalitem > 100)
+                {
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><center><strong>VIP points added: </strong> 200 points </center></td>
+                }
+            }
+            else
+            {
+                if (totalitem > 100 && totalitem < 150)
+                {
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><center><strong>VIP points added: </strong> 200 points </center></td>
+                }
+                if (totalitem > 150 && totalitem < 200)
+                {
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><center><strong>VIP points added: </strong> 300 points </center></td>
+                }
+                if (totalitem > 200 && totalitem < 300)
+                {
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><center><strong>VIP points added: </strong> 500 points </center></td>
+                }
+                if (totalitem > 300 && totalitem < 500)
+                {
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><center><strong>VIP points added: </strong> 750 points </center></td>
+                }
+                if (totalitem > 500)
+                {
+                    int points_gotten = 1000;
+                    float extra_points = totalitem - 500;
+                    extra_points = extra_points / 2;
+                    int points_you_gone_get = (int)extra_points;
+                    points_gotten += points_you_gone_get;
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><center><strong>VIP points added: </strong> @points_gotten points </center></td>
+                }
+            }
+        </tr>
             </tbody>
         </table>
