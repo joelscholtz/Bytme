@@ -1,0 +1,60 @@
+﻿@model UserModel
+@{
+    ViewData["Title"] = "EditUser";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>EditUser</h2>
+
+<p>@Html.DisplayFor(m => m.name) @Html.DisplayFor(m => m.surname) - @Html.DisplayFor(m => m.dt_created)</p>
+
+<hr />
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+<fieldset>
+
+    <div class="editor-field" style="padding-bottom:12px">
+        <label>Name</label>
+        @Html.TextBoxFor(m => m.name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.name)
+    </div>
+    <div class="editor-field" style="padding-bottom:12px">
+        <label>Surname</label>
+        @Html.TextBoxFor(m => m.surname, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.surname)
+    </div>
+    <div class="editor-field" style="padding-bottom:12px">
+        <label>Email</label>
+        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Email)
+    </div>
+    <div class="editor-field" style="padding-bottom:12px">
+        <label>Street name</label>
+        @Html.TextBoxFor(m => m.street, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.street)
+    </div>
+    <div class="editor-field" style="padding-bottom:12px">
+        <label>Street number</label>
+        @Html.TextBoxFor(m => m.streetnumber, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.streetnumber)
+    </div>
+    <div class="editor-field" style="padding-bottom:12px">
+        <label>Zipcode</label>
+        @Html.TextBoxFor(m => m.zipcode, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.zipcode)
+    </div>
+    <div class="editor-field">
+        <label>City</label>
+        @Html.TextBoxFor(m => m.city, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.city)
+    </div>
+    <div class="col-md-2" style="padding-top:3%">
+        <input type="submit" value="save changes" title="save changes" onclick="return alert('updating user')" class="form-control" style="width:auto; float:right; color:#4D6810;background-color:#d0dfb7;border-color:#4D6810" />
+        @Html.ActionLink("back", "Index", "Manage", null, new { @class = "btn btn-default", type = "submit", onclick = "return confirm('Are you sure you want to leave this page?')", title="Back to users", style = "margin-right:4%;float:right;" })
+    </div>
+</fieldset>
+}
+
+
+

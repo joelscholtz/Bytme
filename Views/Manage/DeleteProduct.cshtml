@@ -1,0 +1,82 @@
+﻿@model Item
+@{
+    ViewData["Title"] = "DeleteProduct";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{ string cat_change(int _product)
+    {
+        var categoryString = "";
+        if (_product == 1) { categoryString = "Suit jackets"; }
+        if (_product == 2) { categoryString = "Shirts"; }
+        if (_product == 3) { categoryString = "Trousers"; }
+        if (_product == 4) { categoryString = "Laptop bags"; }
+        if (_product == 5) { categoryString = "Shirts"; }
+        if (_product == 6) { categoryString = "Short coats"; }
+        if (_product == 7) { categoryString = "Suit jackets"; }
+        if (_product == 8) { categoryString = "Suit trousers"; }
+        if (_product == 9) { categoryString = "Suits"; }
+        if (_product == 10) { categoryString = "Suit waistcoats"; }
+        if (_product == 11) { categoryString = "Blazer"; }
+        if (_product == 12) { categoryString = "Blouses"; }
+        if (_product == 13) { categoryString = "Heels"; }
+        if (_product == 14) { categoryString = "Cardigans"; }
+        if (_product == 15) { categoryString = "Coats"; }
+        if (_product == 16) { categoryString = "Dresses"; }
+        if (_product == 17) { categoryString = "Jumpers"; }
+        if (_product == 18) { categoryString = "Skirts"; }
+        return categoryString;
+    }
+}
+
+<h2>Delete Product</h2>
+<p style="color: #777;">@Html.DisplayFor(pr => pr.id) - @Html.DisplayFor(pr => pr.description) - @Html.DisplayFor(pr => pr.long_description)</p>
+
+<hr />
+<div class="col-md-6" id='productimage' style="padding-left: 9%;">
+    <img src='@Html.ValueFor(pr => pr.photo_url)' style="height:300px" />
+</div>
+<div class="col-lg-6" style="padding-top: 6%;padding-bottom: 3%;">
+    <table>
+        <thead>
+            <tr>
+                <td style="width:140px">Id:</td>
+                <td>@Html.DisplayFor(pr => pr.id)</td>
+            </tr>
+            <tr>
+                <td>Brand:</td>
+                <td>@Html.DisplayFor(pr => pr.description)</td>
+            </tr>
+            <tr>
+                <td>Description:</td>
+                <td>@Html.DisplayFor(pr => pr.long_description)</td>
+            </tr>
+            <tr>
+                <td>Category:</td>
+                <td>@cat_change(ViewBag.ItemCatId)</td>
+            </tr>
+            <tr>
+                <td>Gender:</td>
+                <td>@Html.DisplayFor(pr => pr.gender)</td>
+            </tr>
+            <tr>
+                <td>Price:</td>
+                <td>€@Html.DisplayFor(pr => pr.price)</td>
+            </tr>
+            <tr>
+                <td>Size:</td>
+                <td>@Html.DisplayFor(pr => pr.size)</td>
+            </tr>
+            <tr>
+                <td>Quantity:</td>
+                <td>@Html.DisplayFor(pr => pr.quantity)</td>
+            </tr>
+        </thead>
+    </table>
+</div>
+<div class="col-xs-1" style="margin-left:20%">
+    @using (Html.BeginForm("DropProduct", "Manage", new { id = Html.ValueFor(pr => pr.id) }))
+    {
+        <input type="submit" value="delete" class="form-control" onclick="return confirm('Are you sure you want to delete this product?')" style="margin-left: 20%; width:auto; color: #A94442;background-color: #f3d1d1;border-color: #A94442;" />
+    }
+</div>
+@Html.ActionLink("cancel", "Products", "Manage", null, new { @class = "btn btn-default", type = "submit", onclick = "return confirm('Are you sure you want to leave this page?')", style="margin-left:1%"})

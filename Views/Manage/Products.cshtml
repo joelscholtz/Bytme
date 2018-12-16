@@ -1,58 +1,36 @@
 ﻿@model IEnumerable<bytme.Models.Item>
-
 @{
     ViewData["Title"] = "Products";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 
-@{ string cat_change(int _product)
-    {
-        var categoryString = "";
-        if (_product == 1) { categoryString = "Suit jackets"; }
-        if (_product == 2) { categoryString = "Shirts"; }
-        if (_product == 3) { categoryString = "Trousers"; }
-        if (_product == 4) { categoryString = "Laptop bags"; }
-        if (_product == 5) { categoryString = "Shirts"; }
-        if (_product == 6) { categoryString = "Short coats"; }
-        if (_product == 7) { categoryString = "Suit jackets"; }
-        if (_product == 8) { categoryString = "Suit trousers"; }
-        if (_product == 9) { categoryString = "Suits"; }
-        if (_product == 10) { categoryString = "Suit waistcoats"; }
-        if (_product == 11) { categoryString = "Blazer"; }
-        if (_product == 12) { categoryString = "Blouses"; }
-        if (_product == 13) { categoryString = "Heels"; }
-        if (_product == 14) { categoryString = "Cardigans"; }
-        if (_product == 15) { categoryString = "Coats"; }
-        if (_product == 16) { categoryString = "Dresses"; }
-        if (_product == 17) { categoryString = "Jumpers"; }
-        if (_product == 18) { categoryString = "Skirts"; }
-        return categoryString;
-    }
-}
-@* this page is slow af FIX IT *@
 
 <h2 style="margin-left:10%">Products</h2>
-
-<!--search-->
-<div class="container" style="display:inline-block">
+<div class="container" style="display:inline-block; margin-left: 1.5%;">
     @using (Html.BeginForm())
     {
-
-        @Html.TextBox("searchKeyP", null, new { @class = "form-control", style = " width:70%; margin-left:9%; float:left", placeholder = "search table..", type = "text", id = "searchProduct", title = "search for product" })
-        <input class="form-control" type="submit" value="Search" style="width:auto; float:right; margin-right:14%; background-color:#f0e5f2; color:#B388B8; border-color:#B388B8;" />
-
+        <div class="col-lg-8">
+            <!--searchbar-->
+            @Html.TextBox("searchKeyP", null, new { @class = "form-control", onfocus = "this.value=''", style = "margin-left: 9%; float:left;", placeholder = "search table..", type = "text", id = "searchProduct", title = "search for product" })
+        </div>
+        <div class="col-sm-1">
+            <input class="form-control" type="submit" value="Search" title="Search" style="width: auto;float: left;margin-left: 70%;background-color:#f0e5f2;color:#B388B8;border-color:#B388B8;" />
+        </div>
     }
+    <div class="col-sm-2">
+        <input type="button" class="btn btn-default" value="Add +" title="Add new Product" onclick="location.href='@Url.Action("CreateProduct", "Manage")'" style="margin-right: 40%;color: #B388B8;background-color: #ffffff;border-color: #B388B8;float: right;" />
+    </div>
 </div>
+
 
 <hr />
 
-<!--makes table fo products-->
 <div class="container">
     <table id="productTable" class="table" style="overflow-y:scroll; height:260px; width:75%; display:block; margin-left:10%">
         <thead>
             <tr>
-                <th>
+                <th style="width:20%">
                     ID
                 </th>
                 <th style="width:20%">
@@ -66,6 +44,9 @@
                 </th>
                 <th style="width:15%">
                     QUANTITY
+                </th>
+                <th>
+
                 </th>
                 <th>
 
@@ -94,221 +75,110 @@
                         @Html.DisplayFor(ModelProduct => product.quantity)
                     </td>
                     <td>
-                        <button class="btn btn-default" data-toggle="modal" data-target="#editProduct_@product.id" style="color:#4D6810;background-color: #d0dfb7;border-color:#4D6810;">edit</button>
+                        <button class="btn btn-default" onclick="modalshow('@product.id', '@product.description', '@product.long_description', @product.category_id, '@product.gender', '@product.price', '@product.size', '@product.quantity');" data-toggle="modal" data-target="#viewProduct_@product.id" style="color: #B388B8;background-color: #ffffff;border-color: #B388B8;">view</button>
                     </td>
                     <td>
-                        <button class="btn btn-default" data-toggle="modal" data-target="#deleteProduct_@product.id" style="color: #A94442;background-color: #f3d1d1;border-color: #A94442;">delete</button>
+                        @Html.ActionLink("edit", "EditProduct", "Manage", new { ID = product.id }, new { @class = "btn btn-default", style = "color:#4D6810;background-color: #d0dfb7;border-color:#4D6810" })
+                        
+                    </td>
+                    <td>
+                        @Html.ActionLink("delete", "DeleteProduct", "Manage", new { ID = product.id }, new { @class = "btn btn-default", style = "color: #A94442;background-color: #f3d1d1;border-color: #A94442;" })
                     </td>
                 </tr>
             }
         </thead>
     </table>
 </div>
+<div id="modalposition">
+    
+</div>
+<script>
 
-<!--makes edit modal for each product-->
-@foreach (var _product in Model)
-{
+    function modalshow(id, description, long_description, category_id, gender, price, size, quantity) {
+        document.getElementById('modalposition').innerHTML = '<div class="modal fade" id="viewProduct_' + id + '" role="dialog" style="width: auto; display: block;margin-top: 12%;">' +
+            '        <div class="modal-dialog">' +
+            '            <div class="modal-content">' +
+            '                <div class="modal-header" style="padding-left:8%;background-color: #B388B8;-webkit-border-top-left-radius: 5px; -webkit-border-top-right-radius: 5px;">' +
+            '                    <div class="modal-title" style="font-size: 20px; color:#ffffff; font-weight: 600;">' + description + '<br /> ' + long_description + '</div>' +
+            '                </div>' +
+            '                <div class="modal-body" style="padding-left:8%">' +
+            '                    <!--vertical table-->' +
+            '                    <table>' +
+            '                        <thead>' +
+            '                            <tr>' +
+            '                                <th style="width:130px">' +
+            '                                    Id:' +
+            '                                </th>' +
+            '                                <td>' +
+            id +
+            '                                </td>' +
+            '                            </tr>' +
+            '                            <tr>' +
+            '                                <th>' +
+            '                                    Brand:' +
+            '                                </th>' +
+            '                                <td>' +
+            description +
+            '                                </td>' +
+            '                            </tr>' +
+            '                            <tr>' +
+            '                                <th>' +
+            '                                    Product Name:' +
+            '                                </th>' +
+            '                                <td>' +
+            long_description +
+            '                                <td>' +
+            '                            </tr>' +
+            '                            <tr>' +
+            '                                <th>' +
+            '                                    Category:' +
+            '                                </th>' +
+            '                                <td>' +
+            category_id +
+            '                                </td>' +
+            '                            </tr>' +
+            '                            <tr>' +
+            '                                <th>' +
+            '                                    Price:' +
+            '                                </th>' +
+            '                                <td>' + '€'+
+            price +
+            '                                </td>' +
+            '                            </tr>' +
+            '                            <tr>' +
+            '                            <tr>' +
+            '                                <th>' +
+            '                                    Size:' +
+            '                                </th>' +
+            '                                <td>' +
+            size +
+            '                                </td>' +
+            '                            </tr>' +
+            '                            <tr>' +
+            '                                <th>' +
+            '                                    Gender:' +
+            '                                </th>' +
+            '                                <td>' +
+            gender +
+            '                                <td>' +
+            '                            </tr>' +
+            '                            <tr>' +
+            '                                <th>' +
+            '                                    Stock:' +
+            '                                </th>' +
+            '                                <td>' +
+            quantity +
+            '                                </td>' +
+            '                            </tr>' +
+            '                        </thead>' +
+            '                    </table>' +
+            '                </div>' +
+            '                <div class="modal-footer">' +
+            '                    <button class="btn btn-default" data-dismiss="modal">dismiss</button>' +
+            '                </div>' +
+            '            </div>' +
+            '        </div>' +
+            '    </div>';
+    }
 
-    <div class="modal fade" id="editProduct_@_product.id" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-
-                <div class="modal-header" style="padding-left:8%;background-color: #B388B8;-webkit-border-top-left-radius: 5px; -webkit-border-top-right-radius: 5px;">
-                    <div class="modal-title" style="font-size: 24px; color:#ffffff; font-weight: 600;">Edit</div>
-                    <p style="color:#eedef2; margin-bottom:0">Edit product data</p>
-                </div>
-
-                <div class="modal-body" style="padding-left:8%">
-                    <form id="editProductForm" method="post">
-
-                        <div asp-validation-summary="All" class="text-danger"></div>
-                        <div class="form-group">
-                            <label asp-for="@_product.id">Id</label>
-                            <input asp-for="@_product.id" disabled class="form-control" style="width:90%" />
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="@_product.description">Brand</label>
-                            <input asp-for="@_product.description" class="form-control" style="width:90%" placeholder="@_product.description" />
-                            @*@if(Input._product.description != Model.description)
-                                {
-
-                                }*@
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="@_product.long_description">Long Description</label>
-                            <input asp-for="@_product.long_description" class="form-control" style="width:90%" placeholder="Name-Category-Color" />
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="@_product.category_id">Category</label>
-                            <input asp-for="@_product.category_id" type="" class="form-control" list="product_category_id" style="width:90%" placeholder="@_product.category_id" />
-                            <datalist id="product_category_id">
-                                <option value="1">Suit jackets</option>
-                                <option value="2">Shirts</option>
-                                <option value="3">Trousers</option>
-                                <option value="4">Laptop bags</option>
-                                <option value="5">Shirts</option>
-                                <option value="6">Short coats</option>
-                                <option value="7">Suit jackets</option>
-                                <option value="8">Suit trousers</option>
-                                <option value="9">Suits</option>
-                                <option value="10">Suit waistcoats</option>
-                                <option value="11">Blazer</option>
-                                <option value="12">Blouses</option>
-                                <option value="13">Heels</option>
-                                <option value="14">Cardigans</option>
-                                <option value="15">Coats</option>
-                                <option value="16">Dresses</option>
-                                <option value="17">Jumpers</option>
-                                <option value="18">Skirts</option>
-                            </datalist>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="@_product.gender">Gender</label>
-                            <input asp-for="@_product.gender" class="form-control" list="product_gender" style="width:90%" placeholder="@_product.gender" />
-                            <datalist id="product_gender">
-                                <option value="male" />
-                                <option value="female" />
-                            </datalist>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="@_product.price">Price (€)</label>
-                            <input asp-for="@_product.price" class="form-control" min="0,00" style="width:90%" placeholder="@_product.price" />
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="@_product.size">Size</label>
-                            <input asp-for="@_product.size" class="form-control" type="" list="product_size" style="width:90%" placeholder="@_product.size" />
-                            <datalist id="product_size">
-                                <option value="XS" />
-                                <option value="S" />
-                                <option value="M" />
-                                <option value="L" />
-                                <option value="XL" />
-                            </datalist>
-
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="@_product.quantity">Quantity</label>
-                            <input asp-for="@_product.quantity" class="form-control" type="number" min="0" max="100" style="width:90%" placeholder="@_product.quantity" />
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="@_product.photo_url">Photo URL</label>
-                            <input asp-for="@_product.photo_url" class="form-control" id="product_photo_url" type="text" style="width:90%" placeholder="@_product.photo_url" />
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="@_product.issales">Sale</label>
-                            <input asp-for="@_product.issales" class="form-control" type="" list="product_issales" style="width:90%" placeholder="@_product.issales" />
-                            <datalist id="product_issales">
-                                <option value="0">No sale</option>
-                                <option value="1">Item on Sale</option>
-                            </datalist>
-                        </div>
-                    </form>
-                </div>
-
-                <div class="modal-footer">
-                    <button class="btn btn-default" type="submit" title="save changes" style="color:#4D6810;background-color: #d0dfb7;border-color:#4D6810;">Save</button>
-                    <button class="btn btn-default" data-dismiss="modal">cancel</button>
-                </div>
-
-            </div>
-
-        </div>
-    </div>
-}
-
-
-<!--modal for product delete-->
-@foreach (var _product in Model)
-{
-    <div class="modal fade" id="deleteProduct_@_product.id" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-
-                <div class="modal-header" style="padding-left:8%;background-color: #d06363;-webkit-border-top-left-radius: 5px; -webkit-border-top-right-radius: 5px;">
-                    <div class="modal-title" style="font-size: 24px; color:#ffffff; font-weight: 600;">Delete</div>
-                    <p style="color:#f3d1d1; margin-bottom:0">Are you sure you want to delete this product?</p>
-
-                </div>
-
-                <div class="modal-body" style="padding-left:8%">
-                    <!--vertical table-->
-                    <table>
-                        <thead>
-                            <tr>
-                                <th style="width:35%">
-                                    Id:
-                                </th>
-                                <td>
-                                    @_product.id
-                                </td>
-                            </tr>
-                            <tr>
-                                <th style="width:34%">
-                                    Brand:
-                                </th>
-                                <td>
-                                    @_product.description
-                                </td>
-                            </tr>
-                            <tr>
-                                <th style="width:34%">
-                                    Product Name:
-                                </th>
-                                <td>
-                                    @_product.long_description
-                                <td>
-                            </tr>
-                            <tr>
-                                <th style="width:34%">
-                                    Category:
-                                </th>
-                                <td>
-                                    @cat_change(_product.category_id)
-                                </td>
-                            </tr>
-                            <tr>
-                                <th style="width:34%">
-                                    Price:
-                                </th>
-                                <td>
-                                    €@_product.price
-                                </td>
-                            </tr>
-                            <tr>
-                            <tr>
-                                <th style="width:34%">
-                                    Size:
-                                </th>
-                                <td>
-                                    @_product.size
-                                </td>
-                            </tr>
-                            <tr>
-                                <th style="width:34%">
-                                    Gender:
-                                </th>
-                                <td>
-                                    @_product.gender
-                                <td>
-                            </tr>
-                            <tr>
-                                <th style="width:34%">
-                                    Stock:
-                                </th>
-                                <td>
-                                    @_product.quantity
-                                </td>
-                            </tr>
-
-                        </thead>
-                    </table>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-default" style="color: #A94442;background-color: #f3d1d1;border-color: #A94442;">Delete</button>
-                    <button class="btn btn-default" data-dismiss="modal">cancel</button>
-                </div>
-            </div>
-
-        </div>
-    </div>
-}
+</script>

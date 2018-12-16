@@ -1,0 +1,102 @@
+﻿@model Item
+@{
+    ViewData["Title"] = "CreateProduct";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>CreateProduct</h2>
+<hr />
+<div class="container">
+    <form id="CreateProductForm" method="post">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="@Model.category_id">Category id</label>
+            <input asp-for="@Model.category_id" type="" value="" list="Productcategory" class="form-control" style="width:90%" placeholder="Category id" />
+            <span asp-validation-for="@Model.category_id" class="text-danger"></span>
+            <datalist id="Productcategory">
+                <option value="1">Suit jackets</option>
+                <option value="2">Shirts</option>
+                <option value="3">Trousers</option>
+                <option value="4">Laptop bags</option>
+                <option value="5">Shirts</option>
+                <option value="6">Short coats</option>
+                <option value="7">Suit jackets</option>
+                <option value="8">Suit trousers</option>
+                <option value="9">Suits</option>
+                <option value="10">Suit waistcoats</option>
+                <option value="11">Blazer</option>
+                <option value="12">Blouses</option>
+                <option value="13">Heels</option>
+                <option value="14">Cardigans</option>
+                <option value="15">Coats</option>
+                <option value="16">Dresses</option>
+                <option value="17">Jumpers</option>
+                <option value="18">Skirts</option>
+            </datalist>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.description">Brand</label>
+            <input asp-for="@Model.description" class="form-control" style="width:90%" placeholder="Brand" />
+            <span asp-validation-for="@Model.description" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.long_description">Long Description</label>
+            <input asp-for="@Model.long_description" class="form-control" style="width:90%" placeholder="Name-Category-Color" />
+            <span asp-validation-for="@Model.long_description" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.price">Price</label>
+            @Html.TextBoxFor(p => p.price, new { @class = "form-control", min = "0.01", step = "any", style = "width:90%", placeholder = "Price" })
+            <span asp-validation-for="@Model.price" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.gender">Gender</label>
+            <input asp-for="@Model.gender" type="" value="" list="genders" class="form-control" style="width:90%" placeholder="Gender" />
+            <span asp-validation-for="@Model.gender" class="text-danger"></span>
+            <datalist id="genders">
+                <option value="male" />
+                <option value="female" />
+            </datalist>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.size">Size</label>
+            <input asp-for="@Model.size" class="form-control" value="" type="" list="productSizes" style="width:90%" placeholder="Size" />
+            <datalist id="productSizes">
+                <option value="XS" />
+                <option value="S" />
+                <option value="M" />
+                <option value="L" />
+                <option value="XL" />
+            </datalist>
+            <span asp-validation-for="@Model.size" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.quantity">Quantity</label>
+            <input asp-for="@Model.quantity" type="number" min="0" max="100" class="form-control" style="width:90%" placeholder="Quantity" />
+            <span asp-validation-for="@Model.quantity" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.photo_url">Photo URL</label>
+            <input asp-for="@Model.photo_url" type="url" class="form-control" style="width:90%" placeholder="Photo URL" />
+            <span asp-validation-for="@Model.photo_url" class="text-danger"></span>
+        </div>
+        <div>
+            <label asp-for="@Model.issales">Sale</label>
+            <input asp-for="@Model.issales" class="form-control" value="" type="" list="userRoles" style="width:90%" placeholder="Sale" />
+            <datalist id="SalesStatus">
+                <option value="0">No sale</option>
+                <option value="1">Item on Sale</option>
+            </datalist>
+        </div>
+        <button type="submit" class="btn btn-default" style="margin-top:3%; color:#4D6810; background-color: #d0dfb7;border-color:#4D6810">Save</button>
+        @Html.ActionLink("cancel", "Products", "Manage", null, new { @class = "btn btn-default", type = "submit", onclick = "return confirm('Are you sure you want to leave this page?')", style = "margin-left:2%;" })
+    </form>
+</div>
+<div class="col-sm-1" id='productimage'>
+    <img src='@Html.ValueFor(p => p.photo_url)' style="width:400px; padding-top:90%" class="preview" />
+</div>
+<script>
+    $('[id="img"]').on('change', function () {
+        $('img.preview').prop('src', this.value);
+    });
+</script>
