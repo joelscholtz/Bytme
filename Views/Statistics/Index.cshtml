@@ -44,8 +44,7 @@
                             data: {
                                 labels: ["@ViewBag.Months"],
                                 datasets: [{
-                                    label: "My First dataset",
-                                    backgroundColor: ["#FF5353", "#DD597D", "#CA00CA", "#A41CC6", "#7373FF", "#29AFD6", "#74BAAC"],
+                                    backgroundColor: ["#b388b8", "#a17aa5", "#8f6c93", "#ba93bf", "#c29fc6", "#59445c", "#352837"],
                                     borderColor: '#F2F2F2',
                                     data: [@ViewBag.Users],
                                 }]
@@ -65,7 +64,8 @@
             <div class="col-md-3">
             </div>
             <div class="col-md-9">
-                <h4>Amount of users registered per month</h4>
+                <h4>Money per month</h4>
+                <p>@ViewBag.Money</p>
                 <canvas id="myChart2" width="300" height="100"></canvas>
                 <script>
                         Chart.Legend.prototype.afterFit = function () {
@@ -79,12 +79,12 @@
 
                             // The data for our dataset
                             data: {
-                                labels: ["@ViewBag.Months"],
+                                labels: ["@ViewBag.MoneyMonths"],
                                 datasets: [{
-                                    label: "My First dataset",
-                                    backgroundColor: ["#FF5353", "#DD597D", "#CA00CA", "#A41CC6", "#7373FF", "#29AFD6", "#74BAAC"],
+                                    label: ["@ViewBag.MoneyMonths"],
+                                    backgroundColor: ["#b388b8", "#a17aa5", "#8f6c93", "#ba93bf", "#c29fc6", "#59445c", "#352837"],
                                     borderColor: '#F2F2F2',
-                                    data: [@ViewBag.Users],
+                                    data: [@ViewBag.Money],
                                 }]
                             },
 
