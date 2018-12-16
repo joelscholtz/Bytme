@@ -1,0 +1,72 @@
+﻿@page
+@model CreateUserModel
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+
+@{
+    ViewData["Title"] = "CreateUser";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Create User</h2>
+<hr />
+<div class="container">
+    <form id="CreateUserForm" method="post">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="addByAdmin.Email">Email</label>
+            <input asp-for="addByAdmin.Email" class="form-control" style="width:90%" placeholder="Email" />
+            <span asp-validation-for="addByAdmin.Email" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="addByAdmin.name">Name</label>
+            <input asp-for="addByAdmin.name" class="form-control" style="width:90%" placeholder="Name" />
+            <span asp-validation-for="addByAdmin.name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="addByAdmin.surname">Surname</label>
+            <input asp-for="addByAdmin.surname" class="form-control" style="width:90%" placeholder="Surname" />
+            <span asp-validation-for="addByAdmin.surname" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="addByAdmin.Password"></label>
+            <input asp-for="addByAdmin.Password" class="password form-control" placeholder="" />
+            <span asp-validation-for="addByAdmin.Password" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="addByAdmin.ConfirmPassword"></label>
+            <input asp-for="addByAdmin.ConfirmPassword" class="password form-control" placeholder="" />
+            <span asp-validation-for="addByAdmin.ConfirmPassword" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="addByAdmin.street">Street</label>
+            <input asp-for="addByAdmin.street" class="form-control" style="width:90%" placeholder="Street" />
+            <span asp-validation-for="addByAdmin.street" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="addByAdmin.streetnumber">House Number</label>
+            <input asp-for="addByAdmin.streetnumber" class="form-control" style="width:90%" placeholder="Streetnumber" />
+            <span asp-validation-for="addByAdmin.streetnumber" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="addByAdmin.zipcode">Zip Code</label>
+            <input asp-for="addByAdmin.zipcode" class="form-control" style="width:90%" placeholder="Zipcode" />
+            <span asp-validation-for="addByAdmin.zipcode" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="addByAdmin.city">City</label>
+            <input asp-for="addByAdmin.city" class="form-control" style="width:90%" placeholder="City" />
+            <span asp-validation-for="addByAdmin.city" class="text-danger"></span>
+        </div>
+        <div>
+            <label>Role</label>
+            <input asp-for="addByAdmin.role" class="form-control" value="" type="" list="userRoles" style="width:90%" placeholder="Role" />
+            <datalist id="userRoles">
+                <option value="false">Regular user</option>
+                <option value="true">Admin</option>
+            </datalist>
+        </div>
+        <button type="submit" class="btn btn-default" style="margin-top:3%;margin-right: 10%;float: right;color:#4D6810;background-color: #d0dfb7;border-color:#4D6810;">create</button>
+        @Html.ActionLink("cancel", "Index", "Manage", null, new { @class = "btn btn-default", type = "submit", onclick = "return confirm('Are you sure you want to leave this page?')", style = "margin-right:2%; float:right; margin-top:3%;" })
+    </form>    
+</div>
