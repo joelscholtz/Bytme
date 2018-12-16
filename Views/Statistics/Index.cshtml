@@ -1,0 +1,104 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    ul > li > a {
+        color: black;
+    }
+</style>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Charts</title>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+</head>
+<body>
+    <div>
+        <h3>Admin</h3>
+        <hr />
+        <div class="row">
+            <div class="col-md-3">
+                <ul class="nav nav-pills nav-stacked">
+                    <li><a asp-controller="Manage" asp-action="Index">Users</a></li>
+                    <li><a asp-controller="Manage" asp-action="Products">Products</a></li>
+                    <li><a asp-controller="Statistics" asp-action="Index">Statistics</a></li>
+                </ul>
+            </div>
+            <div class="col-md-9">
+                <div class="row">
+                    <h4>Amount of users registered per month</h4>
+                    <canvas id="myChart" width="300" height="100"></canvas>
+                    <script>
+                        Chart.Legend.prototype.afterFit = function () {
+                            this.width = this.width - 400;
+                        };
+
+                        var ctx = document.getElementById('myChart').getContext('2d');
+                        var chart = new Chart(ctx, {
+                            // The type of chart we want to create
+                            type: 'doughnut',
+
+                            // The data for our dataset
+                            data: {
+                                labels: ["@ViewBag.Months"],
+                                datasets: [{
+                                    label: "My First dataset",
+                                    backgroundColor: ["#FF5353", "#DD597D", "#CA00CA", "#A41CC6", "#7373FF", "#29AFD6", "#74BAAC"],
+                                    borderColor: '#F2F2F2',
+                                    data: [@ViewBag.Users],
+                                }]
+                            },
+
+                            // Configuration options go here
+                            options: {
+                                legend: {
+                                    display: true,
+                                    position: 'left',
+                                }
+                            }
+                        });
+                    </script>
+                </div>
+            </div>
+            <div class="col-md-3">
+            </div>
+            <div class="col-md-9">
+                <h4>Amount of users registered per month</h4>
+                <canvas id="myChart2" width="300" height="100"></canvas>
+                <script>
+                        Chart.Legend.prototype.afterFit = function () {
+                            this.width = this.width - 400;
+                        };
+
+                        var ctx = document.getElementById('myChart2').getContext('2d');
+                        var chart = new Chart(ctx, {
+                            // The type of chart we want to create
+                            type: 'bar',
+
+                            // The data for our dataset
+                            data: {
+                                labels: ["@ViewBag.Months"],
+                                datasets: [{
+                                    label: "My First dataset",
+                                    backgroundColor: ["#FF5353", "#DD597D", "#CA00CA", "#A41CC6", "#7373FF", "#29AFD6", "#74BAAC"],
+                                    borderColor: '#F2F2F2',
+                                    data: [@ViewBag.Users],
+                                }]
+                            },
+
+                            // Configuration options go here
+                            options: {
+                                legend: {
+                                    display: true,
+                                    position: 'left',
+                                }
+                            }
+                        });
+                </script>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
