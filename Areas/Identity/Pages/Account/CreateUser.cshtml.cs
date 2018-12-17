@@ -147,7 +147,7 @@ namespace bytme.Areas.Identity.Pages.Account
                     smtpClient.Send(verifyMessage);
                     ModelState.Clear();
 
-                    RedirectToAction("Index","ManageController");
+                    return Page();
                 }
                 foreach (var error in result.Errors)
                 {

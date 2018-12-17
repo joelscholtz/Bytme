@@ -37,6 +37,11 @@ namespace bytme.Controllers
             
             if(ModelState.IsValid)
             {
+                var products = from p in _db.Items select p;
+                Item product = products.OrderByDescending(o => o.id).FirstOrDefault();
+                var max = product.id;
+
+                newIt.id = Convert.ToInt32(max) + 1;
                 var addIt = await _db.AddAsync(newIt);
                 await _db.SaveChangesAsync();
                 return RedirectToAction("Products");
@@ -198,6 +203,7 @@ namespace bytme.Controllers
                                        || u.surname.ToUpper().Contains(searchKeyU.ToUpper())
                                        || u.Email.ToUpper().Contains(searchKeyU.ToUpper()));
             }
+
             return View(users.ToList());
         }
 
@@ -215,10 +221,10 @@ namespace bytme.Controllers
                                         || item.description.ToUpper().Contains(searchKeyP.ToUpper())
                                         || item.price.ToString().ToUpper().Contains(searchKeyP.ToUpper())
                                         || item.quantity.ToString().ToUpper().Contains(searchKeyP.ToUpper())
-                                        || item.gender.ToUpper().Contains(searchKeyP.ToUpper()));
+                                        || item.gender.ToUpper().Contains(searchKeyP.ToUpper())).OrderBy(u => u.id);
             }
-
-            return View(products.ToList());
+            var p_sorted = products.OrderBy(p => p.id);
+            return View(p_sorted.ToList());
         }
 
 
