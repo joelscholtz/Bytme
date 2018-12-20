@@ -7,10 +7,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     var user = await userManager.GetUserAsync(User);
     var one = 100 - user.points;
-    var two = 250 - user.points;
-    var three = 500 - user.points;
-    var four = 750 - user.points;
-    var five = 1000 - user.points;
+    var two = 500 - user.points;
+    var three = 900 - user.points;
+    var four = 1250 - user.points;
+    var five = 1500 - user.points;
 }
 
 <style>
@@ -56,10 +56,10 @@
             <h3>@user.points</h3>
             <br />
             <h4>No shipping costs: @if (user.points < 100) { <b>&nbspjust @one more points needed</b> } else{<b>&nbsp100 points</b>}</h4>
-            <h4>5% discount: @if (user.points < 250) { <b>&nbsp &nbsp &nbsp &nbsp &nbsp just @two more points needed</b> }else{<b>&nbsp &nbsp &nbsp &nbsp &nbsp 250 points</b>}</h4>
-            <h4>10% discount: @if (user.points < 500) { <b>&nbsp &nbsp &nbsp &nbsp just @three more points needed</b> }else{<b>&nbsp &nbsp &nbsp &nbsp 500 points</b>}</h4>
-            <h4>15% discount: @if (user.points < 750) { <b>&nbsp &nbsp &nbsp &nbsp just @four more points needed</b> }else{<b>&nbsp &nbsp &nbsp &nbsp 750 points</b>}</h4>
-            <h4>20% discount: @if (user.points < 1000) { <b>&nbsp &nbsp &nbsp &nbsp just @five more points needed</b> }else{<b>&nbsp &nbsp &nbsp &nbsp 1000 points</b>}</h4>
+            <h4>5% discount: @if (user.points < 500) { <b>&nbsp &nbsp &nbsp &nbsp &nbsp just @two more points needed</b> }else{<b>&nbsp &nbsp &nbsp &nbsp &nbsp 500 points</b>}</h4>
+            <h4>10% discount: @if (user.points < 900) { <b>&nbsp &nbsp &nbsp &nbsp just @three more points needed</b> }else{<b>&nbsp &nbsp &nbsp &nbsp 900 points</b>}</h4>
+            <h4>15% discount: @if (user.points < 1250) { <b>&nbsp &nbsp &nbsp &nbsp just @four more points needed</b> }else{<b>&nbsp &nbsp &nbsp &nbsp 1250 points</b>}</h4>
+            <h4>20% discount: @if (user.points < 1500) { <b>&nbsp &nbsp &nbsp &nbsp just @five more points needed</b> }else{<b>&nbsp &nbsp &nbsp &nbsp 1500 points</b>}</h4>
             <hr />
             <br />
             <hr />
