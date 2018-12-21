@@ -7,6 +7,7 @@
 @{
     ViewData["Title"] = "ProductDetail";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    string qtychangeid = "q0";
 }
 <head>
     <link href="~/css/site.css" rel="stylesheet" />
@@ -179,6 +180,16 @@
     .container {
     }
 </style>
+
+<script language="javascript">
+    function testForEnter() {
+        if (event.keyCode == 13) {
+            event.cancelBubble = true;
+            event.returnValue = false;
+        }
+    }
+</script>
+
 <script 
         src="~/lib/jquery/dist/jquery.min.js">
 </script>
@@ -281,6 +292,40 @@
     }
 </script>
 
+<script>
+    var jqid = "#";
+    var oldjqid = "#";
+    function stockChecker(id, stock) {
+        //id management (set current tooltip and destroy the previous one if it existed)
+        oldjqid = jqid;
+        jqid = "#" + id;
+
+        if (oldjqid != "#" && oldjqid != jqid) {
+            $(oldjqid).tooltip('destroy');
+        }
+
+        //apply changes to selected qty if it exceeds stock and also notify the user of why its not possible to order this much
+        if (document.getElementById(id).value > stock) {
+            document.getElementById(id).value = stock;
+            $(jqid).tooltip({
+                title: "Cannot be greater than stock",
+                placement: "bottom"
+            });
+            $(jqid).tooltip('show');
+        }
+        else {
+            if (jqid != "#") {
+                $(jqid).tooltip('destroy');
+            }
+        }
+    }
+    function nullchecker(id) {
+        if (document.getElementById(id).value < 1) {
+            document.getElementById(id).value = 1;
+        }
+    }
+</script>
+
 <html>
 <head>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,800" type="text/css">
@@ -333,6 +378,8 @@
                 </script>
                 <p>
                     <span class="quantity">Stock: @Html.DisplayFor(o => o.quantity)</span>
+                    @{qtychangeid = Model.id.ToString();
+                        qtychangeid = "q" + qtychangeid; }
                     @if (SignInManager.IsSignedIn(User))
                     {
                         bool wishlist = ViewBag.Wishlist.Contains(Model.id);
@@ -343,36 +390,36 @@
                                 </a>
                             </div>
                             <div style="float:right; width: 30%">
-                                <input id="_ @Model.id" class="form-control qtyinput" type="number" oninput="stockChecker(this.value, this.id, @Model.quantity)" onchange="setQtySession(this.value); nullchecker(this.value, this.id)" value="1" required />
+                                <input id="@Model.id" onkeydown="testForEnter()" class="form-control qtyinput" type="number" max="@Model.quantity" oninput="stockChecker(this.value, this.id, @Model.quantity)" onchange="setQtySession(this.value); nullchecker(this.value, this.id)" value="1" required />
                             </div>
                         </div>
                         <br />
                         <br />
                         <div align="right">
-                        <a onclick="RemoveFromWishList(@ViewBag.OrderLine)" class="btn btn-default swapHeart"
-                           style="@(wishlist ? "" : "display:none")">
-                            <span style="color:#8F6B93;" class="glyphicon glyphicon-heart"></span>
-                        </a>
-                        <a onclick="AddToWishList(@Model.id)" class="btn btn-default swapHeart"
-                           style="@(wishlist ? "display:none" : "")">
-                            <span style="color:#8F6B93;" class="glyphicon glyphicon-heart-empty"></span>
-                        </a>
-                            </div>
+                            <a onclick="RemoveFromWishList(@ViewBag.OrderLine)" class="btn btn-default swapHeart"
+                               style="@(wishlist ? "" : "display:none")">
+                                <span style="color:#8F6B93;" class="glyphicon glyphicon-heart"></span>
+                            </a>
+                            <a onclick="AddToWishList(@Model.id)" class="btn btn-default swapHeart"
+                               style="@(wishlist ? "display:none" : "")">
+                                <span style="color:#8F6B93;" class="glyphicon glyphicon-heart-empty"></span>
+                            </a>
+                        </div>
                     }
                     else
                     {
                         <div style="width: 100%" align="right">
                             <div style="float:right">
-                            <a onclick="AddToCartSession(@Model.id)" class="btn btn-default" data-target="#modelWindowShop">
-                                <span style="color:#8F6B93;" class="glyphicon glyphicon-shopping-cart"></span>
-                            </a>
-                                </div>
+                                <a onclick="AddToCartSession(@Model.id)" class="btn btn-default" data-target="#modelWindowShop">
+                                    <span style="color:#8F6B93;" class="glyphicon glyphicon-shopping-cart"></span>
+                                </a>
+                            </div>
                             <div style="float:right; width: 30%">
-                                <input id="_ @Model.id" class="form-control tooltip" type="number" oninput="stockChecker(this.value, this.id, @Model.quantity)" onchange="setQtySession(this.value);" value="1" required /><span class="tooltiptext">f</span>
+                                <input id="@Model.id" onkeydown="testForEnter()" class="form-control qtyinput" type="number" max="@Model.quantity" oninput="stockChecker(this.value, this.id, @Model.quantity)" onchange="setQtySession(this.value); nullchecker(this.value, this.id)" value="1" required />
                             </div>
                         </div>
-                            }
-                    </p>
+                    }
+                </p>
                 <div id="snackbar"></div>
                 <div class="modal fade" id="modelWindowShop" style="top:40%" role="dialog">
                     <div class="modal-dialog">

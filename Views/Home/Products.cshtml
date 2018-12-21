@@ -230,6 +230,14 @@
         background-color: white !important;
     }
 </style>
+<script language="javascript">
+    function testForEnter() {
+        if (event.keyCode == 13) {
+            event.cancelBubble = true;
+            event.returnValue = false;
+        }
+    }
+</script>
 <script>
     function validate(evt) {
         var theEvent = evt || window.event;
@@ -601,7 +609,7 @@
                                             bool wishlist = ViewBag.Wishlist.Contains(item.id);
                                             <div style="width: 100%">
                                                 <div style="float:left; width: 30%">
-                                                    <input id="@qtychangeid" class="form-control @qtychangeid" type="number" oninput="stockChecker(this.id, @item.quantity); validate(event);" onchange="setQty(this.value); nullchecker(this.id)" value="1" required />
+                                                    <input id="@qtychangeid" onkeydown="testForEnter()" class="form-control @qtychangeid" type="number" oninput="stockChecker(this.id, @item.quantity); validate(event);" onchange="setQty(this.value); nullchecker(this.id)" value="1" required />
                                                 </div>
 
 
@@ -630,7 +638,7 @@
                                         {
                                             <div style="width: 100%">
                                                 <div style="float:left; width: 30%">
-                                                    <input id="@qtychangeid" class="form-control @qtychangeid" type="number" oninput="stockChecker(this.id, @item.quantity); validate(event);" onchange="setQty(this.value); nullchecker(this.id)" value="1" required />
+                                                    <input id="@qtychangeid" onkeydown="testForEnter()" class="form-control @qtychangeid" type="number" oninput="stockChecker(this.id, @item.quantity); validate(event);" onchange="setQty(this.value); nullchecker(this.id)" value="1" required />
                                                 </div>
                                                 <a onclick="AddToCartSession(@item.id)" class="btn btn-default" data-target="#modelWindowShop">
                                                     <span style="color:#8F6B93;" class="glyphicon glyphicon-shopping-cart"></span>
@@ -659,7 +667,7 @@
                                             bool wishlist = ViewBag.Wishlist.Contains(item.id);
                                             <div style="width: 100%">
                                                 <div style="float:left; width: 30%">
-                                                    <input id="@qtychangeid" class="form-control @qtychangeid" type="number" oninput="stockChecker(this.id, @item.quantity); validate(event);" onchange="setQty(this.value); nullchecker(this.id)" value="1" required />
+                                                    <input id="@qtychangeid" onkeydown="testForEnter()" class="form-control @qtychangeid" type="number" oninput="stockChecker(this.id, @item.quantity); validate(event);" onchange="setQty(this.value); nullchecker(this.id)" value="1" required />
                                                 </div>
 
 
@@ -688,7 +696,7 @@
                                         {
                                             <div style="width: 100%">
                                                 <div style="float:left; width: 30%">
-                                                    <input id="@qtychangeid" class="form-control @qtychangeid" type="number" oninput="stockChecker(this.id, @item.quantity); validate(event);" onchange="setQty(this.value); nullchecker(this.id)" value="1" required />
+                                                    <input id="@qtychangeid" onkeydown="testForEnter()" class="form-control @qtychangeid" type="number" oninput="stockChecker(this.id, @item.quantity); validate(event);" onchange="setQty(this.value); nullchecker(this.id)" value="1" required />
                                                 </div>
                                                 <a onclick="AddToCartSession(@item.id)" class="btn btn-default" data-target="#modelWindowShop">
                                                     <span style="color:#8F6B93;" class="glyphicon glyphicon-shopping-cart"></span>
