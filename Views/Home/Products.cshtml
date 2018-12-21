@@ -13,6 +13,33 @@
     List<string> brands = ViewBag.Brandschecked;
     List<int> Pager = ViewBag.Pager;
     string qtychangeid = "q0";
+
+    string currentsort = ViewBag.currentSort;
+    if (currentsort == null) { currentsort = "Recommended"; }
+
+    string opt1 = "false";
+    string opt2 = "false";
+    string opt3 = "false";
+    string opt4 = "false";
+    string opt5 = "false";
+    switch (currentsort)
+    {
+        case "Recommended":
+            opt1 = "true";
+            break;
+        case "Name A - Z":
+            opt2 = "true";
+            break;
+        case "Name Z- A":
+            opt3 = "true";
+            break;
+        case "Price Low - High":
+            opt4 = "true";
+            break;
+        case "Price High - Low":
+            opt5 = "true";
+            break;
+    }
 }
 <head>
     <link href="~/css/site.css" rel="stylesheet" />
@@ -397,12 +424,17 @@
                 }
             </div>
             <select class="form-control pull-right" form="products" id="sortBy" name="sortBy" style="width:20%; height:40px; margin-right:2%" onchange="executeform66()">
-                <option value="" disabled selected hidden>@ViewBag.currentSort</option>
-                <option value="Name A - Z">Name A - Z</option>
-                <option value="Name Z- A">Name Z- A</option>
-                <option value="Price Low - High">Price Low - High</option>
-                <option value="Price High - Low">Price High - Low</option>
+                <option id="opt1" value="Recommended">Recommended</option>
+                <option id="opt2" value="Name A - Z">Name A - Z</option>
+                <option id="opt3" value="Name Z- A">Name Z- A</option>
+                <option id="opt4" value="Price Low - High">Price Low - High</option>
+                <option id="opt5" value="Price High - Low">Price High - Low</option>
             </select>
+            <script> document.getElementById("opt1").selected = @opt1 ;</script>
+            <script> document.getElementById("opt2").selected = @opt2 ;</script>
+            <script> document.getElementById("opt3").selected = @opt3 ;</script>
+            <script> document.getElementById("opt4").selected = @opt4 ;</script>
+            <script> document.getElementById("opt5").selected = @opt5 ;</script>
             <input type="hidden" id="SelectIndex" name="currentSort" value="@ViewBag.currentSort" />
             <br /><br /><br />
             <div class="row" id="sidebar">

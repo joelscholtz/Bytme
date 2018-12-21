@@ -81,6 +81,8 @@ namespace bytme.Controllers
             clrList.Add("grey");
             clrList.Add("brown");
 
+            bool all = false;
+            string sex = null;
             ViewBag.currentSort = "Recommended";
             bool SortByRemember = String.IsNullOrEmpty(sortBy);
             if (String.IsNullOrEmpty(sortBy)) { sortBy = "Recommended"; }
@@ -288,7 +290,7 @@ namespace bytme.Controllers
                         ViewBag.currentBrands = products.Select(o => o.description).Distinct().ToList();
                         break;
                 }
-                string sex = null;
+
                 if (gender == "Women")
                 {
                     sex = "female";
@@ -302,9 +304,7 @@ namespace bytme.Controllers
                 switch (category)
                 {
                     case "All":
-                        products = from p in _context.Items select p;
-                        products = products.Where(o => o.gender == sex);
-                        ViewBag.currentBrands = products.Select(o => o.description).Distinct().ToList();
+                        all = true;
                         break;
                     case "Blazer Jackets":
                         products = products.Where(o => (o.long_description.Contains("Blazer jacket") || o.long_description.Contains("blazer jacket")) && o.gender == "male");
@@ -508,6 +508,12 @@ namespace bytme.Controllers
             if (!String.IsNullOrEmpty(searchString))
             //als String niet leeg is dan wordt alles hieronder uitgevoerd
             {
+                if (all)
+                {
+                    products = from p in _context.Items select p;
+                    products = products.Where(o => o.gender == sex);
+                    ViewBag.currentBrands = products.Select(o => o.description).Distinct().ToList();
+                }
                 products = products.Where(s => s.description.ToUpper().Contains(searchString.ToUpper()) || s.long_description.ToLower().Contains(searchString.ToLower()));
                 // vul searchstring in
                 ViewBag.Message = searchString;
@@ -536,6 +542,7 @@ namespace bytme.Controllers
                     return View(await products.ToListAsync());
                 }
             }
+            
             return View(await products.ToListAsync());
         }
 
@@ -574,7 +581,7 @@ namespace bytme.Controllers
             ViewData["currentBrands"] = currentBrands;
             ViewData["sortBy"] = sortBy;
             ViewData["currentSort"] = currentSort;
-
+            bool all = false;
 
             if (currentCategory != null)
             {
