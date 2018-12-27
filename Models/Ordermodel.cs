@@ -32,6 +32,7 @@ namespace bytme.Models
         public int oderline_id { get; set; }
         public string user_id { get; set; }
         public float price_payed { get; set; }
+        public string discount { get; set; }
         public DateTime dt_created { get; set; }
     }
     public class OrderStatus

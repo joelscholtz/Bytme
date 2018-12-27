@@ -13,40 +13,41 @@
 <h3><center><strong>Address:</strong></center></h3>
 @for (var i = 0; i < Model.Count; i++)
 {
-    <h4><center>@Model[i].street @Html.DisplayFor(model=> Model[i].streetnumber)</center></h4>
-    <h4><center>@Html.DisplayFor(model => Model[i].zipcode), @Html.DisplayFor(model=> Model[i].city)</center></h4>
+    <h4><center>@Model[i].street @Html.DisplayFor(model => Model[i].streetnumber)</center></h4>
+    <h4><center>@Html.DisplayFor(model => Model[i].zipcode), @Html.DisplayFor(model => Model[i].city)</center></h4>
     <br />
 }
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Order ID
-            </th>
-            <th>
-                Product
-            </th>
-            <th>
-                <center>
-                    Quantity bought
-                </center>
-            </th>
-            <th>
-                <center>
-                    Price
-                </center>
-            </th>
-            <th>
-                <center>
-                    Subtotal
-                </center>
-            </th>
-        </tr>
-    </thead>
-    @{ float totalitem = 0; }
-    <tbody>
-        @for (var i = 0; i < Model.Count; i++)
-        {
+
+@for (var i = 0; i < Model.Count; i++)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Order ID
+                </th>
+                <th>
+                    Product
+                </th>
+                <th>
+                    <center>
+                        Quantity bought
+                    </center>
+                </th>
+                <th>
+                    <center>
+                        Price
+                    </center>
+                </th>
+                <th>
+                    <center>
+                        Subtotal
+                    </center>
+                </th>
+            </tr>
+        </thead>
+        @{ float totalitem = 0; }
+        <tbody>
 
             <tr>
                 <td>
@@ -73,99 +74,173 @@
                 @{totalitem += countitem; }
 
             </tr>
-        }
-        <tr>
-            @if (totalitem < 100)
-            {
-                totalitem += 2.95f;
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><center><strong>shipping costs: </strong> &euro;2,95</center></td>
-            <tr class="hide_all">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><center><strong>Total: </strong>&euro;@totalitem</center></td>
-            </tr>
-        }
-        else
-        {
-        <td></td>
-        <td></td>
-        <td></td>
-        <td><center><strong>Total: </strong>&euro;@totalitem</center></td>
-    }
-            </tr>
-        <tr>
-            @if (totalitem < 100)
-            {
-                totalitem += 2.95f;
-                if (totalitem > 50 && totalitem < 75)
+
+            <tr>
+                @if (totalitem < 100)
                 {
+                    totalitem += 2.95f;
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td><center><strong>VIP points added: </strong> 100 points </center></td>
+                    <td><center><strong>shipping costs: </strong> &euro;2,95</center></td>
+                <tr class="hide_all">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><center><strong>Total: </strong>&euro;@totalitem</center></td>
+                </tr>
                 }
-                if (totalitem > 75 && totalitem < 100)
+                else
                 {
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td><center><strong>VIP points added: </strong> 150 points </center></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><center><strong>Total: </strong>&euro;@totalitem</center></td>
                 }
-                if (totalitem > 100)
-                {
+                </tr>
+                <tr>
+                    @if (Model[i].discount == "nothing" || Model[i].discount == null)
+                    {
+                        if (totalitem < 100)
+                        {
+                            totalitem += 2.95f;
+                            if (totalitem > 50 && totalitem < 75)
+                            {
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td><center><strong>VIP points added: </strong> 100 points </center></td>
+                            }
+                            if (totalitem > 75 && totalitem < 100)
+                            {
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td><center><strong>VIP points added: </strong> 150 points </center></td>
+                            }
+                            if (totalitem > 100)
+                            {
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td><center><strong>VIP points added: </strong> 200 points </center></td>
+                            }
+                        }
+                        else
+                        {
+                            if (totalitem > 100 && totalitem < 150)
+                            {
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td><center><strong>VIP points added: </strong> 200 points </center></td>
+                            }
+                            if (totalitem > 150 && totalitem < 200)
+                            {
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td><center><strong>VIP points added: </strong> 300 points </center></td>
+                            }
+                            if (totalitem > 200 && totalitem < 300)
+                            {
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td><center><strong>VIP points added: </strong> 500 points </center></td>
+                            }
+                            if (totalitem > 300 && totalitem < 500)
+                            {
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td><center><strong>VIP points added: </strong> 750 points </center></td>
+                            }
+                            if (totalitem > 500)
+                            {
+                                int points_gotten = 1000;
+                                float extra_points = totalitem - 500;
+                                extra_points = extra_points / 2;
+                                int points_you_gone_get = (int)extra_points;
+                                points_gotten += points_you_gone_get;
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td><center><strong>VIP points added: </strong> @points_gotten points </center></td>
+                            }
+                        }
+                    }
+                    else if (Model[i].discount == "free_shipping")
+                    {
+                        totalitem -= 2.95f;
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><center><strong>VIP points used: </strong> 100 points </center></td>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><center><strong>Price after discount: </strong> &euro;@totalitem </center></td>
+                    </tr>
+                    }
+                    else if (Model[i].discount == "five_discount")
+                    {
+                        totalitem *= 0.95f;
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td><center><strong>VIP points added: </strong> 200 points </center></td>
-                }
-            }
-            else
-            {
-                if (totalitem > 100 && totalitem < 150)
-                {
+                    <td><center><strong>VIP points used: </strong> 500 points </center></td>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><center><strong>Price after discount: </strong> &euro;@totalitem </center></td>
+                    </tr>
+                    }
+                    else if (Model[i].discount == "ten_discount")
+                    {
+                        totalitem *= 0.90f;
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td><center><strong>VIP points added: </strong> 200 points </center></td>
-                }
-                if (totalitem > 150 && totalitem < 200)
-                {
+                    <td><center><strong>VIP points used: </strong> 900 points </center></td>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><center><strong>Price after discount: </strong> &euro;@totalitem </center></td>
+                    </tr>
+                    }
+                    else if (Model[i].discount == "fifteen_discount")
+                    {
+                        totalitem *= 0.85f;
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td><center><strong>VIP points added: </strong> 300 points </center></td>
-                }
-                if (totalitem > 200 && totalitem < 300)
-                {
+                    <td><center><strong>VIP points used: </strong> 1250 points </center></td>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><center><strong>Price after discount: </strong> &euro;@totalitem </center></td>
+                    </tr>
+                    }
+                    else if (Model[i].discount == "twenty_discount")
+                    {
+                        totalitem *= 0.80f;
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td><center><strong>VIP points added: </strong> 500 points </center></td>
-                }
-                if (totalitem > 300 && totalitem < 500)
-                {
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td><center><strong>VIP points added: </strong> 750 points </center></td>
-                }
-                if (totalitem > 500)
-                {
-                    int points_gotten = 1000;
-                    float extra_points = totalitem - 500;
-                    extra_points = extra_points / 2;
-                    int points_you_gone_get = (int)extra_points;
-                    points_gotten += points_you_gone_get;
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td><center><strong>VIP points added: </strong> @points_gotten points </center></td>
-                }
-            }
-        </tr>
-            </tbody>
-        </table>
+                    <td><center><strong>Price after discount: </strong> 1500 points </center></td>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><center><strong>VIP points used: </strong> &euro;@totalitem </center></td>
+                    </tr>
+                    }
+                    </tr>
+                    </tbody>
+                </table>
+                    }
