@@ -484,6 +484,7 @@ namespace bytme.Controllers
         public IActionResult ConfirmOrder()
         {
             var discount = SessionHelper.GetObjectFromJson<string>(HttpContext.Session, "discount");
+            int discount_email;
             Boolean decreased = false;
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var result = _context.UserModels.Where(u => u.Id == userId).FirstOrDefault();
@@ -589,28 +590,33 @@ namespace bytme.Controllers
                     _context.SaveChanges();
                 }
             }
+            else if (result.points == -1) { }
             else
             {
                 if(discount == "five_discount")
                 {
+                    discount_email = 500;
                     result.points -= 500;
                     _context.Update(result);
                     _context.SaveChanges();
                 }
                 else if(discount == "ten_discount")
                 {
+                    discount_email = 900;
                     result.points -= 900;
                     _context.Update(result);
                     _context.SaveChanges();
                 }
                 else if (discount == "fifteen_discount")
                 {
+                    discount_email = 1250;
                     result.points -= 1250;
                     _context.Update(result);
                     _context.SaveChanges();
                 }
                 else if (discount == "twenty_discount")
                 {
+                    discount_email = 1500;
                     result.points -= 1500;
                     _context.Update(result);
                     _context.SaveChanges();
@@ -740,42 +746,7 @@ namespace bytme.Controllers
                                         " </tr>";
                 }
             }
-            else if (totalPrice < 100 && discount == "free_shipping")
-            {
-                totalPrice += sendcost;
-                mailMessage.Body += " <tr> " +
-                                   " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                   " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                   " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                   " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                   " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>Shipping costs: " + sendcost + " euro</th>" +
-                                   " </tr>";
-
-                mailMessage.Body += " <tr> " +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>Total: " + totalPrice + " euro</th>" +
-                                    " </tr>";
-                totalPrice -= sendcost;
-                mailMessage.Body += " <tr> " +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>Total after discount: " + totalPrice + " euro</th>" +
-                                    " </tr>";
-
-                mailMessage.Body += " <tr> " +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>points used " + "100" + " points</th>" +
-                                    " </tr>";
-            }
-            else if (totalPrice < 100 && discount == "five_discount")
+            else if (totalPrice < 100)
             {
                 totalPrice += sendcost;
                 mailMessage.Body += " <tr> " +
@@ -807,10 +778,10 @@ namespace bytme.Controllers
                                     " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
                                     " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
                                     " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>points used " + "500" + " points</th>" +
+                                    " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>points used " + discount_email + " points</th>" +
                                     " </tr>";
             }
-            else if (totalPrice > 100 && discount == "five_discount")
+            else if (totalPrice > 100)
             {
                 mailMessage.Body += " <tr> " +
                                     " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
@@ -833,190 +804,7 @@ namespace bytme.Controllers
                                     " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
                                     " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
                                     " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>points used " + "500" + " points</th>" +
-                                    " </tr>";
-            }
-            else if (totalPrice < 100 && discount == "ten_discount")
-            {
-                totalPrice += sendcost;
-                mailMessage.Body += " <tr> " +
-                                   " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                   " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                   " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                   " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                   " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>Shipping costs: " + sendcost + " euro</th>" +
-                                   " </tr>";
-
-                mailMessage.Body += " <tr> " +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>Total: " + totalPrice + " euro</th>" +
-                                    " </tr>";
-                totalPrice *= 0.90f;
-                mailMessage.Body += " <tr> " +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>Total after discount: " + totalPrice + " euro</th>" +
-                                    " </tr>";
-
-                mailMessage.Body += " <tr> " +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>points used " + "900" + " points</th>" +
-                                    " </tr>";
-            }
-            else if (totalPrice > 100 && discount == "ten_discount")
-            {
-                mailMessage.Body += " <tr> " +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>Total: " + totalPrice + " euro</th>" +
-                                    " </tr>";
-                totalPrice *= 0.90f;
-                mailMessage.Body += " <tr> " +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>Total after discount: " + totalPrice + " euro</th>" +
-                                    " </tr>";
-
-                mailMessage.Body += " <tr> " +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>points used " + "900" + " points</th>" +
-                                    " </tr>";
-            }
-            else if (totalPrice < 100 && discount == "fifteen_discount")
-            {
-                totalPrice += sendcost;
-                mailMessage.Body += " <tr> " +
-                                   " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                   " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                   " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                   " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                   " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>Shipping costs: " + sendcost + " euro</th>" +
-                                   " </tr>";
-
-                mailMessage.Body += " <tr> " +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>Total: " + totalPrice + " euro</th>" +
-                                    " </tr>";
-                totalPrice *= 0.85f;
-                mailMessage.Body += " <tr> " +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>Total after discount: " + totalPrice + " euro</th>" +
-                                    " </tr>";
-
-                mailMessage.Body += " <tr> " +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>points used " + "1250" + " points</th>" +
-                                    " </tr>";
-            }
-            else if (totalPrice > 100 && discount == "fifteen_discount")
-            {
-                mailMessage.Body += " <tr> " +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>Total: " + totalPrice + " euro</th>" +
-                                    " </tr>";
-                totalPrice *= 0.85f;
-                mailMessage.Body += " <tr> " +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>Total after discount: " + totalPrice + " euro</th>" +
-                                    " </tr>";
-
-                mailMessage.Body += " <tr> " +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>points used " + "1250" + " points</th>" +
-                                    " </tr>";
-            }
-            else if (totalPrice < 100 && discount == "twenty_discount")
-            {
-                totalPrice += sendcost;
-                mailMessage.Body += " <tr> " +
-                                   " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                   " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                   " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                   " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                   " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>Shipping costs: " + sendcost + " euro</th>" +
-                                   " </tr>";
-
-                mailMessage.Body += " <tr> " +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>Total: " + totalPrice + " euro</th>" +
-                                    " </tr>";
-                totalPrice *= 0.80f;
-                mailMessage.Body += " <tr> " +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>Total after discount: " + totalPrice + " euro</th>" +
-                                    " </tr>";
-
-                mailMessage.Body += " <tr> " +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>points used " + "1500" + " points</th>" +
-                                    " </tr>";
-            }
-            else if (totalPrice > 100 && discount == "twenty_discount")
-            {
-                mailMessage.Body += " <tr> " +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>Total: " + totalPrice + " euro</th>" +
-                                    " </tr>";
-                totalPrice *= 0.80f;
-                mailMessage.Body += " <tr> " +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>Total after discount: " + totalPrice + " euro</th>" +
-                                    " </tr>";
-
-                mailMessage.Body += " <tr> " +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>points used " + "1500" + " points</th>" +
+                                    " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>points used " + discount_email + " points</th>" +
                                     " </tr>";
             }
 
