@@ -770,7 +770,7 @@ namespace bytme.Controllers
                                     " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
                                     " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
                                     " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>Total after discount: " + totalPrice + " euro</th>" +
+                                    " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>Total after discount: " + totalPrice.ToString("N") + " euro</th>" +
                                     " </tr>";
 
                 mailMessage.Body += " <tr> " +
@@ -796,7 +796,7 @@ namespace bytme.Controllers
                                     " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
                                     " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
                                     " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>Total after discount: " + totalPrice + " euro</th>" +
+                                    " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>Total after discount: " + totalPrice.ToString("N") + " euro</th>" +
                                     " </tr>";
 
                 mailMessage.Body += " <tr> " +
