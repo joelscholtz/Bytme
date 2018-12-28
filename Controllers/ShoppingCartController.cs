@@ -484,7 +484,7 @@ namespace bytme.Controllers
         public IActionResult ConfirmOrder()
         {
             var discount = SessionHelper.GetObjectFromJson<string>(HttpContext.Session, "discount");
-            int discount_email;
+            int discount_email = 0;
             Boolean decreased = false;
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var result = _context.UserModels.Where(u => u.Id == userId).FirstOrDefault();
