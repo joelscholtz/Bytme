@@ -1,9 +1,9 @@
-﻿@model Item
+﻿@model EditProductModel
 @{
     ViewData["Title"] = "CreateProduct";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+@using bytme.Models;
 <h2>CreateProduct</h2>
 <hr />
 <div class="container">
@@ -61,6 +61,7 @@
         <div class="form-group">
             <label asp-for="@Model.size">Size</label>
             <input asp-for="@Model.size" class="form-control" value="" type="" list="productSizes" style="width:90%" placeholder="Size" />
+            <span asp-validation-for="@Model.size" class="text-danger"></span>
             <datalist id="productSizes">
                 <option value="XS" />
                 <option value="S" />
@@ -68,11 +69,10 @@
                 <option value="L" />
                 <option value="XL" />
             </datalist>
-            <span asp-validation-for="@Model.size" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label asp-for="@Model.quantity">Quantity</label>
-            <input asp-for="@Model.quantity" type="number" min="0" class="form-control" style="width:90%" placeholder="Quantity" />
+            <input asp-for="@Model.quantity" type="number" min = "0.01" step = "any" class="form-control" style="width:90%" placeholder="Quantity" />
             <span asp-validation-for="@Model.quantity" class="text-danger"></span>
         </div>
         <div class="form-group">
@@ -82,14 +82,15 @@
         </div>
         <div>
             <label asp-for="@Model.issales">Sale</label>
-            <input asp-for="@Model.issales" class="form-control" value="" type="" list="SalesStatus" style="width:90%" placeholder="Sale" />
+            <input asp-for="@Model.issales" class="form-control" value="0" type="" list="SalesStatus" style="width:90%" placeholder="Sale" />
+            <span asp-validation-for="@Model.issales" class="text-danger"></span>
             <datalist id="SalesStatus">
                 <option value="0">No sale</option>
                 <option value="1">Item on Sale</option>
             </datalist>
         </div>
-        <button type="submit" class="btn btn-default" style="margin-top:3%; color:#4D6810; background-color: #d0dfb7;border-color:#4D6810">Save</button>
-        @Html.ActionLink("cancel", "Products", "Manage", null, new { @class = "btn btn-default", type = "submit", onclick = "return confirm('Are you sure you want to leave this page?')", style = "margin-left:2%;" })
+        <button type="submit" class="btn btn-default" style="margin-top:10px; color:#4D6810; background-color: #d0dfb7;border-color:#4D6810">Save</button>
+        @Html.ActionLink("cancel", "Products", "Manage", null, new { @class = "btn btn-default", type = "submit", onclick = "return confirm('Are you sure you want to leave this page?')", style = "margin-left:2%;margin-top:10px;" })
     </form>
 </div>
 <div class="col-sm-1" id='productimage'>

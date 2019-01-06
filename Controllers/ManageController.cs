@@ -23,15 +23,138 @@ namespace bytme.Controllers
         private readonly ApplicationDbContext _db;
         private readonly UserManager<UserModel> _userManager;
 
-
         public ManageController(ApplicationDbContext db, UserManager<UserModel> userManager)
         {
             _db = db;
             _userManager = userManager;
         }
+        
+        
+        // user overview
+        [Authorize(Roles = "Admin")]
+        public ViewResult Index(string searchKeyU)
+        {
 
- 
+            var users = from u in _db.Users
+                        select u;
+            if (!String.IsNullOrEmpty(searchKeyU))
+            {
+                //searches for items containing input searchkey
+                // .ToUpper() is used to make search non-case sensitive
+                users = _userManager.Users.Where(u => u.Id.ToUpper().Contains(searchKeyU.ToUpper())
+                                       || u.name.ToUpper().Contains(searchKeyU.ToUpper())
+                                       || u.surname.ToUpper().Contains(searchKeyU.ToUpper())
+                                       || u.Email.ToUpper().Contains(searchKeyU.ToUpper()));
+            }
+
+            return View(users.ToList());
+        }
+
+        // product overview
+        [Authorize(Roles = "Admin")]
+        public ViewResult Products(string searchKeyP)
+        {
+            var products = from item in _db.Items
+                           select item;
+            if (!String.IsNullOrEmpty(searchKeyP))
+            {
+
+                //searches for items containing input searchkey
+                products = _db.Items.Where(item => item.id.ToString().ToUpper().Contains(searchKeyP.ToUpper())
+                                        || item.description.ToUpper().Contains(searchKeyP.ToUpper())
+                                        || item.long_description.ToUpper().Contains(searchKeyP.ToUpper())
+                                        || item.price.ToString().ToUpper().Contains(searchKeyP.ToUpper())
+                                        || item.quantity.ToString().ToUpper().Contains(searchKeyP.ToUpper())
+                                        || item.gender.ToUpper().Contains(searchKeyP.ToUpper())).OrderBy(u => u.id);
+            }
+            var p_sorted = products.OrderBy(p => p.id);
+            return View(p_sorted.ToList());
+        }
+
+        [Authorize(Roles = "Admin")]
+        public ViewResult CreateProduct()
+        {
+            return View();
+        }
+
+        //edit
+        [Authorize(Roles = "Admin")]
+        public IActionResult EditUser(string id)
+        {
+            //finds user sends all user data
+            var User = _db.Users.Where(x => x.Id == id).FirstOrDefault();
+            var edUser = new EditUserModel();
+            edUser.id = User.Id;
+            edUser.city = User.city;
+            edUser.dt_created = User.dt_created;
+            edUser.Email = User.Email;
+            edUser.name = User.name;
+            edUser.street = User.street;
+            edUser.streetnumber = User.streetnumber;
+            edUser.surname = User.surname;
+            edUser.zipcode = User.zipcode;
+
+            return View(edUser);
+        }
+        [Authorize(Roles = "Admin")]
+        public IActionResult EditProduct(int Id)
+        {
+            var Product = _db.Items.FirstOrDefault(ip => ip.id == Id);
+            var edProduct = new EditProductModel();
+            edProduct.id = Product.id;
+            edProduct.category_id = Product.category_id;
+            edProduct.description = Product.description;
+            edProduct.gender = Product.gender;
+            edProduct.issales = Product.issales;
+            edProduct.long_description = Product.long_description;
+            edProduct.photo_url = Product.photo_url;
+            edProduct.price = Product.price;
+            edProduct.quantity = Product.quantity;
+            edProduct.size = Product.size;
+            
+            return View(edProduct);
+        }
+
+        //delete
+        [Authorize(Roles = "Admin")]
+        public IActionResult DeleteUser(string Id)
+        {
+            if(Id == null)
+            {
+                RedirectToAction("Index", "Manage", null);
+            }
+            else
+            {
+                ViewBag.UserId = Id;            
+            }
+            return View();
+        }
+        [Authorize(Roles = "Admin")]
+        public IActionResult DeleteProduct(int Id)
+        {
+            Item OriginItem = _db.Items.FirstOrDefault(ip => ip.id == Id);
+            var deleteItem = new Item();
+            deleteItem.id = OriginItem.id;
+            deleteItem.description = OriginItem.description;
+            deleteItem.long_description = OriginItem.long_description;
+            deleteItem.photo_url = OriginItem.photo_url;
+            deleteItem.price = OriginItem.price;
+            deleteItem.quantity = OriginItem.quantity;
+            deleteItem.size = OriginItem.size;
+            deleteItem.issales = OriginItem.issales;
+            deleteItem.gender = OriginItem.gender;
+
+            ViewBag.ItemCatId = OriginItem.category_id;
+
+            return View(deleteItem);
+        }
+
+
+        //actions
+
+        //create
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> CreateProduct(Item newIt)
         {
             
@@ -49,8 +172,10 @@ namespace bytme.Controllers
             return View();
         }
 
+        //edit
         [HttpPost]
-        public async Task<ActionResult> EditUser(string id, UserModel userModel)
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> EditUser(string id, EditUserModel userModel)
         {
             if(ModelState.IsValid)
             {
@@ -119,7 +244,7 @@ namespace bytme.Controllers
                
                     var result = await _userManager.UpdateAsync(user);
                     var dbup = await _db.SaveChangesAsync();
-                    return View(user);
+                    return View(userModel);
                 }
            
         
@@ -130,34 +255,74 @@ namespace bytme.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> EditProduct(int Id, Item item)
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> EditProduct(int Id, EditProductModel item)
         {
             var product = await _db.Items.FirstOrDefaultAsync(i => i.id == Id);
+
             if (ModelState.IsValid)
             {
                 
                 if (product != null)
                 {
-                    if (await TryUpdateModelAsync<Item>(product, "", p => p.description, p => p.category_id, p => p.gender, p => p.issales, p => p.long_description, p => p.photo_url, p => p.price, p => p.quantity, p => p.size)
-                    ){
-                        try
-                        {
-                            await _db.SaveChangesAsync();
-                            return View(product);
-                        }
-                        catch (DbUpdateException)
-                        {
-                            ModelState.AddModelError(string.Empty, "An error occured while updating");
-                        }
-
+                    if (item.category_id != null && product.category_id != item.category_id)
+                    {
+                        product.category_id = item.category_id;
                     }
-                    return View(product);
+                    if (item.description != null && product.description != item.description)
+                    {
+                        product.description = item.description;
+                    }
+                    if (item.gender != null && product.gender != item.gender)
+                    {
+                        product.gender = item.gender;
+                    }
+                    if (item.issales != null && product.issales != item.issales)
+                    {
+                        product.issales = item.issales;
+                    }
+                    if (item.long_description != null && product.long_description != item.long_description)
+                    {
+                        product.long_description = item.long_description;
+                    }
+                    if (item.photo_url != null && product.photo_url != item.photo_url)
+                    {
+                        product.photo_url = item.photo_url;
+                    }
+                    if (item.price != null && product.price != item.price)
+                    {
+                        product.price = item.price;
+                    }
+                    if (item.quantity != null && product.quantity != item.quantity)
+                    {
+                        product.quantity = item.quantity;
+                    }
+                    if (item.size != null && product.size != item.size)
+                    {
+                        product.size = item.size;
+                    }
+                    
+                    try
+                    {
+                        _db.Items.Update(product);
+                        await _db.SaveChangesAsync();
+                        return View(item);
+                    }
+                    catch (DbUpdateException)
+                    {
+                        ModelState.AddModelError(string.Empty, "An error occured while updating");
+                    }
                 }
-                return View(product);
+                return View(item);
             }
-            return View(product);
+            return View(item);
         }
 
+
+
+
+
+        //delete
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DropUser(string id)
@@ -186,108 +351,6 @@ namespace bytme.Controllers
             await _db.SaveChangesAsync();
             return RedirectToAction("Products");
         }
-
-        // user overview
-        [Authorize(Roles = "Admin")]
-        public ViewResult Index(string searchKeyU)
-        {
-
-            var users = from u in _db.Users
-                        select u;
-            if (!String.IsNullOrEmpty(searchKeyU))
-            {
-                //searches for items containing input searchkey
-                // .ToUpper() is used to make search non-case sensitive
-                users = _userManager.Users.Where(u => u.Id.ToUpper().Contains(searchKeyU.ToUpper())
-                                       || u.name.ToUpper().Contains(searchKeyU.ToUpper())
-                                       || u.surname.ToUpper().Contains(searchKeyU.ToUpper())
-                                       || u.Email.ToUpper().Contains(searchKeyU.ToUpper()));
-            }
-
-            return View(users.ToList());
-        }
-
-        // product overview
-        [Authorize(Roles = "Admin")]
-        public ViewResult Products(string searchKeyP)
-        {
-            var products = from item in _db.Items
-                           select item;
-            if (!String.IsNullOrEmpty(searchKeyP))
-            {
-
-                //searches for items containing input searchkey
-                products = _db.Items.Where(item => item.id.ToString().ToUpper().Contains(searchKeyP.ToUpper())
-                                        || item.description.ToUpper().Contains(searchKeyP.ToUpper())
-                                        || item.price.ToString().ToUpper().Contains(searchKeyP.ToUpper())
-                                        || item.quantity.ToString().ToUpper().Contains(searchKeyP.ToUpper())
-                                        || item.gender.ToUpper().Contains(searchKeyP.ToUpper())).OrderBy(u => u.id);
-            }
-            var p_sorted = products.OrderBy(p => p.id);
-            return View(p_sorted.ToList());
-        }
-
-
-        //statistics
-        [Authorize(Roles = "Admin")]
-        public IActionResult Statistics()
-        {
-            return View();
-        }
-
-        [Authorize(Roles = "Admin")]
-        public IActionResult CreateProduct()
-        {
-            return View();
-        }
-
-        //update
-        [Authorize(Roles = "Admin")]
-        public IActionResult EditUser(string id)
-        {
-            //finds user sends all user data
-            return View(_db.Users.Where(x => x.Id == id).FirstOrDefault());
-        }
-        [Authorize(Roles = "Admin")]
-        public IActionResult EditProduct(int Id)
-        {
-            return View(_db.Items.FirstOrDefault(ip => ip.id == Id));
-        }
-
-        //delete
-        [Authorize(Roles = "Admin")]
-        public IActionResult DeleteUser(string Id)
-        {
-            if(Id == null)
-            {
-                RedirectToAction("Index", "Manage", null);
-            }
-            else
-            {
-                ViewBag.UserId = Id;            
-            }
-            return View();
-        }
-        [Authorize(Roles = "Admin")]
-        public IActionResult DeleteProduct(int Id)
-        {
-            Item OriginItem = _db.Items.FirstOrDefault(ip => ip.id == Id);
-            var deleteItem = new Item();
-            deleteItem.id = OriginItem.id;
-            deleteItem.description = OriginItem.description;
-            deleteItem.long_description = OriginItem.long_description;
-            deleteItem.photo_url = OriginItem.photo_url;
-            deleteItem.price = OriginItem.price;
-            deleteItem.quantity = OriginItem.quantity;
-            deleteItem.size = OriginItem.size;
-            deleteItem.issales = OriginItem.issales;
-            deleteItem.gender = OriginItem.gender;
-
-            ViewBag.ItemCatId = OriginItem.category_id;
-
-            return View(deleteItem);
-        }
-       
         
     }
 }

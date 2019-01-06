@@ -4,181 +4,201 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<div class="col-lg-2">
 
-
-<h2 style="margin-left:10%">Products</h2>
-<div class="container" style="display:inline-block; margin-left: 1.5%;">
-    @using (Html.BeginForm())
-    {
-        <div class="col-lg-8">
-            <!--searchbar-->
-            @Html.TextBox("searchKeyP", null, new { @class = "form-control", onfocus = "this.value=''", style = "margin-left: 9%; float:left;", placeholder = "search table..", type = "text", id = "searchProduct", title = "search for product" })
-        </div>
-        <div class="col-sm-1">
-            <input class="form-control" type="submit" value="Search" title="Search" style="width: auto;float: left;margin-left: 70%;background-color:#f0e5f2;color:#B388B8;border-color:#B388B8;" />
-        </div>
-    }
-    <div class="col-sm-2">
-        <input type="button" class="btn btn-default" value="Add +" title="Add new Product" onclick="location.href='@Url.Action("CreateProduct", "Manage")'" style="margin-right: 40%;color: #B388B8;background-color: #ffffff;border-color: #B388B8;float: right;" />
+    <h3>Admin</h3>
+    <hr />
+    <div>
+        <ul class="nav nav-pills nav-stacked">
+            <li><a asp-controller="Manage" asp-action="Index">Users</a></li>
+            <li><a asp-controller="Manage" asp-action="Products">Products</a></li>
+            <li><a asp-controller="Statistics" asp-action="Index">Statiistics</a></li>
+        </ul>
     </div>
+    <hr />
 </div>
 
+<div class="col-lg-10" style="padding-left: 53px;">
+    <h2 style="margin-left:10%">Products</h2>
+    <div class="container" style="display:inline-block;">
+        @using (Html.BeginForm())
+        {
+            <div class="col-lg-8">
+                <!--searchbar-->
+                @Html.TextBox("searchKeyP", null, new { @class = "form-control", onfocus = "this.value=''", style = "margin-left: 9%; float:left;", placeholder = "search table..", type = "text", id = "searchProduct", title = "search for product" })
+            </div>
+            <div class="col-sm-1">
+                <input class="form-control" type="submit" value="Search" title="Search" style="width: auto;float: left;margin-left: 70%;background-color:#f0e5f2;color:#B388B8;border-color:#B388B8;" />
+            </div>
+        }
+        <div class="col-sm-2">
+            <input type="button" class="btn btn-default" value="Add +" title="Add new Product" onclick="location.href='@Url.Action("CreateProduct", "Manage")'" style="margin-right: 40%;color: #B388B8;background-color: #ffffff;border-color: #B388B8;float: right;" />
+        </div>
+    </div>
 
-<hr />
 
-<div class="container">
-    <table id="productTable" class="table" style="overflow-y:scroll; height:260px; width:75%; display:block; margin-left:10%">
-        <thead>
-            <tr>
-                <th style="width:20%">
-                    ID
-                </th>
-                <th style="width:20%">
-                    BRAND
-                </th>
-                <th style="width:15%">
-                    PRICE
-                </th>
-                <th style="width:15%">
-                    GENDER
-                </th>
-                <th style="width:15%">
-                    QUANTITY
-                </th>
-                <th>
+    <hr />
 
-                </th>
-                <th>
-
-                </th>
-                <th>
-
-                </th>
-            </tr>
-            <!--loads user data into table-->
-            @foreach (var product in Model)
-            {
+    <div class="container">
+        <table id="productTable" class="table" style="overflow-y:scroll; height:260px; width:75%; display:block; margin-left:10%">
+            <thead>
                 <tr>
-                    <td>
-                        @Html.DisplayFor(ModelProduct => product.id)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(ModelProduct => product.description)
-                    </td>
-                    <td>
-                        €@Html.DisplayFor(ModelProduct => product.price)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(ModelProduct => product.gender)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(ModelProduct => product.quantity)
-                    </td>
-                    <td>
-                        <button class="btn btn-default" onclick="modalshow('@product.id', '@product.description', '@product.long_description', @product.category_id, '@product.gender', '@product.price', '@product.size', '@product.quantity');" data-toggle="modal" data-target="#viewProduct_@product.id" style="color: #B388B8;background-color: #ffffff;border-color: #B388B8;">view</button>
-                    </td>
-                    <td>
-                        @Html.ActionLink("edit", "EditProduct", "Manage", new { ID = product.id }, new { @class = "btn btn-default", style = "color:#4D6810;background-color: #d0dfb7;border-color:#4D6810" })
-                        
-                    </td>
-                    <td>
-                        @Html.ActionLink("delete", "DeleteProduct", "Manage", new { ID = product.id }, new { @class = "btn btn-default", style = "color: #A94442;background-color: #f3d1d1;border-color: #A94442;" })
-                    </td>
+                    <th>
+                        ID
+                    </th>
+                    <th style="width:20%">
+                        BRAND
+                    </th>
+                    <th style="width:22%">
+                        DESCRIPTION
+                    </th>
+                    <th style="width:15%">
+                        PRICE
+                    </th>
+                    <th style="width:15%">
+                        GENDER
+                    </th>
+                    <th style="width:15%">
+                        QUANTITY
+                    </th>
+                    <th>
+
+                    </th>
+                    <th>
+
+                    </th>
+                    <th>
+
+                    </th>
                 </tr>
-            }
-        </thead>
-    </table>
-</div>
-<div id="modalposition">
-    
-</div>
-<script>
+                <!--loads user data into table-->
+                @foreach (var product in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(ModelProduct => product.id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(ModelProduct => product.description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(ModelProduct => product.long_description)
+                        </td>
+                        <td>
+                            €@Html.DisplayFor(ModelProduct => product.price)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(ModelProduct => product.gender)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(ModelProduct => product.quantity)
+                        </td>
+                        <td>
+                            <button class="btn btn-default" onclick="modalshow('@product.id', '@product.description', '@product.long_description', @product.category_id, '@product.gender', '@product.price', '@product.size', '@product.quantity');" data-toggle="modal" data-target="#viewProduct_@product.id" style="color: #B388B8;background-color: #ffffff;border-color: #B388B8;">view</button>
+                        </td>
+                        <td>
+                            @Html.ActionLink("edit", "EditProduct", "Manage", new { ID = product.id }, new { @class = "btn btn-default", style = "color:#4D6810;background-color: #d0dfb7;border-color:#4D6810" })
 
-    function modalshow(id, description, long_description, category_id, gender, price, size, quantity) {
-        document.getElementById('modalposition').innerHTML = '<div class="modal fade" id="viewProduct_' + id + '" role="dialog" style="width: auto; display: block;margin-top: 12%;">' +
-            '        <div class="modal-dialog">' +
-            '            <div class="modal-content">' +
-            '                <div class="modal-header" style="padding-left:8%;background-color: #B388B8;-webkit-border-top-left-radius: 5px; -webkit-border-top-right-radius: 5px;">' +
-            '                    <div class="modal-title" style="font-size: 20px; color:#ffffff; font-weight: 600;">' + description + '<br /> ' + long_description + '</div>' +
-            '                </div>' +
-            '                <div class="modal-body" style="padding-left:8%">' +
-            '                    <!--vertical table-->' +
-            '                    <table>' +
-            '                        <thead>' +
-            '                            <tr>' +
-            '                                <th style="width:130px">' +
-            '                                    Id:' +
-            '                                </th>' +
-            '                                <td>' +
-            id +
-            '                                </td>' +
-            '                            </tr>' +
-            '                            <tr>' +
-            '                                <th>' +
-            '                                    Brand:' +
-            '                                </th>' +
-            '                                <td>' +
-            description +
-            '                                </td>' +
-            '                            </tr>' +
-            '                            <tr>' +
-            '                                <th>' +
-            '                                    Product Name:' +
-            '                                </th>' +
-            '                                <td>' +
-            long_description +
-            '                                <td>' +
-            '                            </tr>' +
-            '                            <tr>' +
-            '                                <th>' +
-            '                                    Category:' +
-            '                                </th>' +
-            '                                <td>' +
-            category_id +
-            '                                </td>' +
-            '                            </tr>' +
-            '                            <tr>' +
-            '                                <th>' +
-            '                                    Price:' +
-            '                                </th>' +
-            '                                <td>' + '€'+
-            price +
-            '                                </td>' +
-            '                            </tr>' +
-            '                            <tr>' +
-            '                            <tr>' +
-            '                                <th>' +
-            '                                    Size:' +
-            '                                </th>' +
-            '                                <td>' +
-            size +
-            '                                </td>' +
-            '                            </tr>' +
-            '                            <tr>' +
-            '                                <th>' +
-            '                                    Gender:' +
-            '                                </th>' +
-            '                                <td>' +
-            gender +
-            '                                <td>' +
-            '                            </tr>' +
-            '                            <tr>' +
-            '                                <th>' +
-            '                                    Stock:' +
-            '                                </th>' +
-            '                                <td>' +
-            quantity +
-            '                                </td>' +
-            '                            </tr>' +
-            '                        </thead>' +
-            '                    </table>' +
-            '                </div>' +
-            '                <div class="modal-footer">' +
-            '                    <button class="btn btn-default" data-dismiss="modal">dismiss</button>' +
-            '                </div>' +
-            '            </div>' +
-            '        </div>' +
-            '    </div>';
-    }
+                        </td>
+                        <td>
+                            @Html.ActionLink("delete", "DeleteProduct", "Manage", new { ID = product.id }, new { @class = "btn btn-default", style = "color: #A94442;background-color: #f3d1d1;border-color: #A94442;" })
+                        </td>
+                    </tr>
+                }
+            </thead>
+        </table>
+    </div>
+    </div>
+    <div id="modalposition">
 
-</script>
+    </div>
+    <script>
+
+        function modalshow(id, description, long_description, category_id, gender, price, size, quantity) {
+            document.getElementById('modalposition').innerHTML = '<div class="modal fade" id="viewProduct_' + id + '" role="dialog" style="width: auto; display: block;margin-top: 12%;">' +
+                '        <div class="modal-dialog">' +
+                '            <div class="modal-content">' +
+                '                <div class="modal-header" style="padding-left:8%;background-color: #B388B8;-webkit-border-top-left-radius: 5px; -webkit-border-top-right-radius: 5px;">' +
+                '                    <div class="modal-title" style="font-size: 20px; color:#ffffff; font-weight: 600;">' + description + '<br /> ' + long_description + '</div>' +
+                '                </div>' +
+                '                <div class="modal-body" style="padding-left:8%">' +
+                '                    <!--vertical table-->' +
+                '                    <table>' +
+                '                        <thead>' +
+                '                            <tr>' +
+                '                                <th style="width:130px">' +
+                '                                    Id:' +
+                '                                </th>' +
+                '                                <td>' +
+                id +
+                '                                </td>' +
+                '                            </tr>' +
+                '                            <tr>' +
+                '                                <th>' +
+                '                                    Brand:' +
+                '                                </th>' +
+                '                                <td>' +
+                description +
+                '                                </td>' +
+                '                            </tr>' +
+                '                            <tr>' +
+                '                                <th>' +
+                '                                    Product Name:' +
+                '                                </th>' +
+                '                                <td>' +
+                long_description +
+                '                                <td>' +
+                '                            </tr>' +
+                '                            <tr>' +
+                '                                <th>' +
+                '                                    Category:' +
+                '                                </th>' +
+                '                                <td>' +
+                category_id +
+                '                                </td>' +
+                '                            </tr>' +
+                '                            <tr>' +
+                '                                <th>' +
+                '                                    Price:' +
+                '                                </th>' +
+                '                                <td>' + '€' +
+                price +
+                '                                </td>' +
+                '                            </tr>' +
+                '                            <tr>' +
+                '                            <tr>' +
+                '                                <th>' +
+                '                                    Size:' +
+                '                                </th>' +
+                '                                <td>' +
+                size +
+                '                                </td>' +
+                '                            </tr>' +
+                '                            <tr>' +
+                '                                <th>' +
+                '                                    Gender:' +
+                '                                </th>' +
+                '                                <td>' +
+                gender +
+                '                                <td>' +
+                '                            </tr>' +
+                '                            <tr>' +
+                '                                <th>' +
+                '                                    Stock:' +
+                '                                </th>' +
+                '                                <td>' +
+                quantity +
+                '                                </td>' +
+                '                            </tr>' +
+                '                        </thead>' +
+                '                    </table>' +
+                '                </div>' +
+                '                <div class="modal-footer">' +
+                '                    <button class="btn btn-default" data-dismiss="modal">dismiss</button>' +
+                '                </div>' +
+                '            </div>' +
+                '        </div>' +
+                '    </div>';
+        }
+
+    </script>

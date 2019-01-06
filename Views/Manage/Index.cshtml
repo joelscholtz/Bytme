@@ -15,94 +15,109 @@
     }
 }
 @model IEnumerable<bytme.Models.UserModel>
-<div>
-    <h2 style="margin-left:10%">Users</h2>
+
+<div class="col-lg-2">
+
+    <h3>Admin</h3>
+    <hr />
+    <div>
+        <ul class="nav nav-pills nav-stacked">
+            <li><a asp-controller="Manage" asp-action="Index">Users</a></li>
+            <li><a asp-controller="Manage" asp-action="Products">Products</a></li>
+            <li><a asp-controller="Statistics" asp-action="Index">Statiistics</a></li>
+        </ul>
+    </div>
+    <hr />    
 </div>
-<div class="container" style="display:inline-block; margin-left: 1.5%;">
-    @using (Html.BeginForm())
-    {
-        <div class="col-lg-8">
-            <!--searchbar-->
-            @Html.TextBox("searchKeyU", null, new { @class = "form-control", onfocus = "this.value=''", style = "margin-left: 9%;float:left;", placeholder = "search table..", type = "text", id = "searchUser", title = "search for user" })
+ 
+<div class="col-lg-10" style="padding-left: 53px;">
+    <div>
+        <h2 style="margin-left:50%">Users</h2>
+    </div>
+    <div class="container" style="display:inline-block;" >
+        @using (Html.BeginForm())
+        {
+            <div class="col-lg-8">
+                <!--searchbar-->
+                @Html.TextBox("searchKeyU", null, new { @class = "form-control", onfocus = "this.value=''", style = "float:left;", placeholder = "search table..", type = "text", id = "searchUser", title = "search for user" })
+            </div>
+            <div class="col-sm-1">
+                <input class="form-control" type="submit" value="Search" title="Search" style="width: auto;float: left;background-color:#f0e5f2;color:#B388B8;border-color:#B388B8;" />
+            </div>
+        }
+        <div class="col-sm-2">
+            <a class="btn btn-default" asp-area="Identity" asp-page="/Account/CreateUser" title="Add new user" style="margin-right: 40%;color: #B388B8;background-color: #ffffff;border-color: #B388B8;">Add +</a>
         </div>
-        <div class="col-sm-1">
-            <input class="form-control" type="submit" value="Search" title="Search" style="width: auto;float: left;margin-left: 70%;background-color:#f0e5f2;color:#B388B8;border-color:#B388B8;" />
-        </div>
-    }
-    <div class="col-sm-2">
-        <a class="btn btn-default" asp-area="Identity" asp-page="/Account/CreateUser" title="Add new user" style="margin-right: 40%;color: #B388B8;background-color: #ffffff;border-color: #B388B8;float: right;">Add +</a>
+    </div>
+
+
+    <div class="container" style="margin-top:24px;">
+        <table id="userTable" class="table" style="overflow-y:scroll;height:200px;width:81%;display:block;padding-left:2%;">
+            <thead>
+                <tr>
+                    <th style="width:30%">
+                        ID
+                    </th>
+                    <th>
+                        NAME
+                    </th>
+                    <th>
+                        SURNAME
+                    </th>
+                    <th style="width:30%">
+                        EMAIL
+                    </th>
+                    <th>
+
+                    </th>
+                    <th>
+
+                    </th>
+                    <th>
+
+                    </th>
+                </tr>
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(ModelUser => user.Id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(ModelUser => user.name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(ModelUser => user.surname)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(ModelUser => user.Email)
+                        </td>
+                        <td>
+                            <button class="btn btn-default" onclick="showUserData('@user.Id', '@user.name', '@user.surname', '@user.Email', '@verified(@user.EmailConfirmed)', '@user.street', '@user.streetnumber', '@user.zipcode', '@user.city');" data-toggle="modal" data-target="#viewUser_@user.Id" style="color: #B388B8;background-color: #ffffff;border-color: #B388B8;">view</button>
+                        </td>
+                        <td>
+                            @Html.ActionLink("edit", "EditUser", "Manage", new { ID = @user.Id }, new { @class = "btn btn-default", style = "color:#4D6810;background-color: #d0dfb7;border-color:#4D6810" })
+                        </td>
+                        <td>
+                            @Html.ActionLink("delete", "DeleteUser", "Manage", new { ID = @user.Id }, new { @class = "btn btn-default", style = "color: #A94442;background-color: #f3d1d1;border-color: #A94442;" })
+                        </td>
+                    </tr>
+                }
+            </thead>
+        </table>
+    </div>
+    <div id="modaluser">
+
     </div>
 </div>
-
-<hr />
-
-<div class="container">
-    <table id="userTable" class="table" style="overflow-y:scroll; height:200px; width:75%; display:block; margin-left:10%">
-        <thead>
-            <tr>
-                <th style="width:30%">
-                    ID
-                </th>
-                <th>
-                    NAME
-                </th>
-                <th>
-                    SURNAME
-                </th>
-                <th style="width:30%">
-                    EMAIL
-                </th>
-                <th>
-
-                </th>
-                <th>
-
-                </th>
-                <th>
-
-                </th>
-            </tr>
-            @foreach (var user in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(ModelUser => user.Id)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(ModelUser => user.name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(ModelUser => user.surname)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(ModelUser => user.Email)
-                    </td>
-                    <td>
-                        <button class="btn btn-default" onclick="showUserData('@user.Id', '@user.name', '@user.surname', '@user.Email', '@verified(@user.EmailConfirmed)', '@user.street', '@user.streetnumber', '@user.zipcode', '@user.city');" data-toggle="modal" data-target="#viewUser_@user.Id" style="color: #B388B8;background-color: #ffffff;border-color: #B388B8;">view</button>
-                    </td>
-                    <td>
-                        @Html.ActionLink("edit", "EditUser", "Manage", new { ID = @user.Id }, new { @class = "btn btn-default", style = "color:#4D6810;background-color: #d0dfb7;border-color:#4D6810" })
-                    </td>
-                    <td>
-                        @Html.ActionLink("delete", "DeleteUser", "Manage", new { ID = @user.Id }, new { @class = "btn btn-default", style = "color: #A94442;background-color: #f3d1d1;border-color: #A94442;" })
-                    </td>
-                </tr>
-            }
-        </thead>
-    </table>
-</div>
-<div id="modaluser">
-
-</div>
-
 <script>
     function showUserData(id, name, surname, email, isconfirmed, street, snumber, zip, city) {
         document.getElementById('modaluser').innerHTML = '<div id="viewUser_' + id + '" class="modal fade" role="dialog" style="display: block;margin-top: 12%;">' +
             '        <div class="modal-dialog">' +
             '            <div class="modal-content">' +
             '                <div class="modal-header" style="padding-left:8%;background-color: #B388B8;-webkit-border-top-left-radius: 5px; -webkit-border-top-right-radius: 5px;">' +
-            '                    <div class="modal-title" style="font-size: 24px; color:#ffffff; font-weight: 600;">Edit</div>' +
-            '                    <p style="color:#eedef2; margin-bottom:0">Edit user data</p>' +
+            '                    <div class="modal-title" style="font-size: 24px; color:#ffffff; font-weight: 600;">User Data</div>' +
+            '                    <p style="color:#eedef2; margin-bottom:0">Displaying data for: ' + name + ' ' + surname + '</p>' +
             '                </div>' +
             '                <div class="modal-body" style="padding-left:8%">' +
             '                    <table style=" vertical-align:auto">' +
