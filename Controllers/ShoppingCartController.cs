@@ -726,6 +726,14 @@ namespace bytme.Controllers
                                         " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
                                         " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>VIP points added: " + points_gotten + " points</th>" +
                                         " </tr>";
+
+                    mailMessage.Body += " <tr> " +
+                                        " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                        " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                        " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                        " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                        " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>VIP points total: " + result.points + " points</th>" +
+                                        " </tr>";
                 }
                 else if (totalPrice > 100 && result.points >= 0)
                 {
@@ -743,6 +751,14 @@ namespace bytme.Controllers
                                         " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
                                         " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
                                         " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>VIP points added: " + points_gotten + " points</th>" +
+                                        " </tr>";
+
+                    mailMessage.Body += " <tr> " +
+                                        " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                        " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                        " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                        " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                        " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>VIP points total: " + result.points + " points</th>" +
                                         " </tr>";
                 }
             }
@@ -778,8 +794,16 @@ namespace bytme.Controllers
                                     " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
                                     " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
                                     " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>points used " + discount_email + " points</th>" +
+                                    " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>VIP points used: " + discount_email + " points</th>" +
                                     " </tr>";
+
+                mailMessage.Body += " <tr> " +
+                                        " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                        " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                        " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                        " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                        " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>VIP points total: " + result.points + " points</th>" +
+                                        " </tr>";
             }
             else if (totalPrice > 100)
             {
@@ -804,8 +828,16 @@ namespace bytme.Controllers
                                     " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
                                     " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
                                     " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
-                                    " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>points used " + discount_email + " points</th>" +
+                                    " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>VIP points used: " + discount_email + " points</th>" +
                                     " </tr>";
+
+                mailMessage.Body += " <tr> " +
+                                        " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                        " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                        " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                        " <th style='border: 0px solid #dddddd;text-align: left; padding:8px;'></th>" +
+                                        " <th style='border: 0px solid #dddddd;text-align: center; padding:8px;'>VIP points total: " + result.points + " points</th>" +
+                                        " </tr>";
             }
 
             mailMessage.Body += "</table>";
@@ -814,7 +846,6 @@ namespace bytme.Controllers
                                 "</div>";
 
             client.Send(mailMessage);
-
 
             return RedirectToAction("index", "Home");
         }

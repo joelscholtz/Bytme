@@ -222,21 +222,67 @@
                         }
                     </tr>
                     <tr>
-                        <td colspan="3" class="hidden-xs"></td>
+                        <td colspan="2" class="hidden-xs"></td>
+                        @if (radio1 == "checked")
+                        {
+                            int points_gotten = 0;
 
+                            if (ViewBag.totalPrice + 2.95f < 100)
+                            {
+                                if (ViewBag.totalPrice + 2.95f > 50 && ViewBag.totalPrice + 2.95f < 75)
+                                {
+                                    <td colspan="5" class="hidden-xs text-center"><h4><strong><span id="result_sub_total">points gained: 100</span></strong></h4></td>
+                                }
+                                else if (ViewBag.totalPrice + 2.95f > 75 && ViewBag.totalPrice + 2.95f < 100)
+                                {
+                                    <td colspan="5" class="hidden-xs text-center"><h4><strong><span id="result_sub_total">points gained: 150</span></strong></h4></td>
+                                }
+                            }
+                            else
+                            {
+                                if (ViewBag.totalPrice > 100 && ViewBag.totalPrice < 150)
+                                {
+                                    <td colspan="5" class="hidden-xs text-center"><h4><strong><span id="result_sub_total">points gained: 200</span></strong></h4></td>
+                                }
+                                else if (ViewBag.totalPrice > 150 && ViewBag.totalPrice < 200)
+                                {
+                                    <td colspan="5" class="hidden-xs text-center"><h4><strong><span id="result_sub_total">points gained: 300</span></strong></h4></td>
+                                }
+                                else if (ViewBag.totalPrice > 200 && ViewBag.totalPrice < 300)
+                                {
+                                    <td colspan="5" class="hidden-xs text-center"><h4><strong><span id="result_sub_total">points gained: 500</span></strong></h4></td>
+                                }
+                                else if (ViewBag.totalPrice > 300 && ViewBag.totalPrice < 500)
+                                {
+                                    <td colspan="5" class="hidden-xs text-center"><h4><strong><span id="result_sub_total">points gained: 750</span></strong></h4></td>
+                                }
+                                else if (ViewBag.totalPrice > 500)
+                                {
+                                    points_gotten += 1000;
+                                    float extra_points = ViewBag.totalPrice - 500;
+                                    extra_points = extra_points / 2;
+                                    int points_you_gone_get = (int)extra_points;
+                                    points_gotten += points_you_gone_get;
+                                    <td colspan="5" class="hidden-xs text-center"><h4><strong><span id="result_sub_total">points gained: @points_gotten</span></strong></h4></td>
+                                }
+
+                            }
+                        }
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="hidden-xs"></td>
+                        <td><h5><strong>points: @user.points</strong></h5></td>
 
                         @if (user.points >= 100 && user.points < 500 && ViewBag.totalPrice < 100)
                         {
-                        <td>
-                            <h5><strong>points: @user.points</strong></h5>
-                            <input type="radio" name="discount" value="nothing" id="pointradio1" onclick="DiscountValue(this.value, this.id)" @radio1> No discount<br>
-                            <input type="radio" name="discount" value="free_shipping" id="pointradio2" onclick="DiscountValue(this.value, this.id)" @radio2>  Free Shipping (100 points)<br>
-                        </td>
+                            <td>
+                                <input type="radio" name="discount" value="nothing" id="pointradio1" onclick="DiscountValue(this.value, this.id)" @radio1> No discount<br>
+                                <input type="radio" name="discount" value="free_shipping" id="pointradio2" onclick="DiscountValue(this.value, this.id)" @radio2>  Free Shipping (100 points)<br>
+                            </td>
                         }
                         else if (user.points >= 500 && user.points < 900 && ViewBag.totalPrice < 100)
                         {
                             <td>
-                                <h5><strong>points: @user.points</strong></h5>
                                 <input type="radio" name="discount" value="nothing" id="pointradio1" onclick="DiscountValue(this.value, this.id)" @radio1> No discount<br>
                                 <input type="radio" name="discount" value="free_shipping" id="pointradio2" onclick="DiscountValue(this.value, this.id)" @radio2>  Free Shipping (100 points)<br>
                                 <input type="radio" name="discount" value="five_discount" id="pointradio3" onclick="DiscountValue(this.value, this.id)" @radio3>  5 % off (500 points)<br>
@@ -245,7 +291,6 @@
                         else if (user.points >= 900 && user.points < 1250 && ViewBag.totalPrice < 100)
                         {
                             <td>
-                                <h5><strong>points: @user.points</strong></h5>
                                 <input type="radio" name="discount" value="nothing" id="pointradio1" onclick="DiscountValue(this.value, this.id)" @radio1> No discount<br>
                                 <input type="radio" name="discount" value="free_shipping" id="pointradio2" onclick="DiscountValue(this.value, this.id)" @radio2>  Free Shipping (100 points)<br>
                                 <input type="radio" name="discount" value="five_discount" id="pointradio3" onclick="DiscountValue(this.value, this.id)" @radio3>  5 % off (500 points)<br>
@@ -255,7 +300,6 @@
                         else if (user.points >= 1250 && user.points < 1500 && ViewBag.totalPrice < 100)
                         {
                             <td>
-                                <h5><strong>points: @user.points</strong></h5>
                                 <input type="radio" name="discount" value="nothing" id="pointradio1" onclick="DiscountValue(this.value, this.id)" @radio1> No discount<br>
                                 <input type="radio" name="discount" value="free_shipping" id="pointradio2" onclick="DiscountValue(this.value, this.id)" @radio2>  Free Shipping (100 points)<br>
                                 <input type="radio" name="discount" value="five_discount" id="pointradio3" onclick="DiscountValue(this.value, this.id)" @radio3>  5 % off (500 points)<br>
@@ -266,7 +310,6 @@
                         else if (user.points >= 1500 && ViewBag.totalPrice < 100)
                         {
                             <td>
-                                <h5><strong>points: @user.points</strong></h5>
                                 <input type="radio" name="discount" value="nothing" id="pointradio1" onclick="DiscountValue(this.value, this.id)" @radio1> No discount<br>
                                 <input type="radio" name="discount" value="free_shipping" id="pointradio2" onclick="DiscountValue(this.value, this.id)" @radio2>  Free Shipping (100 points)<br>
                                 <input type="radio" name="discount" value="five_discount" id="pointradio3" onclick="DiscountValue(this.value, this.id)" @radio3>  5 % off (500 points)<br>
@@ -278,7 +321,6 @@
                         else if (user.points >= 500 && user.points < 900 && ViewBag.totalPrice > 100)
                         {
                             <td>
-                                <h5><strong>points: @user.points</strong></h5>
                                 <input type="radio" name="discount" value="nothing" id="pointradio1" @radio1 onclick="DiscountValue(this.value, this.id)"> No discount<br>
                                 <input type="radio" name="discount" value="five_discount" id="pointradio3" @radio3 onclick="DiscountValue(this.value, this.id)">  5 % off (500 points)<br>
                             </td>
@@ -286,7 +328,6 @@
                         else if (user.points >= 900 && user.points < 1250 && ViewBag.totalPrice > 100)
                         {
                             <td>
-                                <h5><strong>points: @user.points</strong></h5>
                                 <input type="radio" name="discount" value="nothing" id="pointradio1" @radio1 onclick="DiscountValue(this.value, this.id)"> No discount<br>
                                 <input type="radio" name="discount" value="five_discount" id="pointradio3" @radio3 onclick="DiscountValue(this.value, this.id)">  5 % off (500 points)<br>
                                 <input type="radio" name="discount" value="ten_discount" id="pointradio4" @radio4 onclick="DiscountValue(this.value, this.id)">  10 % off (900 points)<br>
@@ -295,7 +336,6 @@
                         else if (user.points >= 1250 && user.points < 1500 && ViewBag.totalPrice > 100)
                         {
                             <td>
-                                <h5><strong>points: @user.points</strong></h5>
                                 <input type="radio" name="discount" value="nothing" id="pointradio1" @radio1 onclick="DiscountValue(this.value, this.id)"> No discount<br>
                                 <input type="radio" name="discount" value="five_discount" id="pointradio3" @radio3 onclick="DiscountValue(this.value, this.id)">  5 % off (500 points)<br>
                                 <input type="radio" name="discount" value="ten_discount" id="pointradio4" @radio4 onclick="DiscountValue(this.value, this.id)">  10 % off (900 points)<br>
@@ -305,7 +345,6 @@
                         else if (user.points >= 1500 && ViewBag.totalPrice > 100)
                         {
                             <td>
-                                <h5><strong>points: @user.points</strong></h5>
                                 <input type="radio" name="discount" value="nothing" id="pointradio1" @radio1 onclick="DiscountValue(this.value, this.id)"> No discount<br>
                                 <input type="radio" name="discount" value="five_discount" id="pointradio3" @radio3 onclick="DiscountValue(this.value, this.id)">  5 % off (500 points)<br>
                                 <input type="radio" name="discount" value="ten_discount" id="pointradio4" @radio4 onclick="DiscountValue(this.value, this.id)">  10 % off (900 points)<br>
@@ -507,7 +546,8 @@
                                                                 return "error";
                                                             }
                                                         });
-                                                        window.alert('Payment Complete! Email has been sent!')
+                                                        window.alert('Payment Complete! Email has been sent!');
+                                                        @radio1 = "checked";
                                                     });
                                             }
                                         }, '#paypal-button-container');
