@@ -248,7 +248,7 @@
                     </tr>
                     <tr>
                         <td colspan="2" class="hidden-xs"></td>
-                        @if (radio1 == "checked" || user.points < 100)
+                        @if (radio1 == "checked" && user.points != -1 || user.points < 100 && user.points != -1)
                         {
                             int points_gotten = 0;
 
@@ -300,7 +300,15 @@
                     </tr>
                     <tr>
                         <td colspan="3" class="hidden-xs"></td>
-                        <td><h5><strong>points: @user.points</strong></h5></td>
+                        @if (user.points == -1)
+                            {
+                                <td class="hidden-xs text-center"><h4><a style="color:#8f6b93" asp-controller="Vip" asp-action="Vip"> To join our VIP program and get access to cool discounts! click here </a></h4></td>
+                            }
+                        else
+                            {
+                                <td class="hidden-xs text-center"><h5><strong>points: @user.points</strong></h5></td>
+                            }
+
 
                         @if (user.points >= 100 && user.points < 500 && ViewBag.totalPrice < 100)
                         {
