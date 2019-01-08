@@ -847,6 +847,9 @@ namespace bytme.Controllers
 
             client.Send(mailMessage);
 
+            discount = "nothing";
+            SessionHelper.SetObjectAsJson(HttpContext.Session, "discount", discount);
+
             return RedirectToAction("index", "Home");
         }
 
@@ -891,6 +894,7 @@ namespace bytme.Controllers
             ViewBag.Id = Id;
             discountSave(Discount);
             var discount = SessionHelper.GetObjectFromJson<string>(HttpContext.Session, "discount");
+            ViewBag.discount = discount;
 
             var cart = SessionHelper.GetObjectFromJson<List<Product>>(HttpContext.Session, "cart");
             ViewBag.cart = cart;

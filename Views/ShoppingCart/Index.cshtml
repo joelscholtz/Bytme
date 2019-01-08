@@ -8,12 +8,37 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     var user = await userManager.GetUserAsync(User);
 
-    string radio1 = "checked";
+    string radio1 = "";
     string radio2 = "";
     string radio3 = "";
     string radio4 = "";
     string radio5 = "";
     string radio6 = "";
+
+    if (ViewBag.discount == "nothing" || ViewBag.discount == null)
+    {
+        radio1 = "checked";
+    }
+    else if (ViewBag.discount == "free_shipping")
+    {
+        radio2 = "checked";
+    }
+    else if (ViewBag.discount == "five_discount")
+    {
+        radio3 = "checked";
+    }
+    else if (ViewBag.discount == "ten_discount")
+    {
+        radio4 = "checked";
+    }
+    else if (ViewBag.discount == "fifteen_discount")
+    {
+        radio5 = "checked";
+    }
+    else if (ViewBag.discount == "twenty_discount")
+    {
+        radio6 = "checked";
+    }
 
     switch (ViewBag.Id)
     {
@@ -167,7 +192,7 @@
                         <td colspan="2" class="hidden-xs"></td>
                         @if (ViewBag.model_view != null)
                         {
-                            @if (ViewBag.totalPrice < 100 && radio1 == "checked")
+                            @if (ViewBag.totalPrice < 100 && radio1 == "checked" || ViewBag.totalPrice < 100 && user.points < 100)
                             {
                                 <td class="hidden-xs text-center"><h5>if you buy €100,- or more your shipping costs will be free </h5></td>
                                 <td colspan="2" class="hidden-xs text-center"><h5>shipping costs = €2.95</h5> <h4><strong>Total = &euro;@ViewBag.totalPrice.ToString("0.00")</strong></h4></td>
@@ -176,7 +201,7 @@
                             {
                                 <td colspan="5" class="hidden-xs text-center"><h4><strong><span id="result_sub_total">Total &euro;@ViewBag.totalPrice.ToString("N")</span></strong></h4></td>
                             }
-                            if (ViewBag.totalPrice > 100 && radio1 == "checked")
+                            if (ViewBag.totalPrice > 100 && radio1 == "checked" || ViewBag.totalPrice > 100 && user.points < 100)
                             {
                                 <td colspan="5" class="hidden-xs text-center"><h4><strong><span id="result_sub_total">Total &euro;@ViewBag.totalPrice.ToString("N")</span></strong></h4></td>
                             }
@@ -223,7 +248,7 @@
                     </tr>
                     <tr>
                         <td colspan="2" class="hidden-xs"></td>
-                        @if (radio1 == "checked")
+                        @if (radio1 == "checked" || user.points < 100)
                         {
                             int points_gotten = 0;
 
@@ -231,30 +256,30 @@
                             {
                                 if (ViewBag.totalPrice + 2.95f > 50 && ViewBag.totalPrice + 2.95f < 75)
                                 {
-                                    <td colspan="5" class="hidden-xs text-center"><h4><strong><span id="result_sub_total">points gained: 100</span></strong></h4></td>
+                                    <td colspan="5" class="hidden-xs text-center"><h5>points gained: </h5><h4><strong><span id="result_sub_total">100 points</span></strong></h4></td>
                                 }
                                 else if (ViewBag.totalPrice + 2.95f > 75 && ViewBag.totalPrice + 2.95f < 100)
                                 {
-                                    <td colspan="5" class="hidden-xs text-center"><h4><strong><span id="result_sub_total">points gained: 150</span></strong></h4></td>
+                                    <td colspan="5" class="hidden-xs text-center"><h5>points gained: </h5><h4><strong><span id="result_sub_total">150 points</span></strong></h4></td>
                                 }
                             }
                             else
                             {
                                 if (ViewBag.totalPrice > 100 && ViewBag.totalPrice < 150)
                                 {
-                                    <td colspan="5" class="hidden-xs text-center"><h4><strong><span id="result_sub_total">points gained: 200</span></strong></h4></td>
+                                    <td colspan="5" class="hidden-xs text-center"><h5>points gained: </h5><h4><strong><span id="result_sub_total">200 points </span></strong></h4></td>
                                 }
                                 else if (ViewBag.totalPrice > 150 && ViewBag.totalPrice < 200)
                                 {
-                                    <td colspan="5" class="hidden-xs text-center"><h4><strong><span id="result_sub_total">points gained: 300</span></strong></h4></td>
+                                    <td colspan="5" class="hidden-xs text-center"><h5>points gained: </h5><h4><strong><span id="result_sub_total">300 points </span></strong></h4></td>
                                 }
                                 else if (ViewBag.totalPrice > 200 && ViewBag.totalPrice < 300)
                                 {
-                                    <td colspan="5" class="hidden-xs text-center"><h4><strong><span id="result_sub_total">points gained: 500</span></strong></h4></td>
+                                    <td colspan="5" class="hidden-xs text-center"><h5>points gained: </h5><h4><strong><span id="result_sub_total">500 points </span></strong></h4></td>
                                 }
                                 else if (ViewBag.totalPrice > 300 && ViewBag.totalPrice < 500)
                                 {
-                                    <td colspan="5" class="hidden-xs text-center"><h4><strong><span id="result_sub_total">points gained: 750</span></strong></h4></td>
+                                    <td colspan="5" class="hidden-xs text-center"><h5>points gained: </h5><h4><strong><span id="result_sub_total">750 points </span></strong></h4></td>
                                 }
                                 else if (ViewBag.totalPrice > 500)
                                 {
@@ -263,10 +288,14 @@
                                     extra_points = extra_points / 2;
                                     int points_you_gone_get = (int)extra_points;
                                     points_gotten += points_you_gone_get;
-                                    <td colspan="5" class="hidden-xs text-center"><h4><strong><span id="result_sub_total">points gained: @points_gotten</span></strong></h4></td>
+                                    <td colspan="5" class="hidden-xs text-center"><h5>points gained: </h5><h4><strong><span id="result_sub_total">@points_gotten points </span></strong></h4></td>
                                 }
 
                             }
+                        }
+                        else
+                        {
+
                         }
                     </tr>
                     <tr>
@@ -547,7 +576,6 @@
                                                             }
                                                         });
                                                         window.alert('Payment Complete! Email has been sent!');
-                                                        @radio1 = "checked";
                                                     });
                                             }
                                         }, '#paypal-button-container');
