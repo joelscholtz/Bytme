@@ -11,7 +11,7 @@
 <h2>Your order details</h2>
 
 <h3><center><strong>Address:</strong></center></h3>
-@for (var i = 0; i < Model.Count; i++)
+@for (var i = 0; i < 1; i++)
 {
     <h4><center>@Model[i].street @Html.DisplayFor(model => Model[i].streetnumber)</center></h4>
     <h4><center>@Html.DisplayFor(model => Model[i].zipcode), @Html.DisplayFor(model => Model[i].city)</center></h4>
@@ -68,17 +68,22 @@
                 </td>
                 <td>
                     <center>
-                        @{var countitem = (@Model[i].price_payed * Model[i].qty_bought);} &euro;@countitem
+                        @{var countitem = (@Model[i].price_payed * Model[i].qty_bought);} &euro;@countitem.ToString("N")
                     </center>
                 </td>
+
+
                 @{totalitem += countitem; }
 
             </tr>
+        </tbody>
 
+        <tfoot>
             <tr>
                 @if (totalitem < 100)
                 {
                     totalitem += 2.95f;
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -87,7 +92,8 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td><center><strong>Total: </strong>&euro;@totalitem</center></td>
+                    <td></td>
+                    <td><center><strong>Total: </strong>&euro;@totalitem.ToString("N")</center></td>
                 </tr>
                 }
                 else
@@ -95,7 +101,8 @@
             <td></td>
             <td></td>
             <td></td>
-            <td><center><strong>Total: </strong>&euro;@totalitem</center></td>
+            <td></td>
+            <td><center><strong>Total: </strong>&euro;@totalitem.ToString("N")</center></td>
                 }
                 </tr>
                 <tr>
@@ -109,6 +116,7 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
+                                <td></td>
                                 <td><center><strong>VIP points added: </strong> 100 points </center></td>
                             }
                             if (totalitem > 75 && totalitem < 100)
@@ -116,10 +124,12 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
+                                <td></td>
                                 <td><center><strong>VIP points added: </strong> 150 points </center></td>
                             }
                             if (totalitem > 100)
                             {
+                                <td></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -133,10 +143,12 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
+                                <td></td>
                                 <td><center><strong>VIP points added: </strong> 200 points </center></td>
                             }
                             if (totalitem > 150 && totalitem < 200)
                             {
+                                <td></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -147,10 +159,12 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
+                                <td></td>
                                 <td><center><strong>VIP points added: </strong> 500 points </center></td>
                             }
                             if (totalitem > 300 && totalitem < 500)
                             {
+                                <td></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -166,6 +180,7 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
+                                <td></td>
                                 <td><center><strong>VIP points added: </strong> @points_gotten points </center></td>
                             }
                         }
@@ -176,12 +191,14 @@
                         <td></td>
                         <td></td>
                         <td></td>
+                        <td></td>
                         <td><center><strong>VIP points used: </strong> 100 points </center></td>
                     <tr>
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td><center><strong>Price after discount: </strong> &euro;@totalitem </center></td>
+                        <td></td>
+                        <td><center><strong>Price after discount: </strong> &euro;@totalitem.ToString("N") </center></td>
                     </tr>
                     }
                     else if (Model[i].discount == "five_discount")
@@ -190,12 +207,14 @@
                     <td></td>
                     <td></td>
                     <td></td>
+                    <td></td>
                     <td><center><strong>VIP points used: </strong> 500 points </center></td>
                     <tr>
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td><center><strong>Price after discount: </strong> &euro;@totalitem </center></td>
+                        <td></td>
+                        <td><center><strong>Price after discount: </strong> &euro;@totalitem.ToString("N") </center></td>
                     </tr>
                     }
                     else if (Model[i].discount == "ten_discount")
@@ -204,12 +223,14 @@
                     <td></td>
                     <td></td>
                     <td></td>
+                    <td></td>
                     <td><center><strong>VIP points used: </strong> 900 points </center></td>
                     <tr>
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td><center><strong>Price after discount: </strong> &euro;@totalitem </center></td>
+                        <td></td>
+                        <td><center><strong>Price after discount: </strong> &euro;@totalitem.ToString("N") </center></td>
                     </tr>
                     }
                     else if (Model[i].discount == "fifteen_discount")
@@ -218,12 +239,14 @@
                     <td></td>
                     <td></td>
                     <td></td>
+                    <td></td>
                     <td><center><strong>VIP points used: </strong> 1250 points </center></td>
                     <tr>
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td><center><strong>Price after discount: </strong> &euro;@totalitem </center></td>
+                        <td></td>
+                        <td><center><strong>Price after discount: </strong> &euro;@totalitem.ToString("N") </center></td>
                     </tr>
                     }
                     else if (Model[i].discount == "twenty_discount")
@@ -232,15 +255,17 @@
                     <td></td>
                     <td></td>
                     <td></td>
+                    <td></td>
                     <td><center><strong>Price after discount: </strong> 1500 points </center></td>
                     <tr>
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td><center><strong>VIP points used: </strong> &euro;@totalitem </center></td>
+                        <td></td>
+                        <td><center><strong>VIP points used: </strong> &euro;@totalitem.ToString("N") </center></td>
                     </tr>
                     }
                     </tr>
-                    </tbody>
+                    </tfoot>
                 </table>
                     }
