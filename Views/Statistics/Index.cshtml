@@ -31,9 +31,7 @@
                     <h4>Amount of users registered per month</h4>
                     <canvas id="myChart" width="300" height="100"></canvas>
                     <script>
-                        Chart.Legend.prototype.afterFit = function () {
-                            this.width = this.width - 400;
-                        };
+
 
                         var ctx = document.getElementById('myChart').getContext('2d');
                         var chart = new Chart(ctx, {
@@ -42,11 +40,12 @@
 
                             // The data for our dataset
                             data: {
-                                labels: ["@ViewBag.Months"],
+                                labels: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
                                 datasets: [{
-                                    backgroundColor: ["#b388b8", "#a17aa5", "#8f6c93", "#ba93bf", "#c29fc6", "#59445c", "#352837"],
+                                    backgroundColor: ["#FFAACC", "#FFAAFF", "#CCAAFF", "#CCCCFF", "#CCFFCC", "#CCFFFF", "#FFFFCC", "#FFDDCC", "#CCAACC", "#CCCCEE", "#CCEEEE", "#FFFFEE"],
                                     borderColor: '#F2F2F2',
-                                    data: [@ViewBag.Users],
+                                    data: [@ViewBag.UsersJAN, @ViewBag.UsersFEB, @ViewBag.UsersMAR, @ViewBag.UsersAPR, @ViewBag.UsersMAY, @ViewBag.UsersJUN, @ViewBag.UsersJUL, @ViewBag.UsersSEP, @ViewBag.UsersAUG, @ViewBag.UsersOCT, @ViewBag.UsersNOV, @ViewBag.UsersDEC]
+                                    //data: [10,50,20,30,60,5,15,35,40,55,22,43]
                                 }]
                             },
 
@@ -64,35 +63,51 @@
             <div class="col-md-3">
             </div>
             <div class="col-md-9">
-                <h4>Money per month</h4>
-                <p>@ViewBag.Money</p>
+                <h4>Money earned per month</h4>
+                <!--<p>@ViewBag.Money</p>-->
                 <canvas id="myChart2" width="300" height="100"></canvas>
                 <script>
-                        Chart.Legend.prototype.afterFit = function () {
-                            this.width = this.width - 400;
-                        };
+                    var ctx = document.getElementById('myChart2').getContext('2d');
 
-                        var ctx = document.getElementById('myChart2').getContext('2d');
+                    var jan = parseFloat("@ViewBag.MoneyJAN".replace(",", "."));
+                    var feb = parseFloat("@ViewBag.MoneyFEB".replace(",", "."));
+                    var mar = parseFloat("@ViewBag.MoneyMAR".replace(",", "."));
+                    var apr = parseFloat("@ViewBag.MoneyAPR".replace(",", "."));
+                    var may = parseFloat("@ViewBag.MoneyMAY".replace(",", "."));
+                    var jun = parseFloat("@ViewBag.MoneyJUN".replace(",", "."));
+                    var jul = parseFloat("@ViewBag.MoneyJUL".replace(",", "."));
+                    var aug = parseFloat("@ViewBag.MoneyAUG".replace(",", "."));
+                    var sep = parseFloat("@ViewBag.MoneySEP".replace(",", "."));
+                    var oct = parseFloat("@ViewBag.MoneyOCT".replace(",", "."));
+                    var nov = parseFloat("@ViewBag.MoneyNOV".replace(",", "."));
+                    var dec = parseFloat("@ViewBag.MoneyDEC".replace(",", ".") + '€');
+
                         var chart = new Chart(ctx, {
                             // The type of chart we want to create
                             type: 'bar',
 
                             // The data for our dataset
                             data: {
-                                labels: ["@ViewBag.MoneyMonths"],
+                                labels: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
                                 datasets: [{
-                                    label: ["@ViewBag.MoneyMonths"],
-                                    backgroundColor: ["#b388b8", "#a17aa5", "#8f6c93", "#ba93bf", "#c29fc6", "#59445c", "#352837"],
+                                    backgroundColor: ["#FFAACC", "#FFAAFF", "#CCAAFF", "#CCCCFF", "#CCFFCC", "#CCFFFF", "#FFFFCC", "#FFDDCC", "#CCAACC", "#CCCCEE", "#CCEEEE", "#FFFFEE"],
                                     borderColor: '#F2F2F2',
-                                    data: [@ViewBag.Money],
+                                    data: [jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec]
+                                    //data: [10,50,20,30,60,5,15,35,40,55,22,43]
                                 }]
                             },
 
                             // Configuration options go here
                             options: {
                                 legend: {
-                                    display: true,
-                                    position: 'left',
+                                    display: false,
+                                },
+                                tooltips: {
+                                    callbacks: {
+                                        label: function (tooltipItem) {
+                                            return "€" + Number(tooltipItem.yLabel);
+                                        }
+                                    }
                                 }
                             }
                         });
