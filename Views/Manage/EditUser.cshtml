@@ -52,7 +52,7 @@
             <input asp-for="@Model.city" class="form-control" style="width:90%" placeholder="@Model.city" />
             <span asp-validation-for="@Model.city" class="text-danger"></span>
         </div>
-        <div class="col-lg-12" style="padding-top:3%">
+        <div class="col-lg-11" style="padding-top:3%">
             @Html.ActionLink("back", "Index", "Manage", null, new { @class = "btn btn-default", type = "submit", onclick = "return confirm('Are you sure you want to leave this page?')", title = "Back to users", style = "float:right; " })
             <input type="submit" value="save changes" title="save changes" class="form-control" style="width:auto;margin-right: 2%;float:right;color:#4D6810;background-color:#d0dfb7;border-color:#4D6810;" />
         </div>
