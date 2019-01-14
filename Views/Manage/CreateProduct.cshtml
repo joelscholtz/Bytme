@@ -72,7 +72,7 @@
         </div>
         <div class="form-group">
             <label asp-for="@Model.quantity">Quantity</label>
-            <input asp-for="@Model.quantity" type="number" min = "0.01" step = "any" class="form-control" style="width:90%" placeholder="Quantity" />
+            <input asp-for="@Model.quantity" type="number" min = "1" step = "any" class="form-control" style="width:90%" placeholder="Quantity" />
             <span asp-validation-for="@Model.quantity" class="text-danger"></span>
         </div>
         <div class="form-group">
